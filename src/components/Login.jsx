@@ -1,99 +1,129 @@
 import React, { useState } from 'react';
 
+import '../css/login.css';
+
 const Login = ({ onNavigate }) => {
   const [userInfo, setUserInfo] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const jsonUsers = [
-      { username: 'demo', emailOrMobile: 'demo@instagram.com', password: 'demo123' },
-      { username: 'vansh_singh_787', emailOrMobile: 'vansh@example.com', password: 'password' }
-    ];
+    try {
+      let jsonUsers = [];
+      try {
+        const res = await fetch('/json/pass.json');
+        if (res.ok) {
+          jsonUsers = await res.json();
+        }
+      } catch (err) {
+        console.warn('Could not read pass.json', err);
+      }
 
-    const localUsers = JSON.parse(localStorage.getItem('users')) || [];
-    const allUsers = [...jsonUsers, ...localUsers];
+      const localUsers = JSON.parse(localStorage.getItem('users')) || [];
+      const allUsers = [...jsonUsers, ...localUsers];
 
-    const validUser = allUsers.find(user =>
-      (user.username?.toLowerCase() === userInfo.toLowerCase() ||
-       user.emailOrMobile?.toLowerCase() === userInfo.toLowerCase()) &&
-      user.password === password
-    );
+      const validUser = allUsers.find(user =>
+        (user.username?.toLowerCase() === userInfo.toLowerCase() ||
+         user.emailOrMobile?.toLowerCase() === userInfo.toLowerCase()) &&
+        user.password === password
+      );
 
-    if (validUser) {
-      alert(`✅ Welcome, ${validUser.username || validUser.fullName || 'User'}!`);
-      sessionStorage.setItem('currentUser', JSON.stringify(validUser));
-      onNavigate('home');
-    } else {
-      alert('❌ Invalid username or password!');
+      if (validUser) {
+        alert(`✅ Welcome, ${validUser.username || validUser.fullName || 'User'}!`);
+        sessionStorage.setItem('currentUser', JSON.stringify(validUser));
+        onNavigate('home');
+      } else {
+        alert('❌ Invalid username or password!');
+      }
+    } catch (err) {
+      console.error('Error checking credentials:', err);
+      alert('⚠️ Something went wrong while logging in.');
     }
   };
 
   return (
-    <div style={{ fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', backgroundColor: 'black', color: 'white', minHeight: '100vh', width: '100%' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', gap: '50px', margin: '0 auto', maxWidth: '1200px', minHeight: '80vh' }}>
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <img src="./public/pics/img_1.png" alt="Instagram" style={{ maxWidth: '400px', width: '100%', height: 'auto', borderRadius: '10px' }} />
+    <>
+      <div className="container">
+        <div className="left">
+          <img src="/pics/img_1.png" alt="image" id="img1" />
         </div>
 
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          <div style={{ width: '100%', maxWidth: '350px', padding: '40px', textAlign: 'center' }}>
-            <h1 style={{ fontSize: '48px', marginBottom: '40px', fontWeight: 'normal' }}>Instagram</h1>
+        <div className="right">
+          <div className="box">
+            <h1>Instagram</h1>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
-              <input
-                type="text"
-                placeholder="Phone number, username or email"
+            <div className="info" id="loginForm">
+              <input 
+                type="text" 
+                placeholder="Phone number, username or email" 
+                id="user_info" 
                 value={userInfo}
                 onChange={(e) => setUserInfo(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSubmit(e)}
-                style={{ backgroundColor: 'hsl(0, 0%, 15%)', border: '1px solid hsl(0, 0%, 21%)', borderRadius: '7px', padding: '14px 12px', fontSize: '14px', color: 'aliceblue', outline: 'none' }}
+                required 
               />
-              <input
-                type="password"
-                placeholder="Password"
+              <input 
+                type="password" 
+                placeholder="Password" 
+                id="user_pass"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSubmit(e)}
-                style={{ backgroundColor: 'hsl(0, 0%, 15%)', border: '1px solid hsl(0, 0%, 21%)', borderRadius: '7px', padding: '14px 12px', fontSize: '14px', color: 'aliceblue', outline: 'none' }}
+                required 
               />
-              <button onClick={handleSubmit} style={{ backgroundColor: 'rgb(0, 149, 246)', border: 'none', borderRadius: '6px', padding: '14px', color: 'white', fontSize: '14px', fontWeight: '600', cursor: 'pointer', marginTop: '8px' }}>
-                Log in
-              </button>
+              <button type="submit" id="submit_btn" onClick={handleSubmit}>Log in</button>
             </div>
 
-            <div style={{ margin: '20px 0', position: 'relative', color: 'hsl(0, 0%, 56%)', fontSize: '13px', fontWeight: '600', display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-              <hr style={{ flex: 1, border: 'none', borderTop: '1px solid hsl(0, 0%, 20%)' }} />
-              <span style={{ padding: '0 10px', color: 'hsl(0, 0%, 67%)', fontFamily: 'Arial, Helvetica, sans-serif' }}>OR</span>
-              <hr style={{ flex: 1, border: 'none', borderTop: '1px solid hsl(0, 0%, 20%)' }} />
+            <div className="or">
+              <hr />
+              <span>OR</span>
+              <hr />
             </div>
 
-            <button style={{ background: 'transparent', border: 'none', color: '#385185', fontSize: '14px', fontWeight: '600', cursor: 'pointer', padding: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', gap: '8px', marginBottom: '20px' }}>
-              <span>Log in with Facebook</span>
+            <button id="facebook_btn">
+              <img src="/pics/fb_blue.png" style={{ width: '18px', height: '20px' }} alt="Facebook" />
+              <span>&nbsp;Log in with Facebook</span>
             </button>
+            <br />
 
-            <a href="#" style={{ color: 'hsl(209, 100%, 41%)', textDecoration: 'none', fontSize: '12px', display: 'block', marginBottom: '20px' }}>
-              Forgot password?
-            </a>
+            <a href="#" id="forget_pass">Forgot password?</a>
 
-            <div style={{ fontSize: '14px', color: '#8e8e8e' }}>
-              <span>Don't have an account? </span>
-              <span onClick={() => onNavigate('signup')} style={{ color: '#0095f6', cursor: 'pointer', fontWeight: '600' }}>Sign up</span>
+            <div id="signup-text">
+              <span>Don't have an account?</span>
+              <span id="signup-link" onClick={() => onNavigate('signup')} style={{ cursor: 'pointer' }}>Sign up</span>
             </div>
           </div>
         </div>
       </div>
 
-      <footer style={{ padding: '20px', textAlign: 'center', backgroundColor: 'black' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '15px', marginBottom: '15px' }}>
-          {['Meta', 'About', 'Blog', 'Jobs', 'Help', 'API', 'Privacy', 'Terms'].map(link => (
-            <a key={link} href="#" style={{ color: 'hsl(0, 0%, 56%)', textDecoration: 'none', fontSize: '12px' }}>{link}</a>
-          ))}
+      <footer className="footer">
+        <div className="links">
+          <a href="#">Meta</a>
+          <a href="#">About</a>
+          <a href="#">Blog</a>
+          <a href="#">Jobs</a>
+          <a href="#">Help</a>
+          <a href="#">API</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Locations</a>
+          <a href="#">Instagram Lite</a>
+          <a href="#">Meta AI</a>
+          <a href="#">Meta AI Articles</a>
+          <a href="#">Threads</a>
+          <a href="#">Contact Uploading & Non-Users</a>
+          <a href="#">Meta Verified</a>
         </div>
-        <span style={{ color: 'hsl(0, 0%, 56%)', fontSize: '12px' }}>© 2025 Instagram from Meta</span>
+
+        <div className="footer_bottom">
+          <select className="language_select">
+            <option>English</option>
+            <option>Hindi</option>
+            <option>Punjabi</option>
+          </select>
+          <span className="copyright">&copy; 2025 Instagram from Meta</span>
+        </div>
       </footer>
-    </div>
+    </>
   );
 };
 

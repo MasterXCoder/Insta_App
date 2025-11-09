@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 
+import '../css/signup.css';
+
+
 const Signup = ({ onNavigate }) => {
-  const [emailOrMobile, setEmailOrMobile] = useState('');
-  const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
-  const [username, setUsername] = useState('');
+  const [detail, setDetail] = useState('');
+  const [userPass, setUserPass] = useState('');
+  const [name, setName] = useState('');
+  const [userInfo, setUserInfo] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!emailOrMobile || !password || !fullName || !username) {
+    if (!detail || !userPass || !name || !userInfo) {
       alert('Please fill in all fields!');
       return;
     }
@@ -18,8 +21,8 @@ const Signup = ({ onNavigate }) => {
 
     const userExists = users.some(
       (u) =>
-        u.username.toLowerCase() === username.toLowerCase() ||
-        u.emailOrMobile?.toLowerCase() === emailOrMobile.toLowerCase()
+        u.username.toLowerCase() === userInfo.toLowerCase() ||
+        u.emailOrMobile?.toLowerCase() === detail.toLowerCase()
     );
 
     if (userExists) {
@@ -27,7 +30,13 @@ const Signup = ({ onNavigate }) => {
       return;
     }
 
-    const newUser = { username, fullName, emailOrMobile, password };
+    const newUser = {
+      username: userInfo,
+      fullName: name,
+      emailOrMobile: detail,
+      password: userPass,
+    };
+
     users.push(newUser);
     localStorage.setItem('users', JSON.stringify(users));
 
@@ -36,79 +45,127 @@ const Signup = ({ onNavigate }) => {
   };
 
   return (
-    <div style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', backgroundColor: 'black', color: 'white', minHeight: '100vh' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
-        <div style={{ maxWidth: '350px', width: '100%' }}>
-          <div style={{ backgroundColor: 'black', border: '1px solid hsl(0, 0%, 15%)', padding: '40px', marginBottom: '10px', textAlign: 'center' }}>
-            <h1 style={{ fontSize: '48px', marginBottom: '20px' }}>Instagram</h1>
+    <div>
+      <div className="container">
+        <div className="main">
+          <div className="box">
+            <div className="logo">
+              <h1>Instagram</h1>
+            </div>
 
-            <p style={{ color: 'hsl(0, 0%, 56%)', fontSize: '17px', lineHeight: '20px', marginBottom: '20px', fontWeight: '600' }}>
-              Sign up to see photos and videos<br />from your friends.
-            </p>
+            <p className="line">Sign up to see photos and videos<br />from your friends.</p>
 
-            <button style={{ backgroundColor: 'rgb(24, 119, 242)', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '8px', fontSize: '14px', fontWeight: '600', width: '100%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px', height: '32px' }}>
-              Log in with Facebook
+            <button className="facebook_btn">
+              <img src="/pics/fb_white.png" style={{ width: '20px', height: '20px' }} alt="Facebook" />
+              &nbsp;Log in with Facebook
             </button>
 
-            <div style={{ margin: '20px 0', position: 'relative', color: 'hsl(0, 0%, 56%)', fontSize: '13px', fontWeight: '600', display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-              <hr style={{ flex: 1, border: 'none', borderTop: '1px solid hsl(0, 0%, 20%)' }} />
-              <span style={{ padding: '0 10px', color: 'hsl(0, 0%, 67%)', fontFamily: 'Arial, Helvetica, sans-serif' }}>OR</span>
-              <hr style={{ flex: 1, border: 'none', borderTop: '1px solid hsl(0, 0%, 20%)' }} />
+            <div className="or">
+              <hr />
+              <span>OR</span>
+              <hr />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <input
-                type="text"
-                placeholder="Mobile Number or Email"
-                value={emailOrMobile}
-                onChange={(e) => setEmailOrMobile(e.target.value)}
-                style={{ backgroundColor: 'hsl(0, 0%, 7%)', border: '1px solid hsl(0, 0%, 15%)', borderRadius: '3px', padding: '9px 8px', fontSize: '14px', color: 'white', outline: 'none' }}
+            <div className="info">
+              <input 
+                type="text" 
+                placeholder="Mobile Number or Email" 
+                id="detail"
+                value={detail}
+                onChange={(e) => setDetail(e.target.value)}
+                required 
               />
-              <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                style={{ backgroundColor: 'hsl(0, 0%, 7%)', border: '1px solid hsl(0, 0%, 15%)', borderRadius: '3px', padding: '9px 8px', fontSize: '14px', color: 'white', outline: 'none' }}
+              <input 
+                type="password" 
+                placeholder="Password" 
+                id="user_pass"
+                value={userPass}
+                onChange={(e) => setUserPass(e.target.value)}
+                required 
               />
-              <input
-                type="text"
-                placeholder="Full Name"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                style={{ backgroundColor: 'hsl(0, 0%, 7%)', border: '1px solid hsl(0, 0%, 15%)', borderRadius: '3px', padding: '9px 8px', fontSize: '14px', color: 'white', outline: 'none' }}
+              <input 
+                type="text" 
+                placeholder="Full Name" 
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required 
               />
-              <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                style={{ backgroundColor: 'hsl(0, 0%, 7%)', border: '1px solid hsl(0, 0%, 15%)', borderRadius: '3px', padding: '9px 8px', fontSize: '14px', color: 'white', outline: 'none' }}
+              <input 
+                type="text" 
+                placeholder="Username" 
+                id="user_info"
+                value={userInfo}
+                onChange={(e) => setUserInfo(e.target.value)}
+                required 
               />
 
-              <p style={{ fontSize: '12px', color: 'hsl(0, 0%, 56%)', lineHeight: '16px', margin: '10px 0', textAlign: 'center' }}>
-                By signing up, you agree to our <a href="#" style={{ color: 'hsl(209, 100%, 39%)', textDecoration: 'none' }}>Terms</a>, <a href="#" style={{ color: 'hsl(209, 100%, 39%)', textDecoration: 'none' }}>Privacy Policy</a> and <a href="#" style={{ color: 'hsl(209, 100%, 39%)', textDecoration: 'none' }}>Cookies Policy</a>.
+              <p className="terms_text">
+                People who use our service may have uploaded your contact information to Instagram. 
+                <a href="#" className="learn_more">Learn More</a>
               </p>
 
-              <button onClick={handleSubmit} style={{ backgroundColor: '#1877f2', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '8px', fontSize: '14px', fontWeight: '600', cursor: 'pointer', marginTop: '10px', height: '32px' }}>
-                Sign Up
-              </button>
-            </div>
-          </div>
+              <p className="terms_text">
+                By signing up, you agree to our <a href="#" className="link">Terms</a>, 
+                <a href="#" className="link">Privacy Policy</a> and <a href="#" className="link">Cookies Policy</a>.
+              </p>
 
-          <div style={{ maxWidth: '350px', width: '100%', backgroundColor: 'black', border: '1px solid hsl(0, 0%, 15%)', padding: '20px', textAlign: 'center', marginBottom: '20px', fontSize: '14px' }}>
-            Have an account? <span onClick={() => onNavigate('login')} style={{ color: '#1877f2', cursor: 'pointer', fontWeight: '600' }}>Log in</span>
+              <button type="submit" id="submit_btn" onClick={handleSubmit}>Sign Up</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <footer style={{ padding: '20px', textAlign: 'center', backgroundColor: 'black' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '15px', marginBottom: '15px' }}>
-          {['Meta', 'About', 'Blog', 'Jobs', 'Help', 'API', 'Privacy', 'Terms'].map(link => (
-            <a key={link} href="#" style={{ color: 'hsl(0, 0%, 56%)', textDecoration: 'none', fontSize: '12px' }}>{link}</a>
-          ))}
+      <div className="container">
+        <div className="login_box">
+          <p>Have an account? <span className="login_link" onClick={() => onNavigate('login')} style={{ cursor: 'pointer' }}>Log in</span></p>
         </div>
-        <span style={{ color: 'hsl(0, 0%, 56%)', fontSize: '12px' }}>© 2025 Instagram from Meta</span>
+      </div>
+
+      <div className="app">
+        <span className="playstore">
+          <a href="https://play.google.com/store/apps/details?id=com.instagram.android&hl=en">
+            <button>
+              <img src="/pics/playstore.png" style={{ borderRadius: '3px' }} alt="Play Store" />
+            </button>
+          </a>
+        </span>
+        <span className="microsoft">
+          <a href="https://apps.microsoft.com/detail/9nblggh5l9xt?hl=en-US&gl=US">
+            <button style={{ background: 'transparent' }}>
+              <img src="/pics/Microsoft.png" alt="Microsoft" />
+            </button>
+          </a>
+        </span>
+      </div>
+
+      <footer className="footer">
+        <div className="links">
+          <a href="#">Meta</a>
+          <a href="#">About</a>
+          <a href="#">Blog</a>
+          <a href="#">Jobs</a>
+          <a href="#">Help</a>
+          <a href="#">API</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Locations</a>
+          <a href="#">Instagram Lite</a>
+          <a href="#">Meta AI</a>
+          <a href="#">Meta AI Articles</a>
+          <a href="#">Threads</a>
+          <a href="#">Contact Uploading & Non-Users</a>
+          <a href="#">Meta Verified</a>
+        </div>
+
+        <div className="footer-bottom">
+          <select className="language-select">
+            <option>English</option>
+            <option>Hindi</option>
+            <option>Punjabi</option>
+          </select>
+          <span className="copyright">&copy; 2025 Instagram from Meta</span>
+        </div>
       </footer>
     </div>
   );
