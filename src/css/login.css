@@ -5,7 +5,6 @@ body{
 }
 
 .container{
-
     flex: 1;    /* 50% space */
     display: flex;
     align-items: center;
