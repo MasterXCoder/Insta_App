@@ -14,11 +14,13 @@ import {
   FaFacebook,
   FaWhatsapp,
   FaEnvelope,
-  FaXTwitter,
-  FaEllipsisVertical,
+  FaTwitter,
   FaPlay,
   FaPause,
-} from "react-icons/fa6";
+  FaBookmark,
+  FaEllipsisV,
+} from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const Reels = () => {
   const [liked, setLiked] = useState({});
@@ -31,46 +33,40 @@ const Reels = () => {
       id: 1,
       user: "@ritu_goyal_art",
       desc: `"Environment Awareness Poster Mak... more"`,
-      video: "../video/sample_6.mp4",
+      video: "/video/sample_6.mp4",
       likes: 568,
     },
     {
       id: 2,
       user: "@King's_club",
       desc: "A night at a concert with friends! more",
-      video: "../video/sample_10.mp4",
+      video: "/video/sample_10.mp4",
       likes: 798,
     },
     {
       id: 3,
       user: "@mountain_skier",
       desc: "Skiing down the beautiful mountains! more",
-      video: "../video/sample_7.mp4",
+      video: "/video/sample_7.mp4",
       likes: 978,
     },
   ];
 
   const shareUsers = [
-    { name: "Ishpreet Singh", img: "../pics/profile_2.jpg" },
-    { name: "Mohit", img: "../pics/profile_6.jpg" },
-    { name: "Nishchal", img: "../pics/profile_5.jpg" },
-    { name: "Lucky Arora", img: "../pics/profile_3.jpg" },
-    { name: "Kanav", img: "../pics/profile_11.jpg" },
-    { name: "Lavnish", img: "../pics/profile_10.jpg" },
+    { name: "Ishpreet Singh", img: "/pics/profile_2.jpg" },
+    { name: "Mohit", img: "/pics/profile_6.jpg" },
+    { name: "Nishchal", img: "/pics/profile_5.jpg" },
+    { name: "Lucky Arora", img: "/pics/profile_3.jpg" },
+    { name: "Kanav", img: "/pics/profile_11.jpg" },
+    { name: "Lavnish", img: "/pics/profile_10.jpg" },
   ];
 
   const toggleLike = (id) => {
-    setLiked((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    setLiked((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   const toggleSave = (id) => {
-    setSaved((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
+    setSaved((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   const filteredUsers = shareUsers.filter((u) =>
@@ -79,45 +75,43 @@ const Reels = () => {
 
   return (
     <div id="main_page">
+      {/* SIDEBAR NAVIGATION */}
       <div id="main_nav">
         <header>
-          <a href="#" className="logo">
+          <Link to="/" className="logo">
             Instagram
-          </a>
+          </Link>
           <nav>
-            <a href="home.html" id="insta-icon">
-              <FaInstagram />
-            </a>
-            <a href="home.html">
+            <Link to="/">
               <FaHome /> <span id="dis">Home</span>
-            </a>
-            <a href="#search">
+            </Link>
+            <Link to="/search">
               <FaSearch /> <span id="dis">Search</span>
-            </a>
-            <a href="explore.html">
+            </Link>
+            <Link to="/explore">
               <FaCompass /> <span id="dis">Explore</span>
-            </a>
-            <a href="reel.html">
+            </Link>
+            <Link to="/reels">
               <FaVideo /> <span id="dis">Reels</span>
-            </a>
-            <a href="message.html">
+            </Link>
+            <Link to="/messages">
               <FaFacebookMessenger /> <span id="dis">Messages</span>
-            </a>
-            <a href="#notifications">
+            </Link>
+            <Link to="/notification">
               <FaHeart /> <span id="dis">Notifications</span>
-            </a>
-            <a href="#create">
+            </Link>
+            <Link to="/create">
               <FaPlusSquare /> <span id="dis">Create</span>
-            </a>
-            <a href="profile.html">
+            </Link>
+            <Link to="/profile">
               <img
-                src="../pics/profile_1.jpg"
+                src="/pics/profile_1.jpg"
                 alt="Profile"
                 className="icon"
                 style={{ borderRadius: "50%" }}
               />
               <span id="dis">Profile</span>
-            </a>
+            </Link>
             <br />
             <br />
             <br />
@@ -130,6 +124,7 @@ const Reels = () => {
         </header>
       </div>
 
+      {/* MAIN REELS SECTION */}
       <div className="vertical_line">
         {reels.map((reel) => (
           <div className="short" key={reel.id}>
@@ -140,10 +135,10 @@ const Reels = () => {
                 const vid = e.currentTarget.parentElement.querySelector("video");
                 if (vid.paused) {
                   vid.play();
-                  e.currentTarget.innerHTML = `<i class='fas fa-pause'></i>`;
+                  e.currentTarget.innerHTML = "<i class='fas fa-pause'></i>";
                 } else {
                   vid.pause();
-                  e.currentTarget.innerHTML = `<i class='fas fa-play'></i>`;
+                  e.currentTarget.innerHTML = "<i class='fas fa-play'></i>";
                 }
               }}
             >
@@ -159,6 +154,7 @@ const Reels = () => {
             </div>
 
             <div className="actions">
+              {/* LIKE */}
               <FaHeart
                 className="like-icon"
                 style={{
@@ -176,7 +172,7 @@ const Reels = () => {
                   : reel.likes}
               </span>
 
-              {/* Comment Icon */}
+              {/* COMMENT ICON */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -191,7 +187,7 @@ const Reels = () => {
                 <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
               </svg>
 
-              {/* Share Icon */}
+              {/* SHARE ICON */}
               <svg
                 onClick={() => setShareOpen(true)}
                 xmlns="http://www.w3.org/2000/svg"
@@ -209,31 +205,30 @@ const Reels = () => {
                 <path d="m21.854 2.147-10.94 10.939" />
               </svg>
 
-              {/* Save Icon */}
-              <svg
+              {/* SAVE ICON */}
+              <FaBookmark
                 onClick={() => toggleSave(reel.id)}
-                className="rxn-save"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill={saved[reel.id] ? "#ffd700" : "none"}
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-              </svg>
+                style={{
+                  color: saved[reel.id] ? "#ffd700" : "white",
+                  cursor: "pointer",
+                }}
+              />
 
-              <FaEllipsisVertical />
+              {/* MORE ICON */}
+              <FaEllipsisV />
             </div>
           </div>
         ))}
 
         {/* SHARE POPUP */}
         {shareOpen && (
-          <div id="sharePopup" className="popup" onClick={(e) => e.target.id === "sharePopup" && setShareOpen(false)}>
+          <div
+            id="sharePopup"
+            className="popup"
+            onClick={(e) =>
+              e.target.id === "sharePopup" && setShareOpen(false)
+            }
+          >
             <div className="popup-content">
               <span className="close" onClick={() => setShareOpen(false)}>
                 &times;
@@ -270,7 +265,7 @@ const Reels = () => {
                   <FaEnvelope /> Email
                 </button>
                 <button>
-                  <FaXTwitter /> X
+                  <FaTwitter /> Twitter
                 </button>
               </div>
             </div>

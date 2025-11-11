@@ -4,8 +4,14 @@ body{
     color: rgb(255, 255, 255);
 }
 
+<<<<<<< HEAD
 .contain{
     flex: 1;   
+=======
+.container{
+
+    flex: 1;    /* 50% space */
+>>>>>>> ef72e869d527e04c11591e19f7b7982e490536a1
     display: flex;
     flex-direction: row;
     align-items: center;

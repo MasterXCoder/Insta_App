@@ -1,6 +1,6 @@
   import React, { useState, useEffect } from "react";
   import "../css/home.css";
-  
+  import "../css/notification.css";
   import {
     FaInstagram,
     FaHome,
@@ -57,7 +57,7 @@
         userPic: "/pics/profile_3.jpg",
         image: "/pics/lucky_2.png",
         likes: 101,
-        caption: "✌",
+        caption: "✌️",
       },
       {
         id: 3,
@@ -124,13 +124,13 @@
           </a>
           <nav>
             <a href="#"><FaInstagram /></a>
-            <a href="#"><FaHome /><span id="dis">Home</span></a>
-            <a href="#"><FaSearch /><span id="dis">Search</span></a>
-            <a href="#"><FaCompass /><span id="dis">Explore</span></a>
-            <a href="reel" onClick={() => onNavigate('reel')} style={{ cursor: 'pointer' }}><FaVideo /><span id="dis">Reels</span></a>
-            <a href="#" onClick={toggleMessages}><FaFacebookMessenger /><span id="dis">Messages</span></a>
-            <a href="#" onClick={toggleNotifications}><FaHeart /><span id="dis">Notifications</span></a>
-            <a href="#" onClick={toggleShare}><FaPlusSquare /><span id="dis">Create</span></a>
+            <a href="/"><FaHome /><span id="dis">Home</span></a>
+            <a href="Search"><FaSearch /><span id="dis">Search</span></a>
+            <a href="Explore"><FaCompass /><span id="dis">Explore</span></a>
+            <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
+            <a href="Messages" onClick={toggleMessages}><FaFacebookMessenger /><span id="dis">Messages</span></a>
+            <a href="/notification" onClick={toggleNotifications}><FaHeart /><span id="dis">Notifications</span></a>
+            <a href="Create" onClick={toggleShare}><FaPlusSquare /><span id="dis">Create</span></a>
             <a href="#"><img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} /><span id="dis">Profile</span></a>
             <a href="#"><FaBars /><span id="dis">More</span></a>
           </nav>
@@ -283,7 +283,6 @@
   }
 
   // POST COMPONENT
-  // POST COMPONENT
 function Post({ post }) {
   const [liked, setLiked] = useState(false);
   const toggleLike = () => setLiked(!liked);
@@ -307,7 +306,7 @@ function Post({ post }) {
       <div className="post-footer">
         <div className="post-footer-rxn">
 
-          {/* ❤ Like Button */}
+          {/* ❤️ Like Button */}
           <button
             onClick={toggleLike}
             style={{
