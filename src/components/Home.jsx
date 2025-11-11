@@ -127,7 +127,7 @@
             <a href="#"><FaHome /><span id="dis">Home</span></a>
             <a href="#"><FaSearch /><span id="dis">Search</span></a>
             <a href="#"><FaCompass /><span id="dis">Explore</span></a>
-            <a href="#"><FaVideo /><span id="dis">Reels</span></a>
+            <a href="reel" onClick={() => onNavigate('reel')} style={{ cursor: 'pointer' }}><FaVideo /><span id="dis">Reels</span></a>
             <a href="#" onClick={toggleMessages}><FaFacebookMessenger /><span id="dis">Messages</span></a>
             <a href="#" onClick={toggleNotifications}><FaHeart /><span id="dis">Notifications</span></a>
             <a href="#" onClick={toggleShare}><FaPlusSquare /><span id="dis">Create</span></a>

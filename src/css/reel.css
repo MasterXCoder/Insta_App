@@ -1,0 +1,373 @@
+/* ---------------- Global ---------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+}
+
+#main_page {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+/* ---------------- Sidebar ---------------- */
+#main_nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: white;
+  border-right: 1px solid #333;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.logo {
+  font-size: 25px;
+  font-family: 'Dancing Script', cursive;
+  padding: 12px;
+}
+
+header a {
+  text-decoration: none;
+  color: white;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 8px;
+}
+
+nav a:hover {
+  background-color: #262626;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+/* ---------------- Reels ---------------- */
+.vertical_line {
+  margin-left: 250px;
+  flex: 1;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0;
+}
+
+.short {
+  position: relative;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  scroll-snap-align: start;
+  background: #000;
+}
+
+.short video {
+  box-shadow: 0 0 25px rgba(233, 215, 215, 0.5);
+  margin-top: 40px;
+  width: 380px;
+  height: 675px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.short video:hover {
+  transform: scale(1.02);
+}
+
+/* ---------------- Play Button ---------------- */
+.play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: white;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.short:hover .play-btn {
+  opacity: 1;
+}
+
+.play-btn i {
+  pointer-events: none;
+}
+
+/* ---------------- Actions ---------------- */
+.actions {
+  position: absolute;
+  right: -60px;
+  bottom: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  font-size: 28px;
+  color: white;
+}
+
+.like-count {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.fa-bookmark,
+.fa-heart,
+.fa-comment,
+.fa-share {
+  cursor: pointer;
+  transition: transform 0.3s, color 0.3s;
+}
+
+.fa-bookmark:hover {
+  transform: scale(1.2);
+  color: #1657f0;
+}
+.fa-heart:hover {
+  transform: scale(1.2);
+  color: #ff004f;
+}
+.fa-comment:hover {
+  transform: scale(1.2);
+  color: #9c9698;
+}
+.fa-share:hover {
+  transform: scale(1.2);
+  color: #09e75a;
+}
+
+/* ---------------- Overlay ---------------- */
+.video-overlay {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  padding: 10px;
+  width: 90%;
+  box-sizing: border-box;
+}
+
+.video-overlay .user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.video-overlay .description {
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+/* ---------------- Like Animation ---------------- */
+.fa-heart.active {
+  color: #ff004f;
+  transform: scale(1.3);
+  animation: pop 0.3s ease;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.8); }
+  100% { transform: scale(1.2); }
+}
+
+/* ---------------- Responsive ---------------- */
+#insta-icon { display: none; }
+
+@media (max-width: 768px) {
+  #main_nav {
+    width: 70px;
+    padding: 10px;
+  }
+  nav a span,
+  .logo,
+  #dis {
+    display: none;
+  }
+  #insta-icon {
+    display: inline-block;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  .vertical_line {
+    margin-left: 60px;
+  }
+}
+
+/* ---------------- Share Popup ---------------- */
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-content {
+  background-color: #121212;
+  border-radius: 16px;
+  padding: 20px;
+  width: 400px;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  color: white;
+  box-shadow: 0 0 20px rgba(255,255,255,0.1);
+  animation: fadeIn 0.3s ease;
+}
+
+.close {
+  position: absolute;
+  right: 15px;
+  top: 10px;
+  font-size: 25px;
+  cursor: pointer;
+  color: #aaa;
+}
+.close:hover { color: white; }
+
+.share-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+}
+.share-list .user {
+  width: 100px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 8px;
+  padding: 10px;
+}
+.share-list .user:hover { background-color: #1f1f1f; }
+
+.share-list .user img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+}
+
+.share-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+.share-options button {
+  flex: 1 1 45%;
+  background-color: #222;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+.share-options button:hover {
+  background-color: #333;
+}
+
+#searchUser {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  background-color: #1e1e1e;
+  color: white;
+  margin-bottom: 10px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+.like-icon.active {
+  stroke: #ff004f;
+  fill: #ff004f;
+  transition: 0.2s ease;
+}
+
+.fa-heart.active {
+  color: #ff004f;
+  transition: 0.2s ease;
+}
+.like-icon:hover {
+  cursor: pointer;
+  stroke: #ff004f;
+  fill: #ff004f;
+  transition: 0.2s ease;
+}
+
+.fa-heart:hover {
+  color: #ff004f;
+  transition: 0.2s ease;
+}
+.rxn-save.active,
+.fa-bookmark.active {
+  color: #ffd700; /* gold color for saved */
+  transition: 0.2s ease;
+}

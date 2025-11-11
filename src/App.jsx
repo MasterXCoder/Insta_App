@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Home from './components/Home';
+import Reel from './components/Reel';
 
 function App() {
   console.log('App loaded!');
@@ -18,6 +19,7 @@ function App() {
       {currentPage === 'login' && <Login onNavigate={navigate} />}
       {currentPage === 'signup' && <Signup onNavigate={navigate} />}
       {currentPage === 'home' && <Home onNavigate={navigate} />}
+      {currentPage === 'reel' && <Reel onNavigate={navigate} />}
     </div>
   );
 }
