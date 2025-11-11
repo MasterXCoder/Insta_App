@@ -1,169 +1,432 @@
-import React, { useState, useEffect } from 'react';
+  import React, { useState, useEffect } from "react";
+  import "../css/home.css";
+  import "../css/notification.css";
+  import {
+    FaInstagram,
+    FaHome,
+    FaSearch,
+    FaCompass,
+    FaVideo,
+    FaFacebookMessenger,
+    FaHeart,
+    FaPlusSquare,
+    FaBars,
+    FaLink,
+    FaFacebook,
+    FaWhatsapp,
+    FaEnvelope,
+    FaTwitter,
+  } from "react-icons/fa";
 
-import '../css/home.css';
+  export default function Home() {
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [showMessages, setShowMessages] = useState(false);
+    const [showShare, setShowShare] = useState(false);
+    const [searchTerm, setSearchTerm] = useState("");
 
-const Home = ({ onNavigate }) => {
-  const [posts, setPosts] = useState([]);
+    // Toggle functions
+    const toggleNotifications = () => setShowNotifications(!showNotifications);
+    const toggleMessages = () => setShowMessages(!showMessages);
+    const toggleShare = () => setShowShare(!showShare);
 
-  useEffect(() => {
-    const savedPosts = JSON.parse(sessionStorage.getItem('posts')) || [];
-    setPosts(savedPosts);
-  }, []);
+    // Close share popup if clicked outside
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        const popupContent = document.querySelector(".popup-content");
+        if (showShare && popupContent && !popupContent.contains(event.target)) {
+          setShowShare(false);
+        }
+      };
+      window.addEventListener("click", handleClickOutside);
+      return () => window.removeEventListener("click", handleClickOutside);
+    }, [showShare]);
+
+    const posts = [
+      {
+        id: 1,
+        username: "warnerbrosindia",
+        userPic: "/pics/warnerbrosindia.jpg",
+        image: "/pics/post_3.png",
+        likes: 1317839,
+        caption:
+          "#ContestAlert #TheConjuring: Last Rites Movie Contest goes live soon",
+      },
+      {
+        id: 2,
+        username: "Lucky Arora",
+        userPic: "/pics/profile_3.jpg",
+        image: "/pics/lucky_2.png",
+        likes: 101,
+        caption: "✌️",
+      },
+      {
+        id: 3,
+        username: "rohitsharma45",
+        userPic: "/pics/post_2.png",
+        image: "/pics/post_2.png",
+        likes: 1317839,
+        caption: "🇮🇳👑",
+      },
+    ];
+
+    const messages = [
+      { name: "Mohit", pic: "/pics/profile_6.jpg", time: "1h" },
+      { name: "Lovepreet", pic: "/pics/profile_4.jpg", time: "1h" },
+      { name: "Mohit", pic: "/pics/profile_7.jpg", time: "1h" },
+      { name: "Nishchal", pic: "/pics/profile_5.jpg", time: "1h" },
+      { name: "Lucky", pic: "/pics/profile_3.jpg", time: "3h" },
+      { name: "Ishpreet Singh", pic: "/pics/profile_2.jpg", time: "10h" },
+    ];
+
+    const shareUsers = [
+      { name: "Ishpreet Singh", pic: "/pics/profile_2.jpg" },
+      { name: "Mohit", pic: "/pics/profile_6.jpg" },
+      { name: "Nishchal", pic: "/pics/profile_5.jpg" },
+      { name: "Lucky Arora", pic: "/pics/profile_3.jpg" },
+      { name: "Kanav", pic: "/pics/profile_11.jpg" },
+      { name: "Lavnish", pic: "/pics/profile_10.jpg" },
+    ];
+
+    const suggestions = [
+      {
+        name: "ld.gurveeer",
+        pic: "/pics/demo_1.jpg",
+        text: "Followed by priyanshi.dhall_",
+      },
+      {
+        name: "naman1621",
+        pic: "/pics/demo_2.jpg",
+        text: "Followed by _harshitjangta_ + 2",
+      },
+      {
+        name: "itsharman_03",
+        pic: "/pics/demo_3.jpg",
+        text: "Followed by _harshitjangta_ + 2",
+      },
+      {
+        name: "tanush_520",
+        pic: "/pics/demo_4.jpg",
+        text: "Followed by ananyaguptaa16 + ...",
+      },
+      {
+        name: "anand_akash07",
+        pic: "/pics/demo_5.jpg",
+        text: "Followed by chitkarafresherss_2",
+      },
+    ];
+
+    return (
+      <div id="main_page">
+        {/* SIDEBAR NAVIGATION */}
+        <header id="main_nav">
+          <a href="#" className="logo" style={{ fontFamily: "Dancing Script" }}>
+            Instagram
+          </a>
+          <nav>
+            <a href="#"><FaInstagram /></a>
+            <a href="/"><FaHome /><span id="dis">Home</span></a>
+            <a href="Search"><FaSearch /><span id="dis">Search</span></a>
+            <a href="Explore"><FaCompass /><span id="dis">Explore</span></a>
+            <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
+            <a href="Messages" onClick={toggleMessages}><FaFacebookMessenger /><span id="dis">Messages</span></a>
+            <a href="/notification" onClick={toggleNotifications}><FaHeart /><span id="dis">Notifications</span></a>
+            <a href="Create" onClick={toggleShare}><FaPlusSquare /><span id="dis">Create</span></a>
+            <a href="#"><img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} /><span id="dis">Profile</span></a>
+            <a href="#"><FaBars /><span id="dis">More</span></a>
+          </nav>
+        </header>
+
+        {/* NOTIFICATIONS */}
+        {showNotifications && (
+          <div className="notifications">
+            <div className="main">
+              <h1>Notifications</h1>
+              <div className="request-section">
+                <img src="/pics/profile_1.jpg" alt="profile" />
+                <div className="request-section-follow">
+                  <p><b>Follow requests</b></p>
+                  <p className="follow-requests">hiten_256 + 5 others</p>
+                </div>
+                <div className="blue-dot"></div>
+              </div>
+              <h2>This week</h2>
+              <div className="latest-news">
+                <img src="/pics/profile_1.jpg" alt="profile" />
+                <p>Learn how Meta will use your info to personalize your experiences.</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* HOME FEED */}
+        <div id="home">
+          {/* STORIES */}
+          <div id="home_status">
+            {["profile_8.jpg", "profile_2.jpg", "profile_3.jpg", "profile_4.jpg", "profile_5.jpg", "profile_6.jpg"].map((p, i) => (
+              <a href="#" className="story" key={i}>
+                <img src={`/pics/${p}`} alt="story" />
+                <p className="username">User {i + 1}</p>
+              </a>
+            ))}
+          </div>
+
+          {/* POSTS */}
+          <div id="post-no">
+            {posts.map((post) => (
+              <Post key={post.id} post={post} />
+            ))}
+          </div>
+        </div>
+
+        {/* SUGGESTIONS SECTION */}
+        <div id="suggested">
+          <div className="current-user">
+            <img src="/pics/profile_1.jpg" alt="Profile" className="profile-pic" />
+            <div className="user-info">
+              <strong>Vansh Singh</strong>
+              <p>vansh_singh_787</p>
+            </div>
+            <a href="#">Switch</a>
+          </div>
+
+          <h4>Suggested for you <a href="#" className="see-all">See All</a></h4>
+
+          {suggestions.map((s, i) => (
+            <div key={i} className="suggestion">
+              <img src={s.pic} alt={s.name} className="profile-pic" />
+              <div>
+                <strong>{s.name}</strong>
+                <p>{s.text}</p>
+              </div>
+              <a href="#">Follow</a>
+            </div>
+          ))}
+
+          <footer>
+            <p>About · Help · Press · API · Jobs · Privacy · Terms · Locations · Language · Meta Verified</p>
+            <p>© 2025 INSTAGRAM FROM META</p>
+          </footer>
+        </div>
+
+        {/* FLOATING MESSAGE BAR */}
+        <div className="popup-bar" onClick={toggleMessages}>
+          <div className="icon">
+            <FaFacebookMessenger />
+          </div>
+          <span className="label">Messages</span>
+          <div className="avatars">
+            <img src="/pics/profile_2.jpg" alt="" />
+            <img src="/pics/profile_5.jpg" alt="" />
+            <img src="/pics/profile_3.jpg" alt="" />
+            <div className="more">...</div>
+          </div>
+        </div>
+
+        {/* MESSAGES POPUP */}
+        {showMessages && (
+          <div className="popup-window">
+            <div className="popup-header">
+              <div>Messages <span>4</span></div>
+              <button onClick={toggleMessages}>✖</button>
+            </div>
+            {messages.map((msg, i) => (
+              <div className="message" key={i}>
+                <img src={msg.pic} alt={msg.name} />
+                <div className="details">
+                  <p><b>{msg.name}</b></p>
+                  <p>{msg.name} sent an attachment <small>{msg.time}</small></p>
+                </div>
+                <div className="unread-dot"></div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* SHARE POPUP */}
+        {showShare && (
+          <div className="popup">
+            <div className="popup-content">
+              <span className="close" onClick={toggleShare}>&times;</span>
+              <h2>Share Reel</h2>
+              <input
+                type="text"
+                placeholder="Search user..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+
+              <div className="share-list">
+                {shareUsers
+                  .filter((u) =>
+                    u.name.toLowerCase().includes(searchTerm.toLowerCase())
+                  )
+                  .map((user, i) => (
+                    <div className="user" key={i}>
+                      <img src={user.pic} alt={user.name} />
+                      <p>{user.name}</p>
+                    </div>
+                  ))}
+              </div>
+
+              <div className="share-options">
+                <button><FaLink /> Copy Link</button>
+                <button><FaFacebook /> Facebook</button>
+                <button><FaWhatsapp /> WhatsApp</button>
+                <button><FaEnvelope /> Email</button>
+                <button><FaTwitter /> X</button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // POST COMPONENT
+function Post({ post }) {
+  const [liked, setLiked] = useState(false);
+  const toggleLike = () => setLiked(!liked);
 
   return (
-    <div style={{ backgroundColor: 'black', color: 'white', minHeight: '100vh', fontFamily: 'Arial, sans-serif', display: 'flex' }}>
-      {/* Sidebar */}
-      <div style={{ position: 'fixed', top: 0, left: 0, height: '100vh', width: '250px', backgroundColor: 'black', display: 'flex', flexDirection: 'column', padding: '20px', borderRight: '1px solid #333', zIndex: 1000 }}>
-        <h1 style={{ fontSize: '25px', fontFamily: '"Dancing Script", cursive', padding: '12px', marginBottom: '24px', cursor: 'pointer' }}>Instagram</h1>
-        
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {[
-            { icon: '🏠', label: 'Home' },
-            { icon: '🔍', label: 'Search' },
-            { icon: '🧭', label: 'Explore' },
-            { icon: '🎬', label: 'Reels' },
-            { icon: '✉️', label: 'Messages' },
-            { icon: '❤️', label: 'Notifications' },
-            { icon: '➕', label: 'Create' },
-            { icon: '👤', label: 'Profile' }
-          ].map((item, i) => (
-            <div 
-              key={i}
-              style={{ color: 'white', fontSize: '16px', padding: '12px', display: 'flex', alignItems: 'center', gap: '12px', borderRadius: '8px', cursor: 'pointer', transition: 'background-color 0.2s' }} 
-              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#262626'} 
-              onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+    <div className="post">
+      {/* Header (User Info) */}
+      <div className="home_posts">
+        <div id="home_posts_img">
+          <img src={post.userPic} alt={post.username} />
+        </div>
+        <p>{post.username}</p>
+      </div>
+
+      {/* Post Image */}
+      <div id="posts_image">
+        <img src={post.image} alt="post" />
+      </div>
+
+      {/* Footer (Reaction Icons) */}
+      <div className="post-footer">
+        <div className="post-footer-rxn">
+
+          {/* ❤️ Like Button */}
+          <button
+            onClick={toggleLike}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+            }}
+          >
+            <svg
+              className="like-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill={liked ? "red" : "none"}
+              stroke={liked ? "red" : "currentColor"}
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <span>{item.icon}</span> <span>{item.label}</span>
-            </div>
-          ))}
-        </nav>
-      </div>
+              <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+            </svg>
+          </button>
 
-      {/* Main Content */}
-      <div style={{ marginLeft: '300px', width: '500px', padding: '40px 20px' }}>
-        {/* Stories */}
-        <div style={{ display: 'flex', gap: '15px', marginTop: '20px', marginBottom: '30px', overflowX: 'auto' }}>
-          {['Nishchal', 'Lucky', 'Madhav', 'Ishpreet', 'Love', 'Mohit'].map((name, i) => (
-            <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', minWidth: '70px' }}>
-              <div style={{ 
-                width: '60px', 
-                height: '60px', 
-                borderRadius: '50%', 
-                background: 'linear-gradient(45deg, #d62976, #fa1eef, #feda75)',
-                padding: '3px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <img 
-                  src={`https://i.pravatar.cc/60?img=${i+1}`} 
-                  alt={name}
-                  style={{ 
-                    width: '54px', 
-                    height: '54px', 
-                    borderRadius: '50%',
-                    border: '2px solid black'
-                  }}
-                />
-              </div>
-              <p style={{ fontSize: '12px', margin: '5px 0 0 0', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: '70px', textAlign: 'center' }}>{name}</p>
-            </div>
-          ))}
-        </div>
+          {/* 💬 Comment Icon */}
+          <button
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+            }}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
+            </svg>
+          </button>
 
-        {/* Posts */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-          {[
-            { user: 'warnerbrosindia', img: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500', likes: '1,317,839', caption: '#ContestAlert #TheConjuring: Last Rites Movie Contest goes live soon', comments: '26,687' },
-            { user: 'Lucky Arora', img: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=500', likes: '101', caption: '✌️', comments: '2' }
-          ].map((post, index) => (
-            <div key={index} style={{ borderBottom: '1px solid #333', paddingBottom: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
-                <img 
-                  src={`https://i.pravatar.cc/40?img=${index + 10}`} 
-                  style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }}
-                  alt="User"
-                />
-                <span style={{ fontWeight: 'bold' }}>{post.user}</span>
-                <span style={{ marginLeft: 'auto', fontSize: '20px', cursor: 'pointer' }}>⋮</span>
-              </div>
-              
-              <img 
-                src={post.img} 
-                style={{ width: '100%', borderRadius: '4px', marginBottom: '12px' }}
-                alt="Post"
-              />
-              
-              <div style={{ display: 'flex', gap: '15px', marginBottom: '8px' }}>
-                <span 
-                  onClick={() => handleLike(index)} 
-                  style={{ fontSize: '24px', cursor: 'pointer', transition: 'transform 0.2s' }}
-                  onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.2)'}
-                  onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                >
-                  {likedPosts[index] ? '❤️' : '🤍'}
-                </span>
-                <span style={{ fontSize: '24px', cursor: 'pointer' }}>💬</span>
-                <span style={{ fontSize: '24px', cursor: 'pointer' }}>📤</span>
-                <span style={{ fontSize: '24px', cursor: 'pointer', marginLeft: 'auto' }}>🔖</span>
-              </div>
-              
-              <div style={{ fontWeight: 'bold', marginBottom: '8px' }}>{post.likes} likes</div>
-              <div style={{ marginBottom: '8px' }}>
-                <span style={{ fontWeight: 'bold' }}>{post.user}</span> {post.caption}
-              </div>
-              <div style={{ color: '#888', fontSize: '14px', marginBottom: '10px', cursor: 'pointer' }}>View all {post.comments} comments</div>
-              <input 
-                type="text" 
-                placeholder="Add a comment..." 
-                style={{ width: '100%', background: 'none', border: 'none', borderTop: '1px solid #333', color: 'white', padding: '10px 0', fontSize: '14px', outline: 'none' }}
-              />
-            </div>
-          ))}
+          {/* 📤 Share Icon */}
+          <button
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: 0,
+            }}
+          >
+            <svg
+              className="fa-solid fa-share"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
+              <path d="m21.854 2.147-10.94 10.939" />
+            </svg>
+          </button>
+
+          {/* 🔖 Save Icon */}
+          <button
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              marginLeft: "auto",
+              padding: 0,
+            }}
+          >
+            <svg
+              className="rxn-save"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+            </svg>
+          </button>
         </div>
       </div>
 
-      {/* Right Sidebar */}
-      <div style={{ position: 'fixed', right: '20px', top: '20px', width: '320px', padding: '15px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', cursor: 'pointer' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <img src="https://i.pravatar.cc/50?img=1" style={{ width: '50px', height: '50px', borderRadius: '50%' }} alt="User" />
-            <div>
-              <div style={{ fontWeight: 'bold', fontSize: '14px' }}>Vansh Singh</div>
-              <div style={{ fontSize: '12px', color: 'gray' }}>vansh_singh_787</div>
-            </div>
-            <a href="#">Follow</a>
-          </div>
-          <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#0095f6', cursor: 'pointer' }}>Switch</span>
-        </div>
+      {/* Likes */}
+      <div className="likes">
+        {liked
+          ? (post.likes + 1).toLocaleString()
+          : post.likes.toLocaleString()}{" "}
+        likes
+      </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-          <h4 style={{ fontSize: '14px', fontWeight: 'bold', color: '#888', margin: 0 }}>Suggested for you</h4>
-          <span style={{ fontSize: '12px', color: '#fff', cursor: 'pointer' }}>See All</span>
-        </div>
+      {/* Caption */}
+      <div className="caption">
+        <span className="username">{post.username}</span> {post.caption}
+      </div>
 
-        {['ld.gurveeer', 'naman1621', 'itsharman_03', 'tanush_520', 'anand_akash07'].map((user, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '15px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer' }}>
-              <img src={`https://i.pravatar.cc/45?img=${i+15}`} style={{ width: '45px', height: '45px', borderRadius: '50%' }} alt={user} />
-              <div>
-                <div style={{ fontSize: '13px', fontWeight: 'bold' }}>{user}</div>
-                <div style={{ fontSize: '11px', color: 'gray' }}>Followed by others</div>
-              </div>
-            </div>
-            <span style={{ fontSize: '12px', fontWeight: 'bold', color: '#0095f6', cursor: 'pointer' }}>Follow</span>
-          </div>
-        ))}
-
-        <footer style={{ marginTop: '30px', fontSize: '11px', color: 'gray', lineHeight: '1.6' }}>
-          <p style={{ margin: 0 }}>About · Help · Press · API · Jobs · Privacy · Terms</p>
-          <p style={{ margin: '5px 0 0 0' }}>© 2025 INSTAGRAM FROM META</p>
-        </footer>
+      {/* Comment Input */}
+      <div className="add-comment">
+        <input type="text" placeholder="Add a comment..." />
       </div>
     </div>
-
-
   );
-};
-
-export default Home;
+}
