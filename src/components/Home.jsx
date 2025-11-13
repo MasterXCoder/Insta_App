@@ -57,7 +57,7 @@
         userPic: "/pics/profile_3.jpg",
         image: "/pics/lucky_2.png",
         likes: 101,
-        caption: "✌️",
+        caption: "✌",
       },
       {
         id: 3,
@@ -306,7 +306,7 @@ function Post({ post }) {
       <div className="post-footer">
         <div className="post-footer-rxn">
 
-          {/* ❤️ Like Button */}
+          {/* ❤ Like Button */}
           <button
             onClick={toggleLike}
             style={{
