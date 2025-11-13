@@ -124,7 +124,7 @@
           </a>
           <nav>
             <a href="#"><FaInstagram /></a>
-            <a href="/"><FaHome /><span id="dis">Home</span></a>
+            <a href="/Home"><FaHome /><span id="dis">Home</span></a>
             <a href="Search"><FaSearch /><span id="dis">Search</span></a>
             <a href="Explore"><FaCompass /><span id="dis">Explore</span></a>
             <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
@@ -159,16 +159,25 @@
         )}
 
         {/* HOME FEED */}
-        <div id="home">
-          {/* STORIES */}
-          <div id="home_status">
-            {["profile_8.jpg", "profile_2.jpg", "profile_3.jpg", "profile_4.jpg", "profile_5.jpg", "profile_6.jpg"].map((p, i) => (
-              <a href="#" className="story" key={i}>
-                <img src={`/pics/${p}`} alt="story" />
-                <p className="username">User {i + 1}</p>
-              </a>
-            ))}
-          </div>
+      <div id="home">
+        {/* STORIES */}
+        <div id="home_status">
+          {[
+            { img: "profile_5.jpg", name: "Nishchal" },
+            { img: "profile_8.jpg", name: "Madhav" },
+            { img: "profile_2.jpg", name: "Ishpreet S..." },
+            { img: "profile_3.jpg", name: "Lucky" },
+            { img: "profile_4.jpg", name: "Lovepreet" },
+            { img: "profile_6.jpg", name: "Mohit" },
+          ].map((story, i) => (
+            <a href="#" className="story" key={i}>
+              <img src={`/pics/${story.img}`} alt={story.name} />
+              <p className="username">{story.name}</p>
+            </a>
+          ))}
+        </div>
+
+
 
           {/* POSTS */}
           <div id="post-no">

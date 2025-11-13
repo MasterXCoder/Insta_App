@@ -44,7 +44,7 @@ const Login = ({ onNavigate }) => {
 
   return (
     <>
-      <div className="container">
+      <div className="contain">
         <div className="left">
           <img src="/pics/img_1.png" alt="image" id="img1" />
         </div>

@@ -129,7 +129,6 @@ const Reels = () => {
         {reels.map((reel) => (
           <div className="short" key={reel.id}>
             <video src={reel.video} autoPlay loop muted />
-
             <div
               className="play-btn"
               onClick={(e) => {
