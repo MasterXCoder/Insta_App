@@ -124,7 +124,7 @@
           </a>
           <nav>
             <a href="#"><FaInstagram /></a>
-            <a href="/"><FaHome /><span id="dis">Home</span></a>
+            <a href="/Home"><FaHome /><span id="dis">Home</span></a>
             <a href="Search"><FaSearch /><span id="dis">Search</span></a>
             <a href="Explore"><FaCompass /><span id="dis">Explore</span></a>
             <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
