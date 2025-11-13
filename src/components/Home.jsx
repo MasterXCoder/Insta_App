@@ -201,7 +201,7 @@
           <h4>Suggested for you <a href="#" className="see-all">See All</a></h4>
 
           {suggestions.map((s, i) => (
-            <div key={i} className="suggestion">
+            <div key={i} className="suggestion profile-link">
               <img src={s.pic} alt={s.name} className="profile-pic" />
               <div>
                 <strong>{s.name}</strong>

@@ -15,7 +15,6 @@ import {
   FaWhatsapp,
   FaEnvelope,
   FaTwitter,
-  FaPlay,
   FaPause,
   FaBookmark,
   FaEllipsisV,
@@ -82,7 +81,7 @@ const Reels = () => {
             Instagram
           </Link>
           <nav>
-            <Link to="/">
+            <Link to="/home">
               <FaHome /> <span id="dis">Home</span>
             </Link>
             <Link to="/search">
@@ -112,11 +111,6 @@ const Reels = () => {
               />
               <span id="dis">Profile</span>
             </Link>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
             <a href="#more" className="main_more">
               <FaBars /> <span id="dis">More</span>
             </a>
@@ -129,19 +123,8 @@ const Reels = () => {
         {reels.map((reel) => (
           <div className="short" key={reel.id}>
             <video src={reel.video} autoPlay loop muted />
-            <div
-              className="play-btn"
-              onClick={(e) => {
-                const vid = e.currentTarget.parentElement.querySelector("video");
-                if (vid.paused) {
-                  vid.play();
-                  e.currentTarget.innerHTML = "<i class='fas fa-pause'></i>";
-                } else {
-                  vid.pause();
-                  e.currentTarget.innerHTML = "<i class='fas fa-play'></i>";
-                }
-              }}
-            >
+
+            <div className="play-btn">
               <FaPause />
             </div>
 
@@ -154,14 +137,9 @@ const Reels = () => {
             </div>
 
             <div className="actions">
-              {/* LIKE */}
+              {/* LIKE ICON */}
               <FaHeart
-                className="like-icon"
-                style={{
-                  color: liked[reel.id] ? "#ff004f" : "white",
-                  transform: liked[reel.id] ? "scale(1.2)" : "scale(1)",
-                  transition: "0.2s",
-                }}
+                className={`like-icon ${liked[reel.id] ? "active" : ""}`}
                 onClick={() => toggleLike(reel.id)}
               />
               <span className="like-count">
@@ -207,11 +185,8 @@ const Reels = () => {
 
               {/* SAVE ICON */}
               <FaBookmark
+                className={`save-icon ${saved[reel.id] ? "active" : ""}`}
                 onClick={() => toggleSave(reel.id)}
-                style={{
-                  color: saved[reel.id] ? "#ffd700" : "white",
-                  cursor: "pointer",
-                }}
               />
 
               {/* MORE ICON */}
