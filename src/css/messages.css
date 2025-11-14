@@ -9,9 +9,24 @@ body {
 #main_page {
     display: flex;
     flex-direction: row;
+    overflow-x: none;
 }
 
-
+#main_nav {
+    position: fixed;  /* Stays in place */
+    /* top: 0;
+    left: 0; */
+    height: 100vh;
+    background-color: black; 
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    color: white;
+    border-right: 1px solid #333;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+}
 
 header {
     display: flex;
@@ -82,7 +97,6 @@ body {
 .messages_main {
     display: flex;
     width: 100%;
-    margin-left: 300px ;
 }
 
 /* --- Left Sidebar --- */
@@ -276,9 +290,9 @@ body {
 .chat-area-main {
     flex-grow: 1;
     display: flex;
-    /* justify-content: center;
+    justify-content: center;
     align-items: center;
-    text-align: center; */
+    text-align: center;
     flex-direction: column
 }
 
@@ -286,8 +300,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    display: none;
 }
+
 
 .empty-chat-icon {  
     width: 96px;
@@ -397,16 +411,22 @@ body {
     border-radius: 50px;
     padding: 5px ;
     position: absolute;
+    overflow: none;
     bottom: 0%;
     width: 95%;
     margin-bottom: 10px;
     background: black;
     gap: 10px;
     margin-left: 20px;
+    align-items: center;
+    justify-content: center;
 }
 
-.chat-area-message svg {
+.chat-area-message i {
     height: 30px;
+    margin-top: 8px;
+    margin-left: 5px;
+    color: #fff ;
 }
 
 .chat-area-message input{
@@ -687,14 +707,12 @@ body {
   opacity: 1;
   transform: translateX(-50%) translateY(-4px);
 }
-.right-main-chat{
+.right-main-chat {
     display: flex;
     flex-direction: column;
     height: 100%;
     width: 100%;
-    display: none;
 }
-
 
 /* modal base */
 /* For create btn */

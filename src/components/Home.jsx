@@ -128,7 +128,7 @@
             <a href="Search"><FaSearch /><span id="dis">Search</span></a>
             <a href="Explore"><FaCompass /><span id="dis">Explore</span></a>
             <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
-            <a href="Messages" onClick={toggleMessages}><FaFacebookMessenger /><span id="dis">Messages</span></a>
+            <a href="/Messages" onClick={toggleMessages}><FaFacebookMessenger /><span id="dis">Messages</span></a>
             <a href="/notification" onClick={toggleNotifications}><FaHeart /><span id="dis">Notifications</span></a>
             <a href="Create" onClick={toggleShare}><FaPlusSquare /><span id="dis">Create</span></a>
             <a href="#"><img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} /><span id="dis">Profile</span></a>

@@ -78,7 +78,7 @@ nav a:hover {
 
 /* ---------------- Reels ---------------- */
 .vertical_line {
-  margin-left: 250px;
+  /* margin-left: 250px; */
   flex: 1;
   height: 100vh;
   overflow-y: scroll;
@@ -351,10 +351,7 @@ nav a:hover {
   transition: 0.2s ease;
 }
 
-.fa-heart.active {
-  color: #ff004f;
-  transition: 0.2s ease;
-}
+
 .like-icon:hover {
   cursor: pointer;
   stroke: #ff004f;
@@ -364,6 +361,7 @@ nav a:hover {
 
 .fa-heart:hover {
   color: #ff004f;
+  fill: #ff004f;
   transition: 0.2s ease;
 }
 .rxn-save.active,
