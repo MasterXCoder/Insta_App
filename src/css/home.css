@@ -287,6 +287,28 @@ nav a svg {
   font-size: 15px;
 }
 
+#suggested .suggestion div {
+    flex: 1;
+    margin-left: 10px;
+}
+
+#suggested .suggestion strong {
+    font-size: 13px;
+    display: block;
+}
+
+#suggested .suggestion p {
+    font-size: 11px;
+    color: gray;
+    margin: 0;
+}
+#suggested .suggestion a {
+    font-size: 12px;
+    font-weight: bold;
+    color: #0095f6;
+    text-decoration: none;
+}
+
 #suggested .suggestion img {
   width: 45px;
   height: 45px;

@@ -131,7 +131,7 @@
             <a href="/Messages" onClick={toggleMessages}><FaFacebookMessenger /><span id="dis">Messages</span></a>
             <a href="/notification" onClick={toggleNotifications}><FaHeart /><span id="dis">Notifications</span></a>
             <a href="Create" onClick={toggleShare}><FaPlusSquare /><span id="dis">Create</span></a>
-            <a href="#"><img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} /><span id="dis">Profile</span></a>
+            <a href="/Profile"><img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} /><span id="dis">Profile</span></a>
             <a href="#"><FaBars /><span id="dis">More</span></a>
           </nav>
         </header>
@@ -190,9 +190,11 @@
         {/* SUGGESTIONS SECTION */}
         <div id="suggested">
           <div className="current-user">
-            <img src="/pics/profile_1.jpg" alt="Profile" className="profile-pic" />
+            <a href="/Profile">
+              <img src="/pics/profile_1.jpg" alt="Profile" className="profile-pic" />
+            </a>
             <div className="user-info">
-              <strong>Vansh Singh</strong>
+              <a href="/Profile"><strong>Vansh Singh</strong></a>
               <p>vansh_singh_787</p>
             </div>
             <a href="#">Switch</a>
@@ -201,10 +203,14 @@
           <h4>Suggested for you <a href="#" className="see-all">See All</a></h4>
 
           {suggestions.map((s, i) => (
-            <div key={i} className="suggestion">
-              <img src={s.pic} alt={s.name} className="profile-pic" />
+            <div key={i} className="suggestion profile-link">
+              <a href={`/Profile?name=${s.name}&pic=${s.pic}`}>
+                <img src={s.pic} alt={s.name} className="profile-pic" />
+              </a>
               <div>
-                <strong>{s.name}</strong>
+                <a href={`/Profile?name=${s.name}&pic=${s.pic}`}>
+                  <strong>{s.name}</strong>
+                </a>
                 <p>{s.text}</p>
               </div>
               <a href="#">Follow</a>
@@ -301,9 +307,13 @@ function Post({ post }) {
       {/* Header (User Info) */}
       <div className="home_posts">
         <div id="home_posts_img">
-          <img src={post.userPic} alt={post.username} />
+          <a href={`/Profile?name=${post.username}&pic=${post.userPic}`}>
+            <img src={post.userPic} alt={post.username} />
+          </a>
         </div>
-        <p>{post.username}</p>
+        <a href={`/Profile?name=${post.username}&pic=${post.userPic}`}>
+          <p>{post.username}</p>
+        </a>
       </div>
 
       {/* Post Image */}

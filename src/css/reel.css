@@ -351,6 +351,10 @@ nav a:hover {
   transition: 0.2s ease;
 }
 
+/* .fa-heart.active {
+  color: #ff004f;
+  transition: 0.2s ease;
+} */
 
 .like-icon:hover {
   cursor: pointer;
