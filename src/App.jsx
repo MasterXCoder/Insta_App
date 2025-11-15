@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Reels from "./components/Reel";
 import Profile from './components/Profile';
 import Story from './components/Story';
+import Explore from './components/Explore';
 
 // Wrapper component to handle navigation from Login
 function LoginWrapper() {
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/reels" element={<Reels />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/story" element={<Story />} />
+        <Route path="/explore" element={<Explore />} />
       </Routes>
     </Router>
   );

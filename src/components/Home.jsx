@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../css/home.css";
-import "../css/notification.css";
+
 import {
   FaInstagram,
   FaHome,
@@ -168,7 +168,7 @@ export default function Home() {
         <nav>
           <a href="/Home"><FaHome /><span id="dis">Home</span></a>
           <a href="#search" onClick={toggleSearch}><FaSearch /><span id="dis">Search</span></a>
-          <a href="Explore"><FaCompass /><span id="dis">Explore</span></a>
+          <a href="/explore"><FaCompass /><span id="dis">Explore</span></a>
           <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
           <a href="Messages" onClick={toggleMessages}><FaFacebookMessenger /><span id="dis">Messages</span></a>
           <a href="/notification" onClick={toggleNotifications}><FaHeart /><span id="dis">Notifications</span></a>

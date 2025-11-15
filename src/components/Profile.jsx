@@ -166,7 +166,7 @@ export default function Profile() {
               <FaSearch />
               <span id="dis">Search</span>
             </a>
-            <a href="Explore">
+            <a href="/explore">
               <FaCompass />
               <span id="dis">Explore</span>
             </a>
