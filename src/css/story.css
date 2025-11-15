@@ -1,20 +1,22 @@
-/* ---------- Global ---------- */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* ========================================
+   STORY VIEWER - Isolated CSS
+   All classes/IDs prefixed with 'story-'
+   ======================================== */
 
-body {
+/* ---------- Story Container ---------- */
+#storyContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   background: #000;
   color: #fff;
-  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  transform: scale(0.9);
-  transform-origin: center;
+  z-index: 9999;
 }
 
 /* ---------- Story Viewer ---------- */
@@ -29,7 +31,7 @@ body {
   position: relative;
 }
 
-/* ---------- Story Base ---------- */
+/* ---------- Story Card Base ---------- */
 .st1 {
   position: relative;
   width: 18vw;
@@ -67,12 +69,11 @@ body {
   box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
 }
 
-/* ---------- Left / Right ---------- */
-/* Left / Right Stories */
+/* ---------- Adjacent Stories (Left/Right) ---------- */
 .st1.left {
-  transform: translateX(-30%) scale(0.85) rotateY(5deg); /* less translation & rotation */
-  opacity: 0.8; /* more visible */
-  filter: blur(1px); /* less blur */
+  transform: translateX(-30%) scale(0.85) rotateY(5deg);
+  opacity: 0.8;
+  filter: blur(1px);
   z-index: 2;
 }
 
@@ -83,7 +84,7 @@ body {
   z-index: 2;
 }
 
-/* Ensure first and last stories don't go too far */
+/* Boundary stories positioning */
 .st1:first-child.left {
   transform: translateX(-20%) scale(0.9) rotateY(0deg);
 }
@@ -92,48 +93,80 @@ body {
   transform: translateX(20%) scale(0.9) rotateY(0deg);
 }
 
-.st1.far-left, .st1.far-right {
+/* ---------- Far Stories ---------- */
+.st1.far-left,
+.st1.far-right {
   transform: scale(0.7);
   opacity: 0.5;
   filter: blur(2px);
   z-index: 1;
 }
 
-/* ---------- Profile Overlay ---------- */
-.profile {
+/* ---------- Story Profile Overlay ---------- */
+.st1 .profile {
   position: absolute;
-  top: 12px;
+  top: 24px;
   left: 12px;
   display: flex;
   align-items: center;
   gap: 8px;
   z-index: 4;
-  margin-top: 12px;
 }
 
-.profile img {
+.st1 .profile img {
   width: 38px;
   height: 38px;
   border-radius: 50%;
   padding: 3px;
-
   border: 3px solid transparent;
   background:
-      linear-gradient(#000, #000) padding-box,
-      conic-gradient(
-          #d62976 0deg,
-          #fa1eef 60deg,
-          #d62976 120deg,
-          #cd662f 180deg,
-          #feda75 240deg,
-          #cd662f 300deg,
-          #d62976 360deg
-      ) border-box;
+    linear-gradient(#000, #000) padding-box,
+    conic-gradient(
+      #d62976 0deg,
+      #fa1eef 60deg,
+      #d62976 120deg,
+      #cd662f 180deg,
+      #feda75 240deg,
+      #cd662f 300deg,
+      #d62976 360deg
+    ) border-box;
+}
+
+.st1 .profile h4 {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- Story Progress Bars ---------- */
+.st1 .progress-container {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  height: 4px;
+  display: flex;
+  gap: 3px;
+  z-index: 5;
+}
+
+.st1 .progress-bar {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.st1 .progress-bar-inner {
+  width: 0%;
+  height: 100%;
+  background: #fff;
+  transition: width 0.1s linear;
 }
 
 /* ---------- Navigation Buttons ---------- */
-#prevBtn,
-#nextBtn {
+.nav-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -148,26 +181,32 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
   z-index: 5;
+  user-select: none;
 }
 
-#prevBtn:hover,
-#nextBtn:hover {
+.nav-btn:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: translateY(-50%) scale(1.1);
 }
 
-#prevBtn { left: 5%; }
-#nextBtn { right: 5%; }
+.nav-btn.left {
+  left: 5%;
+}
 
-/* Hover on active story */
+.nav-btn.right {
+  right: 5%;
+}
+
+/* ---------- Active Story Hover Effect ---------- */
 .st1.active:hover video,
 .st1.active:hover img {
   transform: scale(1.03);
+  transition: transform 0.3s ease;
 }
 
-/* ---------- Play/Pause Icon ---------- */
+/* ---------- Play/Pause Indicator ---------- */
 #playPauseIcon {
   position: fixed;
   top: 50%;
@@ -186,38 +225,122 @@ body {
   transform: translate(-50%, -50%) scale(1.2);
 }
 
-/* ---------- Story Progress Bars ---------- */
-.progress-container {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  right: 8px;
-  height: 4px;
-  display: flex;
-  gap: 3px;
-  z-index: 5;
+/* ---------- Responsive Design ---------- */
+@media (max-width: 1024px) {
+  .st1.active {
+    width: 35vw;
+    max-width: 340px;
+  }
+  
+  .st1 {
+    width: 22vw;
+    max-width: 250px;
+  }
 }
 
-.progress-bar {
-  flex: 1;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.progress-bar-inner {
-  width: 0%;
-  height: 100%;
-  background: #fff;
-  transition: width 0.1s linear;
-}
-
-
-/* ---------- Responsive ---------- */
 @media (max-width: 768px) {
-  .st1.active { width: 60vw; }
-  .st1 { width: 40vw; }
-  #prevBtn, #nextBtn {
-    width: 45px; height: 45px; font-size: 1.5rem;
+  .st1.active {
+    width: 60vw;
+    max-width: 380px;
+  }
+  
+  .st1 {
+    width: 40vw;
+    max-width: 280px;
+  }
+  
+  .nav-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1.5rem;
+  }
+  
+  .nav-btn.left {
+    left: 2%;
+  }
+  
+  .nav-btn.right {
+    right: 2%;
+  }
+  
+  .st1 .profile {
+    top: 20px;
+    left: 10px;
+  }
+  
+  .st1 .profile img {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .st1 .profile h4 {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .st1.active {
+    width: 75vw;
+    max-width: 100%;
+  }
+  
+  .st1 {
+    width: 55vw;
+  }
+  
+  .nav-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+  
+  #playPauseIcon {
+    font-size: 2.5rem;
+  }
+  
+  .st1 .progress-container {
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    height: 3px;
+    gap: 2px;
+  }
+}
+
+/* ---------- Performance Optimizations ---------- */
+.st1 {
+  will-change: transform, opacity, filter;
+  backface-visibility: hidden;
+}
+
+.st1 video,
+.st1 img {
+  will-change: transform;
+}
+
+/* ---------- Accessibility ---------- */
+.nav-btn:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* ---------- Loading State ---------- */
+.st1.loading {
+  background: linear-gradient(
+    90deg,
+    #111 0%,
+    #222 50%,
+    #111 100%
+  );
+  background-size: 200% 100%;
+  animation: story-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes story-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }

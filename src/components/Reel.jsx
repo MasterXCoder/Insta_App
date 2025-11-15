@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../css/reel.css";
 import {
   FaInstagram,
@@ -16,6 +16,7 @@ import {
   FaEnvelope,
   FaTwitter,
   FaPause,
+  FaPlay,
   FaBookmark,
   FaEllipsisV,
 } from "react-icons/fa";
@@ -25,9 +26,11 @@ import Search from './Search';
 const Reels = () => {
   const [liked, setLiked] = useState({});
   const [saved, setSaved] = useState({});
+  const [playing, setPlaying] = useState({});
   const [shareOpen, setShareOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const videoRefs = useRef({});
 
   const reels = [
     {
@@ -62,12 +65,34 @@ const Reels = () => {
     { name: "Lavnish", img: "/pics/profile_10.jpg" },
   ];
 
+  // Initialize all videos as playing
+  useEffect(() => {
+    const initialPlaying = {};
+    reels.forEach(reel => {
+      initialPlaying[reel.id] = true;
+    });
+    setPlaying(initialPlaying);
+  }, []);
+
   const toggleLike = (id) => {
     setLiked((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   const toggleSave = (id) => {
     setSaved((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const togglePlayPause = (id) => {
+    const video = videoRefs.current[id];
+    if (!video) return;
+
+    if (video.paused) {
+      video.play();
+      setPlaying(prev => ({ ...prev, [id]: true }));
+    } else {
+      video.pause();
+      setPlaying(prev => ({ ...prev, [id]: false }));
+    }
   };
 
   const toggleSearch = (e) => {
@@ -83,13 +108,11 @@ const Reels = () => {
     const instaIcon = document.getElementById("insta-icon");
 
     if (showSearch) {
-      // Activate search mode
       disElements.forEach(el => el.style.display = 'none');
       if (nav) nav.style.width = "80px";
       if (logo) logo.style.display = "none";
       if (instaIcon) instaIcon.style.display = "inline-block";
     } else {
-      // Revert to normal sidebar
       disElements.forEach(el => el.style.display = 'inline');
       if (nav) nav.style.width = "";
       if (logo) logo.style.display = "inline-block";
@@ -157,10 +180,19 @@ const Reels = () => {
       <div className="vertical_line">
         {reels.map((reel) => (
           <div className="short" key={reel.id}>
-            <video src={reel.video} autoPlay loop muted />
+            <video 
+              ref={el => videoRefs.current[reel.id] = el}
+              src={reel.video} 
+              autoPlay 
+              loop 
+              muted 
+            />
 
-            <div className="play-btn">
-              <FaPause />
+            <div 
+              className="play-btn" 
+              onClick={() => togglePlayPause(reel.id)}
+            >
+              {playing[reel.id] ? <FaPause /> : <FaPlay />}
             </div>
 
             <div className="video-overlay">
@@ -229,59 +261,60 @@ const Reels = () => {
             </div>
           </div>
         ))}
+      </div>
 
-        {/* SHARE POPUP */}
-        {shareOpen && (
-          <div
-            id="sharePopup"
-            className="popup"
-            onClick={(e) =>
-              e.target.id === "sharePopup" && setShareOpen(false)
-            }
-          >
-            <div className="popup-content">
-              <span className="close" onClick={() => setShareOpen(false)}>
-                &times;
-              </span>
-              <h2>Share Reel</h2>
-              <input
-                type="text"
-                placeholder="Search user..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                id="searchUser"
-              />
+      {/* SHARE POPUP */}
+      {shareOpen && (
+        <div
+          id="sharePopup"
+          className="popup"
+          style={{ display: 'flex' }}
+          onClick={(e) =>
+            e.target.id === "sharePopup" && setShareOpen(false)
+          }
+        >
+          <div className="popup-content">
+            <span className="close" onClick={() => setShareOpen(false)}>
+              &times;
+            </span>
+            <h2>Share Reel</h2>
+            <input
+              type="text"
+              placeholder="Search user..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              id="searchUser"
+            />
 
-              <div className="share-list">
-                {filteredUsers.map((u, i) => (
-                  <div key={i} className="user">
-                    <img src={u.img} alt={u.name} />
-                    <p>{u.name}</p>
-                  </div>
-                ))}
-              </div>
+            <div className="share-list">
+              {filteredUsers.map((u, i) => (
+                <div key={i} className="user">
+                  <img src={u.img} alt={u.name} />
+                  <p>{u.name}</p>
+                </div>
+              ))}
+            </div>
 
-              <div className="share-options">
-                <button>
-                  <FaLink /> Copy Link
-                </button>
-                <button>
-                  <FaFacebook /> Facebook
-                </button>
-                <button>
-                  <FaWhatsapp /> WhatsApp
-                </button>
-                <button>
-                  <FaEnvelope /> Email
-                </button>
-                <button>
-                  <FaTwitter /> Twitter
-                </button>
-              </div>
+            <div className="share-options">
+              <button>
+                <FaLink /> Copy Link
+              </button>
+              <button>
+                <FaFacebook /> Facebook
+              </button>
+              <button>
+                <FaWhatsapp /> WhatsApp
+              </button>
+              <button>
+                <FaEnvelope /> Email
+              </button>
+              <button>
+                <FaTwitter /> Twitter
+              </button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
