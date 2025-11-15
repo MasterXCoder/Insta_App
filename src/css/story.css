@@ -1,0 +1,223 @@
+/* ---------- Global ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transform: scale(0.9);
+  transform-origin: center;
+}
+
+/* ---------- Story Viewer ---------- */
+#storyViewer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+  width: 100%;
+  transition: transform 0.7s ease-in-out;
+  perspective: 1000px;
+  position: relative;
+}
+
+/* ---------- Story Base ---------- */
+.st1 {
+  position: relative;
+  width: 18vw;
+  max-width: 270px;
+  aspect-ratio: 9 / 16;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #111;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+  opacity: 0.5;
+  transform: scale(0.85);
+  filter: blur(3px);
+  transition: all 0.7s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.st1 video,
+.st1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background-color: #000;
+}
+
+/* ---------- Active Story ---------- */
+.st1.active {
+  width: 28vw;
+  max-width: 360px;
+  opacity: 1;
+  transform: scale(1);
+  filter: none;
+  z-index: 3;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+}
+
+/* ---------- Left / Right ---------- */
+/* Left / Right Stories */
+.st1.left {
+  transform: translateX(-30%) scale(0.85) rotateY(5deg); /* less translation & rotation */
+  opacity: 0.8; /* more visible */
+  filter: blur(1px); /* less blur */
+  z-index: 2;
+}
+
+.st1.right {
+  transform: translateX(30%) scale(0.85) rotateY(-5deg);
+  opacity: 0.8;
+  filter: blur(1px);
+  z-index: 2;
+}
+
+/* Ensure first and last stories don't go too far */
+.st1:first-child.left {
+  transform: translateX(-20%) scale(0.9) rotateY(0deg);
+}
+
+.st1:last-child.right {
+  transform: translateX(20%) scale(0.9) rotateY(0deg);
+}
+
+.st1.far-left, .st1.far-right {
+  transform: scale(0.7);
+  opacity: 0.5;
+  filter: blur(2px);
+  z-index: 1;
+}
+
+/* ---------- Profile Overlay ---------- */
+.profile {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 4;
+  margin-top: 12px;
+}
+
+.profile img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  padding: 3px;
+
+  border: 3px solid transparent;
+  background:
+      linear-gradient(#000, #000) padding-box,
+      conic-gradient(
+          #d62976 0deg,
+          #fa1eef 60deg,
+          #d62976 120deg,
+          #cd662f 180deg,
+          #feda75 240deg,
+          #cd662f 300deg,
+          #d62976 360deg
+      ) border-box;
+}
+
+/* ---------- Navigation Buttons ---------- */
+#prevBtn,
+#nextBtn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s ease;
+  z-index: 5;
+}
+
+#prevBtn:hover,
+#nextBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-50%) scale(1.1);
+}
+
+#prevBtn { left: 5%; }
+#nextBtn { right: 5%; }
+
+/* Hover on active story */
+.st1.active:hover video,
+.st1.active:hover img {
+  transform: scale(1.03);
+}
+
+/* ---------- Play/Pause Icon ---------- */
+#playPauseIcon {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  font-size: 3rem;
+  color: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 10;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#playPauseIcon.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.2);
+}
+
+/* ---------- Story Progress Bars ---------- */
+.progress-container {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  height: 4px;
+  display: flex;
+  gap: 3px;
+  z-index: 5;
+}
+
+.progress-bar {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-bar-inner {
+  width: 0%;
+  height: 100%;
+  background: #fff;
+  transition: width 0.1s linear;
+}
+
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .st1.active { width: 60vw; }
+  .st1 { width: 40vw; }
+  #prevBtn, #nextBtn {
+    width: 45px; height: 45px; font-size: 1.5rem;
+  }
+}

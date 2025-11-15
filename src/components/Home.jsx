@@ -19,8 +19,10 @@ import {
 } from "react-icons/fa";
 
 import Search from './Search';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
+  const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showMessages, setShowMessages] = useState(false);
   const [showShare, setShowShare] = useState(false);
@@ -213,7 +215,7 @@ export default function Home() {
             { img: "profile_4.jpg", name: "Lovepreet" },
             { img: "profile_6.jpg", name: "Mohit" },
           ].map((story, i) => (
-            <a href="#" className="story" key={i}>
+            <a href="#" className="story" key={i} onClick={(e) => { e.preventDefault(); navigate('/story'); }}>
               <img src={`/pics/${story.img}`} alt={story.name} />
               <p className="username">{story.name}</p>
             </a>
