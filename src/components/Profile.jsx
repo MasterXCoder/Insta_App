@@ -16,10 +16,12 @@ import {
 } from "react-icons/fa";
 
 import '../css/profile.css';
+import Search from './Search';
 
 export default function Profile() {
 
   const [activeTab, setActiveTab] = useState("posts");
+  const [showSearch, setShowSearch] = useState(false);
   const [profileData, setProfileData] = useState({
     name: "Vansh Singh",
     displayName: "vansh_singh_787",
@@ -40,6 +42,11 @@ export default function Profile() {
   const formatNumber = (num) => {
     if (num >= 1000) return `${Math.floor(num / 1000)}K`;
     return num.toString();
+  };
+
+  const toggleSearch = (e) => {
+    e.preventDefault();
+    setShowSearch(!showSearch);
   };
 
   useEffect(() => {
@@ -83,6 +90,31 @@ export default function Profile() {
     setTagged(pickRandomPosts(4));
   }, []);
 
+  // Handle sidebar styling when search is active
+  useEffect(() => {
+    const nav = document.getElementById("main_nav");
+    const disElements = document.querySelectorAll('#dis');
+    const logo = document.querySelector(".logo");
+    const instaIcon = document.getElementById("insta-icon");
+    const profileElem = document.getElementById("profile");
+
+    if (showSearch) {
+      // Activate search mode
+      disElements.forEach(el => el.style.display = 'none');
+      if (nav) nav.style.width = "80px";
+      if (logo) logo.style.display = "none";
+      if (instaIcon) instaIcon.style.display = "inline-block";
+      if (profileElem) profileElem.style.marginLeft = "120px";
+    } else {
+      // Revert to normal sidebar
+      disElements.forEach(el => el.style.display = 'inline');
+      if (nav) nav.style.width = "";
+      if (logo) logo.style.display = "inline-block";
+      if (instaIcon) instaIcon.style.display = "none";
+      if (profileElem) profileElem.style.marginLeft = "";
+    }
+  }, [showSearch]);
+
   const renderGrid = (data) => {
     if (data.length === 0) {
       return <p style={{ textAlign: "center", color: "#888" }}>No {activeTab} yet</p>;
@@ -122,15 +154,15 @@ export default function Profile() {
           <a href="#" className="logo" style={{ fontFamily: "Dancing Script" }}>
             Instagram
           </a>
+          <a href="#" id="insta-icon" style={{ display: "none" }}>
+            <FaInstagram />
+          </a>
           <nav>
-            <a href="#" id="insta-icon">
-              <FaInstagram />
-            </a>
             <a href="/Home">
               <FaHome />
               <span id="dis">Home</span>
             </a>
-            <a href="#search">
+            <a href="#search" onClick={toggleSearch}>
               <FaSearch />
               <span id="dis">Search</span>
             </a>
@@ -154,7 +186,7 @@ export default function Profile() {
               <FaPlusSquare />
               <span id="dis">Create</span>
             </a>
-            <a href="#">
+            <a href="/profile">
               <img
                 src="/pics/profile_1.jpg"
                 alt="Profile"
@@ -176,19 +208,8 @@ export default function Profile() {
         </header>
       </div>
 
-      {/* SEARCH CONTAINER */}
-      <div id="search_container">
-        <div id="search_top">
-          <h2>Search</h2>
-          <input type="text" id="search_input" placeholder="Search users..." />
-        </div>
-        <div id="search_results">
-          <div id="recent_section">
-            <h3>Recent</h3>
-            <div id="recent_list"></div>
-          </div>
-        </div>
-      </div>
+      {/* SEARCH COMPONENT */}
+      <Search isOpen={showSearch} onClose={toggleSearch} />
 
       {/* PROFILE */}
       <div id="profile">
@@ -314,4 +335,3 @@ export default function Profile() {
     </div>
   );
 }
-

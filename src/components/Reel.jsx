@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/reel.css";
 import {
   FaInstagram,
@@ -20,12 +20,14 @@ import {
   FaEllipsisV,
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import Search from './Search';
 
 const Reels = () => {
   const [liked, setLiked] = useState({});
   const [saved, setSaved] = useState({});
   const [shareOpen, setShareOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
 
   const reels = [
     {
@@ -68,6 +70,33 @@ const Reels = () => {
     setSaved((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
+  const toggleSearch = (e) => {
+    e.preventDefault();
+    setShowSearch(!showSearch);
+  };
+
+  // Handle sidebar styling when search is active
+  useEffect(() => {
+    const nav = document.getElementById("main_nav");
+    const disElements = document.querySelectorAll('#dis');
+    const logo = document.querySelector(".logo");
+    const instaIcon = document.getElementById("insta-icon");
+
+    if (showSearch) {
+      // Activate search mode
+      disElements.forEach(el => el.style.display = 'none');
+      if (nav) nav.style.width = "80px";
+      if (logo) logo.style.display = "none";
+      if (instaIcon) instaIcon.style.display = "inline-block";
+    } else {
+      // Revert to normal sidebar
+      disElements.forEach(el => el.style.display = 'inline');
+      if (nav) nav.style.width = "";
+      if (logo) logo.style.display = "inline-block";
+      if (instaIcon) instaIcon.style.display = "none";
+    }
+  }, [showSearch]);
+
   const filteredUsers = shareUsers.filter((u) =>
     u.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -80,13 +109,16 @@ const Reels = () => {
           <Link to="/" className="logo">
             Instagram
           </Link>
+          <a href="#" id="insta-icon" style={{ display: "none" }}>
+            <FaInstagram />
+          </a>
           <nav>
             <Link to="/home">
               <FaHome /> <span id="dis">Home</span>
             </Link>
-            <Link to="/search">
+            <a href="#search" onClick={toggleSearch}>
               <FaSearch /> <span id="dis">Search</span>
-            </Link>
+            </a>
             <Link to="/explore">
               <FaCompass /> <span id="dis">Explore</span>
             </Link>
@@ -117,6 +149,9 @@ const Reels = () => {
           </nav>
         </header>
       </div>
+
+      {/* SEARCH COMPONENT */}
+      <Search isOpen={showSearch} onClose={toggleSearch} />
 
       {/* MAIN REELS SECTION */}
       <div className="vertical_line">

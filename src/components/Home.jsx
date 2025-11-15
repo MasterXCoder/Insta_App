@@ -1,164 +1,207 @@
-  import React, { useState, useEffect } from "react";
-  import "../css/home.css";
-  import "../css/notification.css";
-  import {
-    FaInstagram,
-    FaHome,
-    FaSearch,
-    FaCompass,
-    FaVideo,
-    FaFacebookMessenger,
-    FaHeart,
-    FaPlusSquare,
-    FaBars,
-    FaLink,
-    FaFacebook,
-    FaWhatsapp,
-    FaEnvelope,
-    FaTwitter,
-  } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import "../css/home.css";
+import "../css/notification.css";
+import {
+  FaInstagram,
+  FaHome,
+  FaSearch,
+  FaCompass,
+  FaVideo,
+  FaFacebookMessenger,
+  FaHeart,
+  FaPlusSquare,
+  FaBars,
+  FaLink,
+  FaFacebook,
+  FaWhatsapp,
+  FaEnvelope,
+  FaTwitter,
+} from "react-icons/fa";
 
-  export default function Home() {
-    const [showNotifications, setShowNotifications] = useState(false);
-    const [showMessages, setShowMessages] = useState(false);
-    const [showShare, setShowShare] = useState(false);
-    const [searchTerm, setSearchTerm] = useState("");
+import Search from './Search';
 
-    // Toggle functions
-    const toggleNotifications = () => setShowNotifications(!showNotifications);
-    const toggleMessages = () => setShowMessages(!showMessages);
-    const toggleShare = () => setShowShare(!showShare);
+export default function Home() {
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showMessages, setShowMessages] = useState(false);
+  const [showShare, setShowShare] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
 
-    // Close share popup if clicked outside
-    useEffect(() => {
-      const handleClickOutside = (event) => {
-        const popupContent = document.querySelector(".popup-content");
-        if (showShare && popupContent && !popupContent.contains(event.target)) {
-          setShowShare(false);
-        }
-      };
-      window.addEventListener("click", handleClickOutside);
-      return () => window.removeEventListener("click", handleClickOutside);
-    }, [showShare]);
+  // Toggle functions
+  const toggleNotifications = () => setShowNotifications(!showNotifications);
+  const toggleMessages = () => setShowMessages(!showMessages);
+  const toggleShare = () => setShowShare(!showShare);
 
-    const posts = [
-      {
-        id: 1,
-        username: "warnerbrosindia",
-        userPic: "/pics/warnerbrosindia.jpg",
-        image: "/pics/post_3.png",
-        likes: 1317839,
-        caption:
-          "#ContestAlert #TheConjuring: Last Rites Movie Contest goes live soon",
-      },
-      {
-        id: 2,
-        username: "Lucky Arora",
-        userPic: "/pics/profile_3.jpg",
-        image: "/pics/lucky_2.png",
-        likes: 101,
-        caption: "✌️",
-      },
-      {
-        id: 3,
-        username: "rohitsharma45",
-        userPic: "/pics/post_2.png",
-        image: "/pics/post_2.png",
-        likes: 1317839,
-        caption: "🇮🇳👑",
-      },
-    ];
+  const toggleSearch = (e) => {
+    e.preventDefault();
+    setShowSearch(!showSearch);
+  };
 
-    const messages = [
-      { name: "Mohit", pic: "/pics/profile_6.jpg", time: "1h" },
-      { name: "Lovepreet", pic: "/pics/profile_4.jpg", time: "1h" },
-      { name: "Mohit", pic: "/pics/profile_7.jpg", time: "1h" },
-      { name: "Nishchal", pic: "/pics/profile_5.jpg", time: "1h" },
-      { name: "Lucky", pic: "/pics/profile_3.jpg", time: "3h" },
-      { name: "Ishpreet Singh", pic: "/pics/profile_2.jpg", time: "10h" },
-    ];
+  // Close share popup if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const popupContent = document.querySelector(".popup-content");
+      if (showShare && popupContent && !popupContent.contains(event.target)) {
+        setShowShare(false);
+      }
+    };
+    window.addEventListener("click", handleClickOutside);
+    return () => window.removeEventListener("click", handleClickOutside);
+  }, [showShare]);
 
-    const shareUsers = [
-      { name: "Ishpreet Singh", pic: "/pics/profile_2.jpg" },
-      { name: "Mohit", pic: "/pics/profile_6.jpg" },
-      { name: "Nishchal", pic: "/pics/profile_5.jpg" },
-      { name: "Lucky Arora", pic: "/pics/profile_3.jpg" },
-      { name: "Kanav", pic: "/pics/profile_11.jpg" },
-      { name: "Lavnish", pic: "/pics/profile_10.jpg" },
-    ];
+  // Handle sidebar styling when search is active
+  useEffect(() => {
+    const nav = document.getElementById("main_nav");
+    const disElements = document.querySelectorAll('#dis');
+    const logo = document.querySelector(".logo");
+    const instaIcon = document.getElementById("insta-icon");
+    const homeElem = document.getElementById("home");
+    const profileElem = document.getElementById("profile");
 
-    const suggestions = [
-      {
-        name: "ld.gurveeer",
-        pic: "/pics/demo_1.jpg",
-        text: "Followed by priyanshi.dhall_",
-      },
-      {
-        name: "naman1621",
-        pic: "/pics/demo_2.jpg",
-        text: "Followed by _harshitjangta_ + 2",
-      },
-      {
-        name: "itsharman_03",
-        pic: "/pics/demo_3.jpg",
-        text: "Followed by _harshitjangta_ + 2",
-      },
-      {
-        name: "tanush_520",
-        pic: "/pics/demo_4.jpg",
-        text: "Followed by ananyaguptaa16 + ...",
-      },
-      {
-        name: "anand_akash07",
-        pic: "/pics/demo_5.jpg",
-        text: "Followed by chitkarafresherss_2",
-      },
-    ];
+    if (showSearch) {
+      // Activate search mode
+      disElements.forEach(el => el.style.display = 'none');
+      if (nav) {
+        nav.style.width = "80px";
+      }
+      if (logo) logo.style.display = "none";
+      if (instaIcon) instaIcon.style.display = "inline-block";
+      if (homeElem) homeElem.style.marginLeft = "0px";
+      if (profileElem) profileElem.style.marginLeft = "120px";
+    } else {
+      // Revert to normal sidebar
+      disElements.forEach(el => el.style.display = 'inline');
+      if (nav) nav.style.width = "";
+      if (logo) logo.style.display = "inline-block";
+      if (instaIcon) instaIcon.style.display = "none";
+      if (homeElem) homeElem.style.marginLeft = "";
+      if (profileElem) profileElem.style.marginLeft = "";
+    }
+  }, [showSearch]);
 
-    return (
-      <div id="main_page">
-        {/* SIDEBAR NAVIGATION */}
-        <header id="main_nav">
-          <a href="#" className="logo" style={{ fontFamily: "Dancing Script" }}>
-            Instagram
-          </a>
-          <nav>
-            <a href="#"><FaInstagram /></a>
-            <a href="/Home"><FaHome /><span id="dis">Home</span></a>
-            <a href="Search"><FaSearch /><span id="dis">Search</span></a>
-            <a href="Explore"><FaCompass /><span id="dis">Explore</span></a>
-            <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
-            <a href="Messages" onClick={toggleMessages}><FaFacebookMessenger /><span id="dis">Messages</span></a>
-            <a href="/notification" onClick={toggleNotifications}><FaHeart /><span id="dis">Notifications</span></a>
-            <a href="Create" onClick={toggleShare}><FaPlusSquare /><span id="dis">Create</span></a>
-            <a href="/Profile"><img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} /><span id="dis">Profile</span></a>
-            <a href="#"><FaBars /><span id="dis">More</span></a>
-          </nav>
-        </header>
+  const posts = [
+    {
+      id: 1,
+      username: "warnerbrosindia",
+      userPic: "/pics/warnerbrosindia.jpg",
+      image: "/pics/post_3.png",
+      likes: 1317839,
+      caption:
+        "#ContestAlert #TheConjuring: Last Rites Movie Contest goes live soon",
+    },
+    {
+      id: 2,
+      username: "Lucky Arora",
+      userPic: "/pics/profile_3.jpg",
+      image: "/pics/lucky_2.png",
+      likes: 101,
+      caption: "✌️",
+    },
+    {
+      id: 3,
+      username: "rohitsharma45",
+      userPic: "/pics/post_2.png",
+      image: "/pics/post_2.png",
+      likes: 1317839,
+      caption: "🇮🇳👑",
+    },
+  ];
 
-        {/* NOTIFICATIONS */}
-        {showNotifications && (
-          <div className="notifications">
-            <div className="main">
-              <h1>Notifications</h1>
-              <div className="request-section">
-                <img src="/pics/profile_1.jpg" alt="profile" />
-                <div className="request-section-follow">
-                  <p><b>Follow requests</b></p>
-                  <p className="follow-requests">hiten_256 + 5 others</p>
-                </div>
-                <div className="blue-dot"></div>
+  const messages = [
+    { name: "Mohit", pic: "/pics/profile_6.jpg", time: "1h" },
+    { name: "Lovepreet", pic: "/pics/profile_4.jpg", time: "1h" },
+    { name: "Mohit", pic: "/pics/profile_7.jpg", time: "1h" },
+    { name: "Nishchal", pic: "/pics/profile_5.jpg", time: "1h" },
+    { name: "Lucky", pic: "/pics/profile_3.jpg", time: "3h" },
+    { name: "Ishpreet Singh", pic: "/pics/profile_2.jpg", time: "10h" },
+  ];
+
+  const shareUsers = [
+    { name: "Ishpreet Singh", pic: "/pics/profile_2.jpg" },
+    { name: "Mohit", pic: "/pics/profile_6.jpg" },
+    { name: "Nishchal", pic: "/pics/profile_5.jpg" },
+    { name: "Lucky Arora", pic: "/pics/profile_3.jpg" },
+    { name: "Kanav", pic: "/pics/profile_11.jpg" },
+    { name: "Lavnish", pic: "/pics/profile_10.jpg" },
+  ];
+
+  const suggestions = [
+    {
+      name: "ld.gurveeer",
+      pic: "/pics/demo_1.jpg",
+      text: "Followed by priyanshi.dhall_",
+    },
+    {
+      name: "naman1621",
+      pic: "/pics/demo_2.jpg",
+      text: "Followed by _harshitjangta_ + 2",
+    },
+    {
+      name: "itsharman_03",
+      pic: "/pics/demo_3.jpg",
+      text: "Followed by _harshitjangta_ + 2",
+    },
+    {
+      name: "tanush_520",
+      pic: "/pics/demo_4.jpg",
+      text: "Followed by ananyaguptaa16 + ...",
+    },
+    {
+      name: "anand_akash07",
+      pic: "/pics/demo_5.jpg",
+      text: "Followed by chitkarafresherss_2",
+    },
+  ];
+
+  return (
+    <div id="main_page">
+      {/* SIDEBAR NAVIGATION */}
+      <header id="main_nav">
+        <a href="#" className="logo" style={{ fontFamily: "Dancing Script" }}>
+          Instagram
+        </a>
+        <a href="#" id="insta-icon" style={{ display: "none" }}>
+          <FaInstagram />
+        </a>
+        <nav>
+          <a href="/Home"><FaHome /><span id="dis">Home</span></a>
+          <a href="#search" onClick={toggleSearch}><FaSearch /><span id="dis">Search</span></a>
+          <a href="Explore"><FaCompass /><span id="dis">Explore</span></a>
+          <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
+          <a href="Messages" onClick={toggleMessages}><FaFacebookMessenger /><span id="dis">Messages</span></a>
+          <a href="/notification" onClick={toggleNotifications}><FaHeart /><span id="dis">Notifications</span></a>
+          <a href="Create" onClick={toggleShare}><FaPlusSquare /><span id="dis">Create</span></a>
+          <a href="/Profile"><img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} /><span id="dis">Profile</span></a>
+          <a href="#"><FaBars /><span id="dis">More</span></a>
+        </nav>
+      </header>
+
+      {/* SEARCH COMPONENT */}
+      <Search isOpen={showSearch} onClose={toggleSearch} />
+
+      {/* NOTIFICATIONS */}
+      {showNotifications && (
+        <div className="notifications">
+          <div className="main">
+            <h1>Notifications</h1>
+            <div className="request-section">
+              <img src="/pics/profile_1.jpg" alt="profile" />
+              <div className="request-section-follow">
+                <p><b>Follow requests</b></p>
+                <p className="follow-requests">hiten_256 + 5 others</p>
               </div>
-              <h2>This week</h2>
-              <div className="latest-news">
-                <img src="/pics/profile_1.jpg" alt="profile" />
-                <p>Learn how Meta will use your info to personalize your experiences.</p>
-              </div>
+              <div className="blue-dot"></div>
+            </div>
+            <h2>This week</h2>
+            <div className="latest-news">
+              <img src="/pics/profile_1.jpg" alt="profile" />
+              <p>Learn how Meta will use your info to personalize your experiences.</p>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* HOME FEED */}
+      {/* HOME FEED */}
       <div id="home">
         {/* STORIES */}
         <div id="home_status">
@@ -177,127 +220,125 @@
           ))}
         </div>
 
+        {/* POSTS */}
+        <div id="post-no">
+          {posts.map((post) => (
+            <Post key={post.id} post={post} />
+          ))}
+        </div>
+      </div>
 
-
-          {/* POSTS */}
-          <div id="post-no">
-            {posts.map((post) => (
-              <Post key={post.id} post={post} />
-            ))}
+      {/* SUGGESTIONS SECTION */}
+      <div id="suggested">
+        <div className="current-user">
+          <a href="/Profile">
+            <img src="/pics/profile_1.jpg" alt="Profile" className="profile-pic" />
+          </a>
+          <div className="user-info">
+            <a href="/Profile"><strong>Vansh Singh</strong></a>
+            <p>vansh_singh_787</p>
           </div>
+          <a href="#">Switch</a>
         </div>
 
-        {/* SUGGESTIONS SECTION */}
-        <div id="suggested">
-          <div className="current-user">
-            <a href="/Profile">
-              <img src="/pics/profile_1.jpg" alt="Profile" className="profile-pic" />
+        <h4>Suggested for you <a href="#" className="see-all">See All</a></h4>
+
+        {suggestions.map((s, i) => (
+          <div key={i} className="suggestion profile-link">
+            <a href={`/Profile?name=${s.name}&pic=${s.pic}`}>
+              <img src={s.pic} alt={s.name} className="profile-pic" />
             </a>
-            <div className="user-info">
-              <a href="/Profile"><strong>Vansh Singh</strong></a>
-              <p>vansh_singh_787</p>
-            </div>
-            <a href="#">Switch</a>
-          </div>
-
-          <h4>Suggested for you <a href="#" className="see-all">See All</a></h4>
-
-          {suggestions.map((s, i) => (
-            <div key={i} className="suggestion profile-link">
+            <div>
               <a href={`/Profile?name=${s.name}&pic=${s.pic}`}>
-                <img src={s.pic} alt={s.name} className="profile-pic" />
+                <strong>{s.name}</strong>
               </a>
-              <div>
-                <a href={`/Profile?name=${s.name}&pic=${s.pic}`}>
-                  <strong>{s.name}</strong>
-                </a>
-                <p>{s.text}</p>
+              <p>{s.text}</p>
+            </div>
+            <a href="#">Follow</a>
+          </div>
+        ))}
+
+        <footer>
+          <p>About · Help · Press · API · Jobs · Privacy · Terms · Locations · Language · Meta Verified</p>
+          <p>© 2025 INSTAGRAM FROM META</p>
+        </footer>
+      </div>
+
+      {/* FLOATING MESSAGE BAR */}
+      <div className="popup-bar" onClick={toggleMessages}>
+        <div className="icon">
+          <FaFacebookMessenger />
+        </div>
+        <span className="label">Messages</span>
+        <div className="avatars">
+          <img src="/pics/profile_2.jpg" alt="" />
+          <img src="/pics/profile_5.jpg" alt="" />
+          <img src="/pics/profile_3.jpg" alt="" />
+          <div className="more">...</div>
+        </div>
+      </div>
+
+      {/* MESSAGES POPUP */}
+      {showMessages && (
+        <div className="popup-window">
+          <div className="popup-header">
+            <div>Messages <span>4</span></div>
+            <button onClick={toggleMessages}>✖</button>
+          </div>
+          {messages.map((msg, i) => (
+            <div className="message" key={i}>
+              <img src={msg.pic} alt={msg.name} />
+              <div className="details">
+                <p><b>{msg.name}</b></p>
+                <p>{msg.name} sent an attachment <small>{msg.time}</small></p>
               </div>
-              <a href="#">Follow</a>
+              <div className="unread-dot"></div>
             </div>
           ))}
-
-          <footer>
-            <p>About · Help · Press · API · Jobs · Privacy · Terms · Locations · Language · Meta Verified</p>
-            <p>© 2025 INSTAGRAM FROM META</p>
-          </footer>
         </div>
+      )}
 
-        {/* FLOATING MESSAGE BAR */}
-        <div className="popup-bar" onClick={toggleMessages}>
-          <div className="icon">
-            <FaFacebookMessenger />
-          </div>
-          <span className="label">Messages</span>
-          <div className="avatars">
-            <img src="/pics/profile_2.jpg" alt="" />
-            <img src="/pics/profile_5.jpg" alt="" />
-            <img src="/pics/profile_3.jpg" alt="" />
-            <div className="more">...</div>
-          </div>
-        </div>
+      {/* SHARE POPUP */}
+      {showShare && (
+        <div className="popup">
+          <div className="popup-content">
+            <span className="close" onClick={toggleShare}>&times;</span>
+            <h2>Share Reel</h2>
+            <input
+              type="text"
+              placeholder="Search user..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
 
-        {/* MESSAGES POPUP */}
-        {showMessages && (
-          <div className="popup-window">
-            <div className="popup-header">
-              <div>Messages <span>4</span></div>
-              <button onClick={toggleMessages}>✖</button>
+            <div className="share-list">
+              {shareUsers
+                .filter((u) =>
+                  u.name.toLowerCase().includes(searchTerm.toLowerCase())
+                )
+                .map((user, i) => (
+                  <div className="user" key={i}>
+                    <img src={user.pic} alt={user.name} />
+                    <p>{user.name}</p>
+                  </div>
+                ))}
             </div>
-            {messages.map((msg, i) => (
-              <div className="message" key={i}>
-                <img src={msg.pic} alt={msg.name} />
-                <div className="details">
-                  <p><b>{msg.name}</b></p>
-                  <p>{msg.name} sent an attachment <small>{msg.time}</small></p>
-                </div>
-                <div className="unread-dot"></div>
-              </div>
-            ))}
-          </div>
-        )}
 
-        {/* SHARE POPUP */}
-        {showShare && (
-          <div className="popup">
-            <div className="popup-content">
-              <span className="close" onClick={toggleShare}>&times;</span>
-              <h2>Share Reel</h2>
-              <input
-                type="text"
-                placeholder="Search user..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-
-              <div className="share-list">
-                {shareUsers
-                  .filter((u) =>
-                    u.name.toLowerCase().includes(searchTerm.toLowerCase())
-                  )
-                  .map((user, i) => (
-                    <div className="user" key={i}>
-                      <img src={user.pic} alt={user.name} />
-                      <p>{user.name}</p>
-                    </div>
-                  ))}
-              </div>
-
-              <div className="share-options">
-                <button><FaLink /> Copy Link</button>
-                <button><FaFacebook /> Facebook</button>
-                <button><FaWhatsapp /> WhatsApp</button>
-                <button><FaEnvelope /> Email</button>
-                <button><FaTwitter /> X</button>
-              </div>
+            <div className="share-options">
+              <button><FaLink /> Copy Link</button>
+              <button><FaFacebook /> Facebook</button>
+              <button><FaWhatsapp /> WhatsApp</button>
+              <button><FaEnvelope /> Email</button>
+              <button><FaTwitter /> X</button>
             </div>
           </div>
-        )}
-      </div>
-    );
-  }
+        </div>
+      )}
+    </div>
+  );
+}
 
-  // POST COMPONENT
+// POST COMPONENT
 function Post({ post }) {
   const [liked, setLiked] = useState(false);
   const toggleLike = () => setLiked(!liked);
@@ -324,7 +365,6 @@ function Post({ post }) {
       {/* Footer (Reaction Icons) */}
       <div className="post-footer">
         <div className="post-footer-rxn">
-
           {/* ❤️ Like Button */}
           <button
             onClick={toggleLike}
