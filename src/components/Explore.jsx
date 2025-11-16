@@ -9,11 +9,6 @@ import {
   FaHeart,
   FaPlusSquare,
   FaBars,
-  FaLink,
-  FaFacebook,
-  FaWhatsapp,
-  FaEnvelope,
-  FaTwitter,
 } from "react-icons/fa";
 import '../css/explore.css';
 
@@ -235,89 +230,89 @@ const Explore = () => {
   }, [viewerVisible, isMuted]);
 
   return (
-    <div className="main">
-      <div id="main_page">
-        <div id="main_nav">
-          <header>
-            <a href="#" className="logo">Instagram</a>
-            <nav>
-          <a href="/Home"><FaHome /><span id="dis">Home</span></a>
-          <a href="#search"><FaSearch /><span id="dis">Search</span></a>
-          <a href="/explore"><FaCompass /><span id="dis">Explore</span></a>
-          <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
-          <a href="Messages" ><FaFacebookMessenger /><span id="dis">Messages</span></a>
-          <a href="/notification"><FaHeart /><span id="dis">Notifications</span></a>
-          <a href="Create"><FaPlusSquare /><span id="dis">Create</span></a>
-          <a href="/Profile"><img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} /><span id="dis">Profile</span></a>
-          <a href="#"><FaBars /><span id="dis">More</span></a>
-          </nav>
+    <div className="explore-main">
+      <div id="explore_page">
+        <div id="explore_nav">
+          <header className="explore-header">
+            <a href="#" className="explore-logo">Instagram</a>
+            <nav className="explore-navigation">
+              <a href="/Home"><FaHome /><span className="nav-text">Home</span></a>
+              <a href="#search"><FaSearch /><span className="nav-text">Search</span></a>
+              <a href="/explore"><FaCompass /><span className="nav-text">Explore</span></a>
+              <a href="/reels"><FaVideo /><span className="nav-text">Reels</span></a>
+              <a href="Messages" ><FaFacebookMessenger /><span className="nav-text">Messages</span></a>
+              <a href="/notification"><FaHeart /><span className="nav-text">Notifications</span></a>
+              <a href="Create"><FaPlusSquare /><span className="nav-text">Create</span></a>
+              <a href="/Profile"><img src="/pics/profile_1.jpg" alt="Profile" className="explore-profile-icon" style={{ borderRadius: "50%" }} /><span className="nav-text">Profile</span></a>
+              <a href="#"><FaBars /><span className="nav-text">More</span></a>
+            </nav>
           </header>
         </div>
 
-        <div className="Mid">
-          <div className="viewer" role="main" style={{display: viewerVisible ? 'flex' : 'none'}} onClick={(e) => e.target.className === 'viewer' && closeViewer()}>
-            <div className="left" aria-hidden="false">
-              <video id="reelVideo" className="reel-video" playsInline muted={isMuted} loop autoPlay>
+        <div className="explore-content">
+          <div className="reel-viewer" role="main" style={{display: viewerVisible ? 'flex' : 'none'}} onClick={(e) => e.target.className === 'reel-viewer' && closeViewer()}>
+            <div className="viewer-left" aria-hidden="false">
+              <video id="explore_reel_video" className="explore-reel-video" playsInline muted={isMuted} loop autoPlay>
                 {currentReel && <source src={currentReel.video} type="video/mp4" />}
                 Your browser doesn't support HTML5 video.
               </video>
 
-              <div className="video-overlay">
-                <button id="muteBtn" className="mute-btn" title="Toggle sound (space)" onClick={handleMuteToggle} style={{opacity: isMuted ? '0.6' : '1'}}>
+              <div className="explore-video-overlay">
+                <button id="explore_mute_btn" className="explore-mute-btn" title="Toggle sound (space)" onClick={handleMuteToggle} style={{opacity: isMuted ? '0.6' : '1'}}>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M11 5L6 9H2v6h4l5 4V5z" />
-                    <path id="soundWave" d="M19 9a4 4 0 0 1 0 6" />
+                    <path id="explore_sound_wave" d="M19 9a4 4 0 0 1 0 6" />
                   </svg>
                 </button>
               </div>
             </div>
 
-            <div className="right" aria-label="Comments panel">
-              <div className="header">
-                <img id="authorAvatar" className="avatar" src={currentReel?.avatar} alt="author avatar" />
-                <div className="user-block">
-                  <div className="name">
-                    <span id="authorName">{currentReel?.user}</span>
-                    <span title="verified" className="verified">✓</span>
+            <div className="viewer-right" aria-label="Comments panel">
+              <div className="viewer-header">
+                <img id="explore_author_avatar" className="viewer-avatar" src={currentReel?.avatar} alt="author avatar" />
+                <div className="viewer-user-block">
+                  <div className="viewer-name">
+                    <span id="explore_author_name">{currentReel?.user}</span>
+                    <span title="verified" className="viewer-verified">✓</span>
                     <small style={{color: 'var(--muted)', marginLeft: '8px', fontWeight: '600'}}>• Follow</small>
                   </div>
                   <div style={{color: 'var(--muted)', fontSize: '13px'}}>Funny Song Studio, Sounds Reel</div>
                 </div>
-                <button className="follow-btn" id="followBtn" onClick={handleFollowToggle} style={{color: isFollowing ? 'var(--muted)' : '#39a0ff'}}>
+                <button className="viewer-follow-btn" id="explore_follow_btn" onClick={handleFollowToggle} style={{color: isFollowing ? 'var(--muted)' : '#39a0ff'}}>
                   {isFollowing ? 'Following' : 'Follow'}
                 </button>
               </div>
 
-              <div className="meta">
-                <div className="caption" id="mainCaption">
+              <div className="viewer-meta">
+                <div className="viewer-caption" id="explore_main_caption">
                   {currentReel?.caption}
                 </div>
-                <div className="hashtags" id="hashTags">
+                <div className="viewer-hashtags" id="explore_hashtags">
                   {currentReel?.hashtags}
                 </div>
               </div>
 
-              <div className="comments-wrap" id="commentsWrap" aria-live="polite">
+              <div className="viewer-comments-wrap" id="explore_comments_wrap" aria-live="polite">
                 {comments.map((comment, index) => (
-                  <div key={index} className="comment">
+                  <div key={index} className="viewer-comment">
                     <img src={comment.avatar} alt="avatar" />
-                    <div className="cbody"><strong>{comment.user}</strong> {comment.text}</div>
+                    <div className="viewer-comment-body"><strong>{comment.user}</strong> {comment.text}</div>
                   </div>
                 ))}
               </div>
 
-              <div className="bottom-meta">
+              <div className="viewer-bottom-meta">
                 <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
-                  <button id="likeBtn" className={`icon-btn like ${isLiked ? 'active' : ''}`} aria-pressed={isLiked} title="Like" onClick={handleLikeToggle}>
-                    <svg className="heart" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6">
+                  <button id="explore_like_btn" className={`viewer-icon-btn viewer-like ${isLiked ? 'active' : ''}`} aria-pressed={isLiked} title="Like" onClick={handleLikeToggle}>
+                    <svg className="viewer-heart" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.6">
                       <path d="M12 21s-7-4.44-9-7.26C-0.2 9.28 3 5 6.5 6.3 8 7.05 9 8.2 12 10.9 15 8.2 16 7.05 17.5 6.3 21 5 24.2 9.28 21 13.74 19 16 12 21 12 21z" />
                     </svg>
                   </button>
-                  <div className="likes-count" id="likesCount">{likes.toLocaleString()} likes</div>
+                  <div className="viewer-likes-count" id="explore_likes_count">{likes.toLocaleString()} likes</div>
                 </div>
 
                 <div style={{marginLeft: 'auto', display: 'flex', gap: '6px', alignItems: 'center'}}>
-                  <button className="icon-btn" id="saveBtn" title="Save" onClick={handleSaveToggle}>
+                  <button className="viewer-icon-btn" id="explore_save_btn" title="Save" onClick={handleSaveToggle}>
                     <svg viewBox="0 0 24 24" width="18" height="18" fill={isSaved ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.6">
                       <path d="M6 2h12v18l-6-3-6 3V2z" />
                     </svg>
@@ -325,105 +320,105 @@ const Explore = () => {
                 </div>
               </div>
 
-              <div className="comment-input-wrap">
+              <div className="viewer-comment-input-wrap">
                 <input 
-                  id="commentInput" 
-                  className="comment-input" 
+                  id="explore_comment_input" 
+                  className="viewer-comment-input" 
                   placeholder="Add a comment..." 
                   aria-label="Add a comment"
                   value={commentInput}
                   onChange={(e) => setCommentInput(e.target.value)}
                   onKeyPress={handleKeyPress}
                 />
-                <button id="postBtn" className="post-btn" onClick={handlePostComment}>Post</button>
+                <button id="explore_post_btn" className="viewer-post-btn" onClick={handlePostComment}>Post</button>
               </div>
             </div>
           </div>
 
           <div className="explore-grid" style={{display: viewerVisible ? 'none' : 'grid'}}>
-            <div className="grid-item video-item" onClick={() => handleGridItemClick(0)}>
+            <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(0)}>
               <video src="../video/sample_8.mp4" autoPlay loop muted></video>
-              <div className="overlay-stats">
+              <div className="explore-overlay-stats">
                 <span><i className="fas fa-heart"></i> 4K</span>
                 <span><i className="fas fa-comment"></i> 40</span>
               </div>
             </div>
 
-            <div className="grid-item video-item" onClick={() => handleGridItemClick(1)}>
+            <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(1)}>
               <video src="../video/sample_10.mp4" autoPlay loop muted></video>
-              <div className="overlay-stats">
+              <div className="explore-overlay-stats">
                 <span><i className="fas fa-heart"></i> 9K</span>
                 <span><i className="fas fa-comment"></i> 40</span>
               </div>
             </div>
 
-            <div className="grid-item video-item" onClick={() => handleGridItemClick(2)}>
+            <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(2)}>
               <video src="../video/sample_4.mp4" autoPlay loop muted></video>
-              <div className="overlay-stats">
+              <div className="explore-overlay-stats">
                 <span><i className="fas fa-heart"></i> 45K</span>
                 <span><i className="fas fa-comment"></i> 4</span>
               </div>
             </div>
 
-            <div className="grid-item video-item" onClick={() => handleGridItemClick(3)}>
+            <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(3)}>
               <video src="../video/sample_7.mp4" autoPlay loop muted></video>
-              <div className="overlay-stats">
+              <div className="explore-overlay-stats">
                 <span><i className="fas fa-heart"></i> 459</span>
                 <span><i className="fas fa-comment"></i> 0</span>
               </div>
             </div>
 
-            <div className="grid-item video-item" onClick={() => handleGridItemClick(4)}>
+            <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(4)}>
               <video src="../video/sample_5.mp4" autoPlay loop muted></video>
-              <div className="overlay-stats">
+              <div className="explore-overlay-stats">
                 <span><i className="fas fa-heart"></i> 49K</span>
                 <span><i className="fas fa-comment"></i> 80</span>
               </div>
             </div>
 
-            <div className="grid-item video-item" onClick={() => handleGridItemClick(5)}>
+            <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(5)}>
               <video src="../video/sample_6.mp4" autoPlay loop muted></video>
-              <div className="overlay-stats">
+              <div className="explore-overlay-stats">
                 <span><i className="fas fa-heart"></i> 4K</span>
                 <span><i className="fas fa-comment"></i> 408</span>
               </div>
             </div>
 
-            <div className="grid-item video-item" onClick={() => handleGridItemClick(6)}>
+            <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(6)}>
               <video src="../video/sample_9.mp4" autoPlay loop muted></video>
-              <div className="overlay-stats">
+              <div className="explore-overlay-stats">
                 <span><i className="fas fa-heart"></i> 459K</span>
                 <span><i className="fas fa-comment"></i> 4,080</span>
               </div>
             </div>
 
-            <div className="grid-item video-item" onClick={() => handleGridItemClick(7)}>
+            <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(7)}>
               <video src="../video/sample_2.mp4" autoPlay loop muted></video>
-              <div className="overlay-stats">
+              <div className="explore-overlay-stats">
                 <span><i className="fas fa-heart"></i> 9K</span>
                 <span><i className="fas fa-comment"></i> 80</span>
               </div>
             </div>
 
-            <div className="grid-item video-item" onClick={() => handleGridItemClick(8)}>
+            <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(8)}>
               <video src="../video/sample_3.mp4" autoPlay loop muted></video>
-              <div className="overlay-stats">
+              <div className="explore-overlay-stats">
                 <span><i className="fas fa-heart"></i> 5K</span>
                 <span><i className="fas fa-comment"></i> 48</span>
               </div>
             </div>
 
-            <div className="grid-item video-item" onClick={() => handleGridItemClick(9)}>
+            <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(9)}>
               <video src="../video/sample_7.mp4" autoPlay loop muted></video>
-              <div className="overlay-stats">
+              <div className="explore-overlay-stats">
                 <span><i className="fas fa-heart"></i> 45</span>
                 <span><i className="fas fa-comment"></i> 4</span>
               </div>
             </div>
 
-            <div className="grid-item video-item" onClick={() => handleGridItemClick(10)}>
+            <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(10)}>
               <video src="../video/sample_1.mp4" autoPlay loop muted></video>
-              <div className="overlay-stats">
+              <div className="explore-overlay-stats">
                 <span><i className="fas fa-heart"></i> 49K</span>
                 <span><i className="fas fa-comment"></i> 400</span>
               </div>
