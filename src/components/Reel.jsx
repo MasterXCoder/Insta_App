@@ -22,6 +22,9 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Search from './Search';
+import Sidebar from './Sidebar';
+import Notification from './Notification';
+import { Create } from './Home';
 
 const Reels = () => {
   const [liked, setLiked] = useState({});
@@ -30,6 +33,8 @@ const Reels = () => {
   const [shareOpen, setShareOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
   const videoRefs = useRef({});
 
   const reels = [
@@ -95,9 +100,16 @@ const Reels = () => {
     }
   };
 
-  const toggleSearch = (e) => {
-    e.preventDefault();
+  const toggleSearch = () => {
     setShowSearch(!showSearch);
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+
+  const toggleCreate = () => {
+    setShowCreate(!showCreate);
   };
 
   // Handle sidebar styling when search is active
@@ -127,54 +139,19 @@ const Reels = () => {
   return (
     <div id="main_page">
       {/* SIDEBAR NAVIGATION */}
-      <div id="main_nav">
-        <header>
-          <Link to="/" className="logo">
-            Instagram
-          </Link>
-          <a href="#" id="insta-icon" style={{ display: "none" }}>
-            <FaInstagram />
-          </a>
-          <nav>
-            <Link to="/home">
-              <FaHome /> <span id="dis">Home</span>
-            </Link>
-            <a href="#search" onClick={toggleSearch}>
-              <FaSearch /> <span id="dis">Search</span>
-            </a>
-            <Link to="/explore">
-              <FaCompass /> <span id="dis">Explore</span>
-            </Link>
-            <Link to="/reels">
-              <FaVideo /> <span id="dis">Reels</span>
-            </Link>
-            <Link to="/messages">
-              <FaFacebookMessenger /> <span id="dis">Messages</span>
-            </Link>
-            <Link to="/notification">
-              <FaHeart /> <span id="dis">Notifications</span>
-            </Link>
-            <Link to="/create">
-              <FaPlusSquare /> <span id="dis">Create</span>
-            </Link>
-            <Link to="/profile">
-              <img
-                src="/pics/profile_1.jpg"
-                alt="Profile"
-                className="icon"
-                style={{ borderRadius: "50%" }}
-              />
-              <span id="dis">Profile</span>
-            </Link>
-            <a href="#more" className="main_more">
-              <FaBars /> <span id="dis">More</span>
-            </a>
-          </nav>
-        </header>
-      </div>
+      <Sidebar 
+        onSearchClick={toggleSearch}
+        onNotificationClick={toggleNotifications}
+        onCreateClick={toggleCreate}
+      />
 
       {/* SEARCH COMPONENT */}
       <Search isOpen={showSearch} onClose={toggleSearch} />
+      <Notification isOpen={showNotifications} onClose={toggleNotifications} />
+      <Create 
+        isOpen={showCreate} 
+        onClose={() => setShowCreate(false)}
+      />
 
       {/* MAIN REELS SECTION */}
       <div className="vertical_line">

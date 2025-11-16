@@ -11,6 +11,9 @@ import {
   FaBars,
 } from "react-icons/fa";
 import '../css/explore.css';
+import Sidebar from './Sidebar';
+import Notification from './Notification';
+import { Create } from './Home';
 
 const Explore = () => {
   const [viewerVisible, setViewerVisible] = useState(false);
@@ -22,6 +25,8 @@ const Explore = () => {
   const [comments, setComments] = useState([]);
   const [commentInput, setCommentInput] = useState('');
   const [likes, setLikes] = useState(0);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
 
   const reelData = [
     {
@@ -155,6 +160,14 @@ const Explore = () => {
     }
   ];
 
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+
+  const toggleCreate = () => {
+    setShowCreate(!showCreate);
+  };
+
   const handleGridItemClick = (index) => {
     const data = reelData[index % reelData.length];
     setCurrentReel(data);
@@ -232,22 +245,15 @@ const Explore = () => {
   return (
     <div className="explore-main">
       <div id="explore_page">
-        <div id="explore_nav">
-          <header className="explore-header">
-            <a href="#" className="explore-logo">Instagram</a>
-            <nav className="explore-navigation">
-              <a href="/Home"><FaHome /><span className="nav-text">Home</span></a>
-              <a href="#search"><FaSearch /><span className="nav-text">Search</span></a>
-              <a href="/explore"><FaCompass /><span className="nav-text">Explore</span></a>
-              <a href="/reels"><FaVideo /><span className="nav-text">Reels</span></a>
-              <a href="Messages" ><FaFacebookMessenger /><span className="nav-text">Messages</span></a>
-              <a href="/notification"><FaHeart /><span className="nav-text">Notifications</span></a>
-              <a href="Create"><FaPlusSquare /><span className="nav-text">Create</span></a>
-              <a href="/Profile"><img src="/pics/profile_1.jpg" alt="Profile" className="explore-profile-icon" style={{ borderRadius: "50%" }} /><span className="nav-text">Profile</span></a>
-              <a href="#"><FaBars /><span className="nav-text">More</span></a>
-            </nav>
-          </header>
-        </div>
+        <Sidebar 
+          onNotificationClick={toggleNotifications}
+          onCreateClick={toggleCreate}
+        />
+        <Notification isOpen={showNotifications} onClose={toggleNotifications} />
+        <Create 
+          isOpen={showCreate} 
+          onClose={() => setShowCreate(false)}
+        />
 
         <div className="explore-content">
           <div className="reel-viewer" role="main" style={{display: viewerVisible ? 'flex' : 'none'}} onClick={(e) => e.target.className === 'reel-viewer' && closeViewer()}>

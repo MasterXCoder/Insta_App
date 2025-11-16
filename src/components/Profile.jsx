@@ -19,12 +19,16 @@ import {
 
 import '../css/profile.css';
 import Search from './Search';
-import { PostsContext } from './Home';
+import Sidebar from './Sidebar';
+import Notification from './Notification';
+import { PostsContext, Create } from './Home';
 
 export default function Profile() {
   const postsContext = useContext(PostsContext);
   const [activeTab, setActiveTab] = useState("posts");
   const [showSearch, setShowSearch] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
   const [profileData, setProfileData] = useState({
     name: "Vansh Singh",
     displayName: "vansh_singh_787",
@@ -48,9 +52,22 @@ export default function Profile() {
     return num.toString();
   };
 
-  const toggleSearch = (e) => {
-    e.preventDefault();
+  const toggleSearch = () => {
     setShowSearch(!showSearch);
+  };
+
+  const toggleNotifications = () => {
+    setShowNotifications(!showNotifications);
+  };
+
+  const toggleCreate = () => {
+    setShowCreate(!showCreate);
+  };
+
+  const handlePostCreated = (newPost) => {
+    if (postsContext?.addPost) {
+      postsContext.addPost(newPost);
+    }
   };
 
   useEffect(() => {
@@ -194,66 +211,19 @@ export default function Profile() {
 
   return (
     <div id="main_page">
-      <div id="main_nav">
-        <header>
-          <a href="#" className="logo" style={{ fontFamily: "Dancing Script" }}>
-            Instagram
-          </a>
-          <a href="#" id="insta-icon" style={{ display: "none" }}>
-            <FaInstagram />
-          </a>
-          <nav>
-            <a href="/Home">
-              <FaHome />
-              <span id="dis">Home</span>
-            </a>
-            <a href="#search" onClick={toggleSearch}>
-              <FaSearch />
-              <span id="dis">Search</span>
-            </a>
-            <a href="/explore">
-              <FaCompass />
-              <span id="dis">Explore</span>
-            </a>
-            <a href="/reels">
-              <FaVideo />
-              <span id="dis">Reels</span>
-            </a>
-            <a href="/Messages">
-              <FaFacebookMessenger />
-              <span id="dis">Messages</span>
-            </a>
-            <a href="/notification">
-              <FaHeart />
-              <span id="dis">Notifications</span>
-            </a>
-            <a href="/Create">
-              <FaPlusSquare />
-              <span id="dis">Create</span>
-            </a>
-            <a href="/profile">
-              <img
-                src="/pics/profile_1.jpg"
-                alt="Profile"
-                className="icon"
-                style={{ borderRadius: "50%" }}
-              />
-              <span id="dis">Profile</span>
-            </a>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <a href="#more" className="main_more">
-              <FaBars />
-              <span id="dis">More</span>
-            </a>
-          </nav>
-        </header>
-      </div>
+      <Sidebar 
+        onSearchClick={toggleSearch}
+        onNotificationClick={toggleNotifications}
+        onCreateClick={toggleCreate}
+      />
 
       <Search isOpen={showSearch} onClose={toggleSearch} />
+      <Notification isOpen={showNotifications} onClose={toggleNotifications} />
+      <Create 
+        isOpen={showCreate} 
+        onClose={() => setShowCreate(false)}
+        onPostCreated={handlePostCreated}
+      />
 
       <div id="profile">
         <div className="profile-header">

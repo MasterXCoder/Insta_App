@@ -422,6 +422,30 @@ function ReelComponent({ reel, styles }) {
 
   return (
     <div className={reel.side === "right" ? styles.shortRight : styles.shortLeft}>
+      {/* Icon on left side when video is on right */}
+      {reel.side === "right" && (
+        <div className={styles.shortIcons}>
+          <div className={styles.iconTooltip}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" width="18" height="18">
+              <title>Reply</title>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+            </svg>
+            <span className={styles.tooltipText}>More</span>
+          </div>
+          <div className={styles.iconTooltip}>
+            <FaReply size={16} />
+            <span className={styles.tooltipText}>Reply</span>
+          </div>
+          <div className={styles.iconTooltip}>
+            <svg aria-label="Choose an emoji" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="18" role="img" viewBox="0 0 24 24" width="18">
+              <title>Choose an emoji</title>
+              <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path>
+            </svg>
+            <span className={styles.tooltipText}>React</span>
+          </div>
+        </div>
+      )}
+
       <div className={styles.videoContainer}>
         <div className={styles.videoHeader}>
           <img src={reel.profilePic} alt="Profile" className={styles.profilePic} />
@@ -447,26 +471,29 @@ function ReelComponent({ reel, styles }) {
         </div>
       </div>
 
-      <div className={styles.shortIcons}>
-        <div className={styles.iconTooltip}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" width="18" height="18">
-            <title>Reply</title>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
-          </svg>
-          <span className={styles.tooltipText}>More</span>
+      {/* Icon on right side when video is on left */}
+      {reel.side === "left" && (
+        <div className={styles.shortIcons}>
+          <div className={styles.iconTooltip}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" width="18" height="18">
+              <title>Reply</title>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+            </svg>
+            <span className={styles.tooltipText}>More</span>
+          </div>
+          <div className={styles.iconTooltip}>
+            <FaReply size={16} />
+            <span className={styles.tooltipText}>Reply</span>
+          </div>
+          <div className={styles.iconTooltip}>
+            <svg aria-label="Choose an emoji" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="18" role="img" viewBox="0 0 24 24" width="18">
+              <title>Choose an emoji</title>
+              <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path>
+            </svg>
+            <span className={styles.tooltipText}>React</span>
+          </div>
         </div>
-        <div className={styles.iconTooltip}>
-          <FaReply size={16} />
-          <span className={styles.tooltipText}>Reply</span>
-        </div>
-        <div className={styles.iconTooltip}>
-          <svg aria-label="Choose an emoji" className="x1lliihq x1n2onr6 x5n08af" fill="currentColor" height="18" role="img" viewBox="0 0 24 24" width="18">
-            <title>Choose an emoji</title>
-            <path d="M15.83 10.997a1.167 1.167 0 1 0 1.167 1.167 1.167 1.167 0 0 0-1.167-1.167Zm-6.5 1.167a1.167 1.167 0 1 0-1.166 1.167 1.167 1.167 0 0 0 1.166-1.167Zm5.163 3.24a3.406 3.406 0 0 1-4.982.007 1 1 0 1 0-1.557 1.256 5.397 5.397 0 0 0 8.09 0 1 1 0 0 0-1.55-1.263ZM12 .503a11.5 11.5 0 1 0 11.5 11.5A11.513 11.513 0 0 0 12 .503Zm0 21a9.5 9.5 0 1 1 9.5-9.5 9.51 9.51 0 0 1-9.5 9.5Z"></path>
-          </svg>
-          <span className={styles.tooltipText}>React</span>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
