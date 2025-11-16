@@ -1,9 +1,9 @@
 /* ========================================
-   STORY VIEWER - Fixed CSS
+   STORY VIEWER - Isolated CSS with Unique Classes
    ======================================== */
 
 /* ---------- Story Container ---------- */
-#storyContainer {
+.storyViewer {
   position: fixed;
   top: 0;
   left: 0;
@@ -18,8 +18,8 @@
   z-index: 9999;
 }
 
-/* ---------- Story Viewer ---------- */
-#storyViewer {
+/* ---------- Story Viewer Container ---------- */
+.storyViewer__container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -31,10 +31,10 @@
 }
 
 /* ---------- Story Card Base ---------- */
-.st1 {
+.storyViewer__card {
   position: relative;
-  width: 18vw;
-  max-width: 270px;
+  width: 22vw;
+  max-width: 340px;
   aspect-ratio: 9 / 16;
   border-radius: 16px;
   overflow: hidden;
@@ -52,19 +52,19 @@
   backface-visibility: hidden;
 }
 
-.st1 video,
-.st1 > img {
+.storyViewer__media {
   width: 100%;
   height: 100%;
   object-fit: contain;
   background-color: #000;
   will-change: transform;
+  display: block;
 }
 
 /* ---------- Active Story ---------- */
-.st1.active {
-  width: 28vw;
-  max-width: 360px;
+.storyViewer__card--active {
+  width: 35vw;
+  max-width: 450px;
   opacity: 1;
   transform: scale(1);
   filter: none;
@@ -73,14 +73,14 @@
 }
 
 /* ---------- Adjacent Stories (Left/Right) ---------- */
-.st1.left {
+.storyViewer__card--left {
   transform: translateX(-10%) scale(0.9) rotateY(5deg);
   opacity: 0.9;
   filter: blur(0.5px);
   z-index: 2;
 }
 
-.st1.right {
+.storyViewer__card--right {
   transform: translateX(10%) scale(0.9) rotateY(-5deg);
   opacity: 0.9;
   filter: blur(0.5px);
@@ -88,23 +88,23 @@
 }
 
 /* Boundary stories positioning */
-.st1:first-child.left {
+.storyViewer__card:first-child.storyViewer__card--left {
   transform: translateX(-20%) scale(0.9) rotateY(0deg);
 }
 
-.st1:last-child.right {
+.storyViewer__card:last-child.storyViewer__card--right {
   transform: translateX(20%) scale(0.9) rotateY(0deg);
 }
 
 /* ---------- Far Stories ---------- */
-.st1.far-left {
+.storyViewer__card--farLeft {
   transform: translateX(-50%) scale(0.7);
   opacity: 0.6;
   filter: blur(2px);
   z-index: 1;
 }
 
-.st1.far-right {
+.storyViewer__card--farRight {
   transform: translateX(50%) scale(0.7);
   opacity: 0.6;
   filter: blur(2px);
@@ -112,20 +112,20 @@
 }
 
 /* ---------- Story Profile Overlay ---------- */
-.st1 .profile {
+.storyViewer__profile {
   position: absolute;
-  top: 24px;
-  left: 12px;
+  top: 28px;
+  left: 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   z-index: 4;
   pointer-events: none;
 }
 
-.st1 .profile img {
-  width: 38px;
-  height: 38px;
+.storyViewer__profile img {
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   padding: 3px;
   border: 3px solid transparent;
@@ -143,35 +143,35 @@
   object-fit: cover;
 }
 
-.st1 .profile h4 {
+.storyViewer__profile h4 {
   color: #fff;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   margin: 0;
 }
 
 /* ---------- Story Progress Bars ---------- */
-.st1 .progress-container {
+.storyViewer__progressContainer {
   position: absolute;
-  top: 8px;
-  left: 8px;
-  right: 8px;
-  height: 4px;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  height: 5px;
   display: flex;
-  gap: 3px;
+  gap: 4px;
   z-index: 5;
   pointer-events: none;
 }
 
-.st1 .progress-bar {
+.storyViewer__progressBar {
   flex: 1;
   background: rgba(255, 255, 255, 0.3);
   border-radius: 2px;
   overflow: hidden;
 }
 
-.st1 .progress-bar-inner {
+.storyViewer__progressBarInner {
   width: 0%;
   height: 100%;
   background: #fff;
@@ -179,18 +179,18 @@
 }
 
 /* ---------- Navigation Buttons ---------- */
-.nav-btn {
+.storyViewer__navBtn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   background: rgba(255, 255, 255, 0.1);
   color: white;
   border: none;
-  font-size: 2rem;
+  font-size: 2.5rem;
   cursor: pointer;
   border-radius: 50%;
-  width: 55px;
-  height: 55px;
+  width: 65px;
+  height: 65px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -199,149 +199,167 @@
   user-select: none;
 }
 
-.nav-btn:hover {
+.storyViewer__navBtn:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: translateY(-50%) scale(1.1);
 }
 
-.nav-btn:active {
+.storyViewer__navBtn:active {
   background: rgba(255, 255, 255, 0.35);
 }
 
-.nav-btn.left {
+.storyViewer__navBtn--left {
   left: 5%;
 }
 
-.nav-btn.right {
+.storyViewer__navBtn--right {
   right: 5%;
 }
 
 /* ---------- Active Story Hover Effect ---------- */
-.st1.active:hover video,
-.st1.active:hover > img {
+.storyViewer__card--active:hover .storyViewer__media {
   transform: scale(1.03);
   transition: transform 0.3s ease;
 }
 
 /* ---------- Story Play/Pause Button ---------- */
-.story-play-btn {
+.storyViewer__playBtn {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
-  width: 70px;
-  height: 70px;
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 32px;
+  font-size: 36px;
   color: white;
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 5;
+  border: none;
+  padding: 0;
 }
 
-.st1.active:hover .story-play-btn {
+.storyViewer__card--active:hover .storyViewer__playBtn {
   opacity: 1;
 }
 
-.story-play-btn svg {
+.storyViewer__playBtn svg {
   pointer-events: none;
+  width: 36px;
+  height: 36px;
 }
 
 /* ---------- Responsive Design ---------- */
 @media (max-width: 1024px) {
-  .st1.active {
+  .storyViewer__card--active {
     width: 35vw;
     max-width: 340px;
   }
   
-  .st1 {
+  .storyViewer__card {
     width: 22vw;
     max-width: 250px;
   }
 }
 
 @media (max-width: 768px) {
-  .st1.active {
+  .storyViewer__card--active {
     width: 60vw;
     max-width: 380px;
   }
   
-  .st1 {
+  .storyViewer__card {
     width: 40vw;
     max-width: 280px;
   }
   
-  .nav-btn {
+  .storyViewer__navBtn {
     width: 45px;
     height: 45px;
     font-size: 1.5rem;
   }
   
-  .nav-btn.left {
+  .storyViewer__navBtn--left {
     left: 2%;
   }
   
-  .nav-btn.right {
+  .storyViewer__navBtn--right {
     right: 2%;
   }
   
-  .st1 .profile {
+  .storyViewer__profile {
     top: 20px;
     left: 10px;
   }
   
-  .st1 .profile img {
+  .storyViewer__profile img {
     width: 32px;
     height: 32px;
   }
   
-  .st1 .profile h4 {
+  .storyViewer__profile h4 {
     font-size: 12px;
   }
 }
 
 @media (max-width: 480px) {
-  .st1.active {
+  .storyViewer__card--active {
     width: 75vw;
     max-width: 100%;
   }
   
-  .st1 {
+  .storyViewer__card {
     width: 55vw;
   }
   
-  .nav-btn {
+  .storyViewer__navBtn {
     width: 40px;
     height: 40px;
     font-size: 1.2rem;
   }
   
-  .st1 .progress-container {
+  .storyViewer__progressContainer {
     top: 6px;
     left: 6px;
     right: 6px;
     height: 3px;
     gap: 2px;
   }
+
+  .storyViewer__playBtn {
+    width: 60px;
+    height: 60px;
+  }
+
+  .storyViewer__playBtn svg {
+    width: 28px;
+    height: 28px;
+  }
 }
 
 /* ---------- Accessibility ---------- */
-.nav-btn:focus {
+.storyViewer__navBtn:focus {
   outline: 2px solid rgba(255, 255, 255, 0.5);
   outline-offset: 2px;
 }
 
-.nav-btn:focus-visible {
+.storyViewer__navBtn:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.7);
 }
 
+.storyViewer__playBtn:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
 /* ---------- Loading State ---------- */
-.st1.loading {
+.storyViewer__card--loading {
   background: linear-gradient(
     90deg,
     #111 0%,
@@ -349,10 +367,10 @@
     #111 100%
   );
   background-size: 200% 100%;
-  animation: story-loading 1.5s ease-in-out infinite;
+  animation: storyViewer__loading 1.5s ease-in-out infinite;
 }
 
-@keyframes story-loading {
+@keyframes storyViewer__loading {
   0% {
     background-position: 200% 0;
   }
@@ -362,7 +380,7 @@
 }
 
 /* ---------- Prevent text selection during interaction ---------- */
-#storyContainer * {
+.storyViewer * {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

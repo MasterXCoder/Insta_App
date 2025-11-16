@@ -19,19 +19,19 @@ export default function Story() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [progressWidths, setProgressWidths] = useState({});
 
-  const viewerRef = useRef(null);
+  const viewerContainerRef = useRef(null);
   const videoRef = useRef(null);
   const progressIntervalRef = useRef(null);
   const progressStartTimeRef = useRef(null);
 
   // Center active story
   useEffect(() => {
-    if (viewerRef.current) {
-      const activeDiv = viewerRef.current.querySelector(".st1.active");
+    if (viewerContainerRef.current) {
+      const activeDiv = viewerContainerRef.current.querySelector(".storyViewer__card--active");
       if (activeDiv) {
-        const offset = viewerRef.current.clientWidth / 2 - (activeDiv.offsetLeft + activeDiv.clientWidth / 2);
-        viewerRef.current.style.transition = "transform 0.7s ease-in-out";
-        viewerRef.current.style.transform = `translateX(${offset}px)`;
+        const offset = viewerContainerRef.current.clientWidth / 2 - (activeDiv.offsetLeft + activeDiv.clientWidth / 2);
+        viewerContainerRef.current.style.transition = "transform 0.7s ease-in-out";
+        viewerContainerRef.current.style.transform = `translateX(${offset}px)`;
       }
     }
   }, [profileIndex, mediaIndex]);
@@ -133,27 +133,27 @@ export default function Story() {
   };
 
   const getStoryClass = (index) => {
-    if (index === profileIndex) return "active";
+    if (index === profileIndex) return "storyViewer__card--active";
     
     // Adjacent stories
     const prevIndex = (profileIndex - 1 + stories.length) % stories.length;
     const nextIndex = (profileIndex + 1) % stories.length;
     
-    if (index === prevIndex) return "left";
-    if (index === nextIndex) return "right";
+    if (index === prevIndex) return "storyViewer__card--left";
+    if (index === nextIndex) return "storyViewer__card--right";
     
     // All other stories based on their position relative to active
-    if (index < profileIndex) return "far-left";
-    return "far-right";
+    if (index < profileIndex) return "storyViewer__card--farLeft";
+    return "storyViewer__card--farRight";
   };
 
   return (
-    <div id="storyContainer">
-      <div className="nav-btn left" onClick={(e) => { e.stopPropagation(); prevStory(); }}>
+    <div className="storyViewer">
+      <button className="storyViewer__navBtn storyViewer__navBtn--left" onClick={(e) => { e.stopPropagation(); prevStory(); }}>
         ❮
-      </div>
+      </button>
 
-      <div id="storyViewer" ref={viewerRef} onClick={togglePlayPause}>
+      <div className="storyViewer__container" ref={viewerContainerRef} onClick={togglePlayPause}>
         {stories.map((profile, index) => {
           const storyClass = getStoryClass(index);
           const isActive = index === profileIndex;
@@ -161,15 +161,15 @@ export default function Story() {
           const isVideo = currentMedia.endsWith('.mp4');
 
           return (
-            <div key={index} className={`st1 ${storyClass}`}>
+            <div key={index} className={`storyViewer__card ${storyClass}`}>
               {isActive && (
                 <>
                   {/* Progress bars */}
-                  <div className="progress-container">
+                  <div className="storyViewer__progressContainer">
                     {profile.media.map((_, i) => (
-                      <div key={i} className="progress-bar">
+                      <div key={i} className="storyViewer__progressBar">
                         <div
-                          className="progress-bar-inner"
+                          className="storyViewer__progressBarInner"
                           style={{
                             width: i < mediaIndex ? '100%' : i === mediaIndex ? `${progressWidths[i] || 0}%` : '0%'
                           }}
@@ -179,7 +179,7 @@ export default function Story() {
                   </div>
 
                   {/* Profile info */}
-                  <div className="profile">
+                  <div className="storyViewer__profile">
                     <img src={profile.profile} alt={profile.name} />
                     <h4>{profile.name}</h4>
                   </div>
@@ -191,14 +191,15 @@ export default function Story() {
                       src={currentMedia}
                       muted
                       playsInline
+                      className="storyViewer__media"
                     ></video>
                   ) : (
-                    <img src={currentMedia} alt={profile.name} />
+                    <img src={currentMedia} alt={profile.name} className="storyViewer__media" />
                   )}
 
                   {/* Play/Pause Button */}
                   <div 
-                    className="story-play-btn" 
+                    className="storyViewer__playBtn" 
                     onClick={(e) => { e.stopPropagation(); togglePlayPause(); }}
                   >
                     {isPlaying ? <FaPause /> : <FaPlay />}
@@ -208,8 +209,8 @@ export default function Story() {
               
               {!isActive && (
                 <>
-                  <img src={currentMedia} alt={profile.name} />
-                  <div className="profile">
+                  <img src={currentMedia} alt={profile.name} className="storyViewer__media" />
+                  <div className="storyViewer__profile">
                     <img src={profile.profile} alt={profile.name} />
                   </div>
                 </>
@@ -219,9 +220,9 @@ export default function Story() {
         })}
       </div>
 
-      <div className="nav-btn right" onClick={(e) => { e.stopPropagation(); nextStory(); }}>
+      <button className="storyViewer__navBtn storyViewer__navBtn--right" onClick={(e) => { e.stopPropagation(); nextStory(); }}>
         ❯
-      </div>
+      </button>
     </div>
   );
 }
