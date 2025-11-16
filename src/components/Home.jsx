@@ -1,6 +1,6 @@
   import React, { useState, useEffect } from "react";
-  import "../css/home.css";
-  import "../css/notification.css";
+import styles from "../css/home.module.css";
+import "../css/notification.css";
   import {
     FaInstagram,
     FaHome,
@@ -57,7 +57,7 @@
         userPic: "/pics/profile_3.jpg",
         image: "/pics/lucky_2.png",
         likes: 101,
-        caption: "✌",
+        caption: "✌️",
       },
       {
         id: 3,
@@ -116,23 +116,23 @@
     ];
 
     return (
-      <div id="main_page">
+      <div className={styles.mainPage}>
         {/* SIDEBAR NAVIGATION */}
-        <header id="main_nav">
-          <a href="#" className="logo" style={{ fontFamily: "Dancing Script" }}>
+        <header className={styles.mainNav}>
+          <a href="#" className={styles.logo} style={{ fontFamily: "Dancing Script" }}>
             Instagram
           </a>
-          <nav>
+          <nav className={styles.nav}>
             <a href="#"><FaInstagram /></a>
-            <a href="/Home"><FaHome /><span id="dis">Home</span></a>
-            <a href="Search"><FaSearch /><span id="dis">Search</span></a>
-            <a href="Explore"><FaCompass /><span id="dis">Explore</span></a>
-            <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
-            <a href="/Messages" onClick={toggleMessages}><FaFacebookMessenger /><span id="dis">Messages</span></a>
-            <a href="/notification" onClick={toggleNotifications}><FaHeart /><span id="dis">Notifications</span></a>
-            <a href="Create" onClick={toggleShare}><FaPlusSquare /><span id="dis">Create</span></a>
-            <a href="/Profile"><img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} /><span id="dis">Profile</span></a>
-            <a href="#"><FaBars /><span id="dis">More</span></a>
+            <a href="/Home"><FaHome /><span className={styles.dis}>Home</span></a>
+            <a href="Search"><FaSearch /><span className={styles.dis}>Search</span></a>
+            <a href="Explore"><FaCompass /><span className={styles.dis}>Explore</span></a>
+            <a href="/reels"><FaVideo /><span className={styles.dis}>Reels</span></a>
+            <a href="Messages" onClick={toggleMessages}><FaFacebookMessenger /><span className={styles.dis}>Messages</span></a>
+            <a href="/notification" onClick={toggleNotifications}><FaHeart /><span className={styles.dis}>Notifications</span></a>
+            <a href="Create" onClick={toggleShare}><FaPlusSquare /><span className={styles.dis}>Create</span></a>
+            <a href="/Profile"><img src="/pics/profile_1.jpg" alt="Profile" className={styles.icon} style={{ borderRadius: "50%" }} /><span className={styles.dis}>Profile</span></a>
+            <a href="#"><FaBars /><span className={styles.dis}>More</span></a>
           </nav>
         </header>
 
@@ -159,9 +159,9 @@
         )}
 
         {/* HOME FEED */}
-      <div id="home">
+      <div className={styles.home}>
         {/* STORIES */}
-        <div id="home_status">
+        <div className={styles.homeStatus}>
           {[
             { img: "profile_5.jpg", name: "Nishchal" },
             { img: "profile_8.jpg", name: "Madhav" },
@@ -170,9 +170,9 @@
             { img: "profile_4.jpg", name: "Lovepreet" },
             { img: "profile_6.jpg", name: "Mohit" },
           ].map((story, i) => (
-            <a href="#" className="story" key={i}>
+            <a href="#" className={styles.story} key={i}>
               <img src={`/pics/${story.img}`} alt={story.name} />
-              <p className="username">{story.name}</p>
+              <p className={styles.username}>{story.name}</p>
             </a>
           ))}
         </div>
@@ -180,7 +180,7 @@
 
 
           {/* POSTS */}
-          <div id="post-no">
+          <div className={styles.postNo}>
             {posts.map((post) => (
               <Post key={post.id} post={post} />
             ))}
@@ -188,24 +188,24 @@
         </div>
 
         {/* SUGGESTIONS SECTION */}
-        <div id="suggested">
-          <div className="current-user">
+        <div className={styles.suggested}>
+          <div className={styles.currentUser}>
             <a href="/Profile">
-              <img src="/pics/profile_1.jpg" alt="Profile" className="profile-pic" />
+              <img src="/pics/profile_1.jpg" alt="Profile" className={styles.profilePic} />
             </a>
-            <div className="user-info">
+            <div className={styles.userInfo}>
               <a href="/Profile"><strong>Vansh Singh</strong></a>
               <p>vansh_singh_787</p>
             </div>
             <a href="#">Switch</a>
           </div>
 
-          <h4>Suggested for you <a href="#" className="see-all">See All</a></h4>
+          <h4>Suggested for you <a href="#" className={styles.seeAll}>See All</a></h4>
 
           {suggestions.map((s, i) => (
-            <div key={i} className="suggestion profile-link">
+            <div key={i} className={`${styles.suggestion} ${styles.profileLink}`}>
               <a href={`/Profile?name=${s.name}&pic=${s.pic}`}>
-                <img src={s.pic} alt={s.name} className="profile-pic" />
+                <img src={s.pic} alt={s.name} className={styles.profilePic} />
               </a>
               <div>
                 <a href={`/Profile?name=${s.name}&pic=${s.pic}`}>
@@ -303,10 +303,10 @@ function Post({ post }) {
   const toggleLike = () => setLiked(!liked);
 
   return (
-    <div className="post">
+    <div className={styles.post}>
       {/* Header (User Info) */}
-      <div className="home_posts">
-        <div id="home_posts_img">
+      <div className={styles.homePosts}>
+        <div className={styles.homePostsImg}>
           <a href={`/Profile?name=${post.username}&pic=${post.userPic}`}>
             <img src={post.userPic} alt={post.username} />
           </a>
@@ -317,15 +317,15 @@ function Post({ post }) {
       </div>
 
       {/* Post Image */}
-      <div id="posts_image">
+      <div className={styles.postsImage}>
         <img src={post.image} alt="post" />
       </div>
 
       {/* Footer (Reaction Icons) */}
-      <div className="post-footer">
-        <div className="post-footer-rxn">
+      <div className={styles.postFooter}>
+        <div className={styles.postFooterRxn}>
 
-          {/* ❤ Like Button */}
+          {/* ❤️ Like Button */}
           <button
             onClick={toggleLike}
             style={{

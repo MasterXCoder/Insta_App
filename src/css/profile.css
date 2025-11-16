@@ -12,7 +12,7 @@ body {
 
 /* Profile Section */
 #profile {
-  margin-left: 300px; /* space for sidebar */
+  /* margin-left: 300px; space for sidebar */
   width: 100%;
   padding: 40px;
 }

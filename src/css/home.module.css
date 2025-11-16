@@ -1,26 +1,18 @@
-/* 🌑 GLOBAL SETTINGS */
-body {
-  margin: 0;
-  padding: 0;
-  background-color: black;
-  font-family: Arial, sans-serif;
-  color: aliceblue;
-}
+/* ========================
+   HOME MODULE STYLES
+   (Do NOT use global body - causes conflicts with Messages)
+======================== */
 
-html,
-body {
-  overflow-x: hidden;
-}
-
-#main_page {
+.mainPage {
   display: flex;
-  overflow: visible; /* ✅ fixed to prevent popup clipping */
+  overflow: visible;
+  background-color: black;
 }
 
 /* ======================
-   🧭 NAVIGATION SIDEBAR
+   🧭 NAVIGATION SIDEBAR (250px fixed for Home)
 ====================== */
-#main_nav {
+.mainNav {
   position: fixed;
   top: 0;
   left: 0;
@@ -35,7 +27,7 @@ body {
   z-index: 2000;
 }
 
-header {
+:global(header) {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -45,15 +37,18 @@ header {
   font-size: 25px;
   font-family: "Dancing Script", cursive;
   padding: 12px;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-nav {
+.nav {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-nav a {
+.nav :global(a) {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -65,15 +60,15 @@ nav a {
   transition: background 0.3s ease;
 }
 
-nav a:hover {
+.nav :global(a:hover) {
   background-color: #262626;
 }
 
-nav a svg {
+.nav :global(svg) {
   flex-shrink: 0;
 }
 
-#dis {
+.dis {
   font-size: 16px;
 }
 
@@ -83,23 +78,27 @@ nav a svg {
 }
 
 /* ======================
-   🏠 HOME SECTION
+   🏠 MAIN HOME SECTION
 ====================== */
-#home {
+.home {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 800px;
-  /* margin-left: 300px; */
+  width: 56%;
+  margin-left: 380px;
+  margin-right: auto;
+  margin-top: 20px;
+  padding: 0 20px;
 }
 
-#home_status {
+.homeStatus {
   display: flex;
   gap: 15px;
-  margin-top: 20px;
+  margin-bottom: 30px;
+  overflow-x: auto;
+  padding: 10px 0;
 }
 
-#home_status a {
+.homeStatus :global(a) {
   text-decoration: none;
   color: inherit;
   display: flex;
@@ -108,13 +107,21 @@ nav a svg {
   transition: transform 0.2s ease;
 }
 
-#home_status a:hover {
+.homeStatus :global(a:hover) {
   transform: scale(1.05);
 }
 
-/* Story Border Gradient */
-.story img,
-#home_posts_img img {
+.story {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.story :global(img),
+.homePostsImg :global(img) {
   width: 60px;
   height: 60px;
   object-fit: cover;
@@ -133,33 +140,42 @@ nav a svg {
     ) border-box;
 }
 
+.username {
+  font-size: 12px;
+  margin-top: 8px;
+}
+
 /* ======================
    🖼️ POSTS
 ====================== */
-#post-no {
+.postNo {
   display: flex;
   flex-direction: column;
   width: 56%;
   margin-top: 20px;
 }
 
-.home_posts {
+.post {
+  margin-bottom: 30px;
+}
+
+.homePosts {
   display: flex;
   align-items: center;
   margin-top: 20px;
   margin-bottom: 10px;
 }
 
-.home_posts p {
+.homePosts :global(p) {
   font-size: 15px;
 }
 
-.home_posts svg {
+.homePosts :global(svg) {
   width: 30px;
   margin-left: auto;
 }
 
-#home_posts_img img {
+.homePostsImg :global(img) {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -167,12 +183,12 @@ nav a svg {
   padding: 3px;
 }
 
-#posts_image {
+.postsImage {
   display: flex;
   justify-content: center;
 }
 
-#posts_image img {
+.postsImage :global(img) {
   width: 400px;
   height: 500px;
   border-radius: 6px;
@@ -180,7 +196,7 @@ nav a svg {
 }
 
 /* Post Footer */
-.post-footer {
+.postFooter {
   margin-top: 10px;
   display: flex;
   width: 100%;
@@ -188,16 +204,12 @@ nav a svg {
   margin-bottom: 10px;
 }
 
-.post-footer-rxn {
+.postFooterRxn {
   display: flex;
   width: 99%;
   height: 30px;
   gap: 10px;
   cursor: pointer;
-}
-
-.rxn-save {
-  margin-left: auto;
 }
 
 /* Like Icon */
@@ -246,39 +258,38 @@ nav a svg {
 /* ======================
    🧑‍🤝‍🧑 SUGGESTED SECTION
 ====================== */
-#suggested {
-  width: 320px;
+.suggested {
+  width: 420px;
   padding: 15px;
   color: #fff;
 }
 
-#suggested .current-user {
+.currentUser {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
 }
 
-#suggested .current-user img {
+.currentUser :global(img) {
   width: 50px;
   height: 50px;
   border-radius: 50%;
 }
 
-#suggested .current-user .user-info {
+.userInfo {
   flex: 1;
   margin-left: 10px;
-  
 }
 
-#suggested .current-user a {
+.currentUser :global(a) {
   font-size: 15px;
   font-weight: bold;
   color: #0095f6;
   text-decoration: none;
 }
 
-#suggested .suggestion {
+.suggestion {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -287,36 +298,49 @@ nav a svg {
   font-size: 15px;
 }
 
-#suggested .suggestion div {
-    flex: 1;
-    margin-left: 10px;
+.suggestion :global(div) {
+  flex: 1;
+  margin-left: 10px;
 }
 
-#suggested .suggestion strong {
-    font-size: 13px;
-    display: block;
+.suggestion :global(strong) {
+  font-size: 13px;
+  display: block;
 }
 
-#suggested .suggestion p {
-    font-size: 11px;
-    color: gray;
-    margin: 0;
-}
-#suggested .suggestion a {
-    font-size: 12px;
-    font-weight: bold;
-    color: #0095f6;
-    text-decoration: none;
+.suggestion :global(p) {
+  font-size: 11px;
+  color: gray;
+  margin: 0;
 }
 
-#suggested .suggestion img {
+.suggestion :global(a) {
+  font-size: 12px;
+  font-weight: bold;
+  color: #0095f6;
+  text-decoration: none;
+}
+
+.suggestion :global(img) {
   width: 45px;
   height: 45px;
   border-radius: 50%;
   margin-right: 5px;
 }
 
-#suggested footer {
+.profilePic {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.seeAll {
+  color: #0095f6;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.suggested :global(footer) {
   margin-top: 20px;
   font-size: 11px;
   color: gray;
@@ -326,7 +350,7 @@ nav a svg {
 /* ======================
    💬 FLOATING MESSAGE BAR
 ====================== */
-.popup-bar {
+:global(.popup-bar) {
   width: 190px;
   height: 40px;
   position: fixed;
@@ -344,28 +368,28 @@ nav a svg {
   transition: background 0.3s ease;
 }
 
-.popup-bar:hover {
+:global(.popup-bar:hover) {
   background-color: #2a2a2a;
 }
 
-.popup-bar .icon {
+:global(.popup-bar .icon) {
   width: auto;
   height: auto;
 }
 
-.popup-bar .label {
+:global(.popup-bar .label) {
   font-size: 14px;
   color: white;
 }
 
-.avatars {
+:global(.avatars) {
   display: flex;
   align-items: center;
   margin-left: auto;
   justify-content: center;
 }
 
-.avatars img {
+:global(.avatars img) {
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -373,7 +397,7 @@ nav a svg {
   margin-left: -8px;
 }
 
-.more {
+:global(.more) {
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -388,7 +412,7 @@ nav a svg {
 /* ======================
    💬 MESSAGES POPUP
 ====================== */
-.popup-window {
+:global(.popup-window) {
   position: fixed;
   right: 20px;
   bottom: 70px;
@@ -400,7 +424,7 @@ nav a svg {
   overflow-y: auto;
   flex-direction: column;
   z-index: 3000;
-  display: flex; /* ✅ always flex for React conditional rendering */
+  display: flex;
   animation: slideUp 0.3s ease;
 }
 
@@ -415,7 +439,7 @@ nav a svg {
   }
 }
 
-.popup-header {
+:global(.popup-header) {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -424,7 +448,7 @@ nav a svg {
   border-bottom: 1px solid #333;
 }
 
-.popup-header span {
+:global(.popup-header span) {
   background: red;
   padding: 2px 8px;
   border-radius: 12px;
@@ -432,7 +456,7 @@ nav a svg {
   margin-left: 5px;
 }
 
-.popup-header button {
+:global(.popup-header button) {
   background: transparent;
   border: none;
   color: white;
@@ -440,7 +464,7 @@ nav a svg {
   cursor: pointer;
 }
 
-.message {
+:global(.message) {
   display: flex;
   align-items: center;
   padding: 10px;
@@ -449,31 +473,31 @@ nav a svg {
   cursor: pointer;
 }
 
-.message:hover {
+:global(.message:hover) {
   background-color: #2a2a2a;
 }
 
-.message img {
+:global(.message img) {
   width: 40px;
   height: 40px;
   border-radius: 50%;
 }
 
-.message .details {
+:global(.message .details) {
   flex: 1;
 }
 
-.message .details p {
+:global(.message .details p) {
   margin: 0;
   font-size: 14px;
   color: white;
 }
 
-.message .details small {
+:global(.message .details small) {
   color: gray;
 }
 
-.unread-dot {
+:global(.unread-dot) {
   width: 10px;
   height: 10px;
   background: #0095f6;
@@ -483,8 +507,8 @@ nav a svg {
 /* ======================
    📤 SHARE POPUP
 ====================== */
-.popup {
-  display: flex; /* ✅ visible when rendered in React */
+:global(.popup) {
+  display: flex;
   position: fixed;
   z-index: 2500;
   left: 0;
@@ -506,7 +530,7 @@ nav a svg {
   }
 }
 
-.popup-content {
+:global(.popup-content) {
   background-color: #121212;
   border-radius: 16px;
   padding: 20px;
@@ -519,7 +543,7 @@ nav a svg {
   animation: slideUp 0.3s ease;
 }
 
-.close {
+:global(.close) {
   position: absolute;
   right: 15px;
   top: 10px;
@@ -528,18 +552,18 @@ nav a svg {
   color: #aaa;
 }
 
-.close:hover {
+:global(.close:hover) {
   color: white;
 }
 
-.share-list {
+:global(.share-list) {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin: 15px 0;
 }
 
-.share-list .user {
+:global(.share-list .user) {
   width: 100px;
   text-align: center;
   display: flex;
@@ -551,24 +575,24 @@ nav a svg {
   transition: background 0.2s ease;
 }
 
-.share-list .user:hover {
+:global(.share-list .user:hover) {
   background-color: #1f1f1f;
 }
 
-.share-list .user img {
+:global(.share-list .user img) {
   width: 55px;
   height: 55px;
   border-radius: 50%;
 }
 
-.share-options {
+:global(.share-options) {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 10px;
 }
 
-.share-options button {
+:global(.share-options button) {
   flex: 1 1 45%;
   background-color: #222;
   border: none;
@@ -583,11 +607,11 @@ nav a svg {
   transition: background 0.3s ease;
 }
 
-.share-options button:hover {
+:global(.share-options button:hover) {
   background-color: #333;
 }
 
-#searchUser {
+:global(#searchUser) {
   width: 100%;
   padding: 10px;
   border-radius: 8px;
@@ -602,51 +626,51 @@ nav a svg {
    📱 RESPONSIVE DESIGN
 ====================== */
 @media (max-width: 768px) {
-  .popup-bar {
+  :global(.popup-bar) {
     display: none;
   }
-  #suggested {
+  .suggested {
     display: none;
   }
-  #dis {
+  .dis {
     display: none;
   }
-  #main_nav {
+  .mainNav {
     width: min-content;
     padding: 10px;
   }
-  nav a span,
+  .nav :global(a) :global(span),
   .logo {
     display: none;
   }
-  #home {
+  .home {
     margin-left: 20px;
     width: 100%;
   }
 }
 
 @media (min-width: 768px) and (max-width: 1424px) {
-  #main_nav {
+  .mainNav {
     width: 70px;
     padding: 10px;
     align-items: center;
   }
-  #home {
+  .home {
     width: 500px;
     margin-left: 200px;
     margin-right: 250px;
   }
-  nav a span,
+  .nav :global(a) :global(span),
   .logo {
     display: none;
   }
-  #post-no {
+  .postNo {
     width: 90%;
   }
-  #suggested {
+  .suggested {
     display: inline;
   }
-  .popup-bar {
+  :global(.popup-bar) {
     display: none;
   }
-}
+} 
