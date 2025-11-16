@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./components/Home";
-// import Notification from "./components/Notification";
+import Notification from "./components/Notification";
 import Login from "./components/Login";
 import Reels from "./components/Reel";
 import Profile from './components/Profile';
@@ -31,7 +31,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LoginWrapper />} />
         <Route path="/home" element={<Home />} />
-        {/* <Route path="/notification" element={<Notification />} /> */}
+        <Route path="/notification" element={<Notification />} />
         <Route path="/reels" element={<Reels />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/Messages" element={<Messages />} />

@@ -262,6 +262,12 @@
   width: 420px;
   padding: 15px;
   color: #fff;
+  position: fixed;
+  top: 8px;
+  right: 20px;
+  height: calc(100vh - 100px);
+  overflow-y: auto;
+  z-index: 100;
 }
 
 .currentUser {

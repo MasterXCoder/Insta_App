@@ -1,7 +1,8 @@
   import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../css/home.module.css";
-import "../css/notification.css";
+import notificationStyles from "../css/notification.module.css";
+import Notification from "./Notification";
   import {
     FaInstagram,
     FaHome,
@@ -131,33 +132,30 @@ import "../css/notification.css";
             <a href="Explore"><FaCompass /><span className={styles.dis}>Explore</span></a>
             <a href="/reels"><FaVideo /><span className={styles.dis}>Reels</span></a>
             <a href="Messages" onClick={toggleMessages}><FaFacebookMessenger /><span className={styles.dis}>Messages</span></a>
-            <a href="/notification" onClick={toggleNotifications}><FaHeart /><span className={styles.dis}>Notifications</span></a>
+            <a href="#" onClick={(e) => { e.preventDefault(); toggleNotifications(); }}><FaHeart /><span className={styles.dis}>Notifications</span></a>
             <a href="Create" onClick={toggleShare}><FaPlusSquare /><span className={styles.dis}>Create</span></a>
             <a href="/Profile"><img src="/pics/profile_1.jpg" alt="Profile" className={styles.icon} style={{ borderRadius: "50%" }} /><span className={styles.dis}>Profile</span></a>
             <a href="#"><FaBars /><span className={styles.dis}>More</span></a>
           </nav>
         </header>
 
-        {/* NOTIFICATIONS */}
+        {/* NOTIFICATIONS OVERLAY */}
         {showNotifications && (
-          <div className="notifications">
-            <div className="main">
-              <h1>Notifications</h1>
-              <div className="request-section">
-                <img src="/pics/profile_1.jpg" alt="profile" />
-                <div className="request-section-follow">
-                  <p><b>Follow requests</b></p>
-                  <p className="follow-requests">hiten_256 + 5 others</p>
-                </div>
-                <div className="blue-dot"></div>
-              </div>
-              <h2>This week</h2>
-              <div className="latest-news">
-                <img src="/pics/profile_1.jpg" alt="profile" />
-                <p>Learn how Meta will use your info to personalize your experiences.</p>
-              </div>
+          <>
+            <div 
+              className={notificationStyles.notificationOverlay}
+              onClick={toggleNotifications}
+            />
+            <div className={notificationStyles.notificationModal}>
+              <button 
+                className={notificationStyles.closeBtn}
+                onClick={toggleNotifications}
+              >
+                ✕
+              </button>
+              <Notification />
             </div>
-          </div>
+          </>
         )}
 
         {/* HOME FEED */}

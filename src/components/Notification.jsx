@@ -1,5 +1,5 @@
 import React from "react";
-import "../css/notification.css";
+import styles from "../css/notification.module.css";
 
 export default function Notification() {
   const notifications = [
@@ -9,7 +9,7 @@ export default function Notification() {
       message: "started following you.",
       date: "Oct 15",
       avatar: "/pics/profile_3.jpg",
-      actions: <button className="following-btn">Following</button>,
+      actions: <button className={styles.followingBtn}>Following</button>,
     },
     {
       type: "like",
@@ -28,27 +28,57 @@ export default function Notification() {
       thumb: "/pics/thumb_3.jpg",
       actions: (
         <>
-          <button className="confirm-btn">Confirm</button>
-          <button className="delete-btn">Delete</button>
+          <button className={styles.confirmBtn}>Confirm</button>
+          <button className={styles.deleteBtn}>Delete</button>
+        </>
+      ),
+    },
+    {
+      type: "follow",
+      username: "svkhbx",
+      message: "started following you.",
+      date: "Oct 15",
+      avatar: "/pics/profile_3.jpg",
+      actions: <button className={styles.followingBtn}>Following</button>,
+    },
+    {
+      type: "like",
+      username: "navreetk_06, iishu._16",
+      message: "and 1 other liked your story.",
+      date: "Oct 09",
+      avatar: "/pics/profile_4.jpg",
+      thumb: "/pics/thumb_2.jpg",
+    },
+    {
+      type: "request",
+      username: "gurvinder_bhatia3",
+      message: "requested to follow you.",
+      date: "Sep 29",
+      avatar: "/pics/profile_5.jpg",
+      thumb: "/pics/thumb_3.jpg",
+      actions: (
+        <>
+          <button className={styles.confirmBtn}>Confirm</button>
+          <button className={styles.deleteBtn}>Delete</button>
         </>
       ),
     },
   ];
 
   return (
-    <div className="main">
+    <div className={styles.main}>
       <h1>Notifications</h1>
 
       {/* Follow Requests Section */}
-      <div className="request-section">
+      <div className={styles.requestSection}>
         <img src="/pics/profile_1.jpg" alt="profile" />
-        <div className="request-section-follow">
+        <div className={styles.requestSectionFollow}>
           <p>
             <b>Follow requests</b>
           </p>
-          <p className="follow-requests">hiten_256 + 5 others</p>
+          <p className={styles.followRequests}>hiten_256 + 5 others</p>
         </div>
-        <div className="blue-dot"></div>
+        <div className={styles.blueDot}></div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -67,7 +97,7 @@ export default function Notification() {
 
       {/* This Week Section */}
       <h2>This week</h2>
-      <div className="latest-news">
+      <div className={styles.latestNews}>
         <img src="/pics/profile_1.jpg" alt="profile" />
         <p>
           Learn how Meta will use your info in new ways to personalize your
@@ -77,33 +107,33 @@ export default function Notification() {
 
       {/* This Month Section */}
       <h2>This month</h2>
-      <div className="notification-list">
+      <div className={styles.notificationList}>
         {notifications.map((notif, index) => (
           <div
             key={index}
             className={
               notif.type === "follow"
-                ? "notification-following"
+                ? styles.notificationFollowing
                 : notif.type === "like"
-                ? "notification-item"
-                : "notification-request"
+                ? styles.notificationItem
+                : styles.notificationRequest
             }
           >
             <img
-              className="notif-avatar"
+              className={styles.notifAvatar}
               src={notif.avatar}
               alt={`${notif.username} avatar`}
             />
-            <div className="notif-content">
+            <div className={styles.notifContent}>
               <p>
                 <strong>{notif.username}</strong> {notif.message}
               </p>
-              <span className="notif-date">{notif.date}</span>
+              <span className={styles.notifDate}>{notif.date}</span>
             </div>
-            <div className="notif-actions">{notif.actions}</div>
+            <div className={styles.notifActions}>{notif.actions}</div>
             {notif.thumb && (
               <img
-                className="notif-thumb"
+                className={styles.notifThumb}
                 src={notif.thumb}
                 alt="thumbnail"
               />
