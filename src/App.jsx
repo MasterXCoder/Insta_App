@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-route
 import Home, { PostsProvider } from "./components/Home";
 import Notification from "./components/Notification";
 import Login from "./components/Login";
+import Signup from "./components/Signup";
 import Reels from "./components/Reel";
 import Profile from './components/Profile';
 import Story from './components/Story';
@@ -26,12 +27,30 @@ function LoginWrapper() {
   return <Login onNavigate={handleNavigate} />;
 }
 
+// Wrapper component to handle navigation from Signup
+function SignupWrapper() {
+  const navigate = useNavigate();
+
+  const handleNavigate = (page) => {
+    if (page === "login") {
+      navigate("/");
+    } else if (page === "home") {
+      navigate("/home");
+    } else {
+      navigate("/");
+    }
+  };
+
+  return <Signup onNavigate={handleNavigate} />;
+}
+
 export default function App() {
   return (
     <Router>
       <PostsProvider>
         <Routes>
           <Route path="/" element={<LoginWrapper />} />
+          <Route path="/signup" element={<SignupWrapper />} />
           <Route path="/home" element={<Home />} />
           <Route path="/notification" element={<Notification />} />
           <Route path="/reels" element={<Reels />} />

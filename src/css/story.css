@@ -74,16 +74,16 @@
 
 /* ---------- Adjacent Stories (Left/Right) ---------- */
 .st1.left {
-  transform: translateX(-30%) scale(0.85) rotateY(5deg);
-  opacity: 0.8;
-  filter: blur(1px);
+  transform: translateX(-10%) scale(0.9) rotateY(5deg);
+  opacity: 0.9;
+  filter: blur(0.5px);
   z-index: 2;
 }
 
 .st1.right {
-  transform: translateX(30%) scale(0.85) rotateY(-5deg);
-  opacity: 0.8;
-  filter: blur(1px);
+  transform: translateX(10%) scale(0.9) rotateY(-5deg);
+  opacity: 0.9;
+  filter: blur(0.5px);
   z-index: 2;
 }
 
@@ -97,10 +97,16 @@
 }
 
 /* ---------- Far Stories ---------- */
-.st1.far-left,
+.st1.far-left {
+  transform: translateX(-50%) scale(0.7);
+  opacity: 0.6;
+  filter: blur(2px);
+  z-index: 1;
+}
+
 .st1.far-right {
-  transform: scale(0.7);
-  opacity: 0.5;
+  transform: translateX(50%) scale(0.7);
+  opacity: 0.6;
   filter: blur(2px);
   z-index: 1;
 }
@@ -217,23 +223,33 @@
   transition: transform 0.3s ease;
 }
 
-/* ---------- Play/Pause Indicator ---------- */
-#playPauseIcon {
-  position: fixed;
+/* ---------- Story Play/Pause Button ---------- */
+.story-play-btn {
+  position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  font-size: 3rem;
-  color: rgba(255, 255, 255, 0.85);
-  pointer-events: none;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: white;
+  cursor: pointer;
   opacity: 0;
-  z-index: 10000;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.3s ease;
+  z-index: 5;
 }
 
-#playPauseIcon.show {
+.st1.active:hover .story-play-btn {
   opacity: 1;
-  transform: translate(-50%, -50%) scale(1.2);
+}
+
+.story-play-btn svg {
+  pointer-events: none;
 }
 
 /* ---------- Responsive Design ---------- */
@@ -303,10 +319,6 @@
     width: 40px;
     height: 40px;
     font-size: 1.2rem;
-  }
-  
-  #playPauseIcon {
-    font-size: 2.5rem;
   }
   
   .st1 .progress-container {

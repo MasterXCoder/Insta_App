@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { FaPause, FaPlay } from "react-icons/fa";
 import "../css/story.css";
 
 export default function Story() {
@@ -16,7 +17,6 @@ export default function Story() {
   const [profileIndex, setProfileIndex] = useState(0);
   const [mediaIndex, setMediaIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [showPlayPause, setShowPlayPause] = useState(false);
   const [progressWidths, setProgressWidths] = useState({});
 
   const viewerRef = useRef(null);
@@ -130,14 +130,19 @@ export default function Story() {
 
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
-    setShowPlayPause(true);
-    setTimeout(() => setShowPlayPause(false), 800);
   };
 
   const getStoryClass = (index) => {
     if (index === profileIndex) return "active";
-    if (index === (profileIndex - 1 + stories.length) % stories.length) return "left";
-    if (index === (profileIndex + 1) % stories.length) return "right";
+    
+    // Adjacent stories
+    const prevIndex = (profileIndex - 1 + stories.length) % stories.length;
+    const nextIndex = (profileIndex + 1) % stories.length;
+    
+    if (index === prevIndex) return "left";
+    if (index === nextIndex) return "right";
+    
+    // All other stories based on their position relative to active
     if (index < profileIndex) return "far-left";
     return "far-right";
   };
@@ -190,6 +195,14 @@ export default function Story() {
                   ) : (
                     <img src={currentMedia} alt={profile.name} />
                   )}
+
+                  {/* Play/Pause Button */}
+                  <div 
+                    className="story-play-btn" 
+                    onClick={(e) => { e.stopPropagation(); togglePlayPause(); }}
+                  >
+                    {isPlaying ? <FaPause /> : <FaPlay />}
+                  </div>
                 </>
               )}
               
@@ -208,10 +221,6 @@ export default function Story() {
 
       <div className="nav-btn right" onClick={(e) => { e.stopPropagation(); nextStory(); }}>
         ❯
-      </div>
-
-      <div id="playPauseIcon" className={showPlayPause ? 'show' : ''}>
-        {isPlaying ? '⏸️' : '▶️'}
       </div>
     </div>
   );
