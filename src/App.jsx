@@ -7,6 +7,7 @@ import Reels from "./components/Reel";
 import Profile from './components/Profile';
 import Story from './components/Story';
 import Explore from './components/Explore';
+import Message from './components/Message';
 
 // Wrapper component to handle navigation from Login
 function LoginWrapper() {
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/story" element={<Story />} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/message" element={<Message />} />
         </Routes>
       </PostsProvider>
     </Router>

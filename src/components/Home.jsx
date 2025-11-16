@@ -386,31 +386,34 @@ export default function Home() {
 
   return (
     <div id="main_page">
-      <header id="main_nav">
-        <a href="#" className="logo" style={{ fontFamily: "Dancing Script" }}>Instagram</a>
-        <a href="#" id="insta-icon" style={{ display: "none" }}><FaInstagram /></a>
-        <nav>
-          <a href="/Home"><FaHome /><span id="dis">Home</span></a>
-          <a href="#search" onClick={toggleSearch}><FaSearch /><span id="dis">Search</span></a>
-          <a href="/explore"><FaCompass /><span id="dis">Explore</span></a>
-          <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
-          <a href="#messages" onClick={(e) => { e.preventDefault(); toggleMessages(); }}>
-            <FaFacebookMessenger /><span id="dis">Messages</span>
-          </a>
-          <a href="#" onClick={(e) => { e.preventDefault(); toggleNotifications(); }}>
-            <FaHeart />
-            <span id="dis">Notifications</span>
-          </a>
-          <a href="#create" onClick={(e) => { e.preventDefault(); setShowCreate(true); }}>
-            <FaPlusSquare /><span id="dis">Create</span>
-          </a>
-          <a href="/Profile">
-            <img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} />
-            <span id="dis">Profile</span>
-          </a>
-          <a href="#more"><FaBars /><span id="dis">More</span></a>
-        </nav>
-      </header>
+    <header id="main_nav">
+      <a href="#" className="logo" style={{ fontFamily: "Dancing Script" }}>Instagram</a>
+      <a href="#" id="insta-icon" style={{ display: "none" }}><FaInstagram /></a>
+      <nav>
+        <a href="/Home"><FaHome /><span id="dis">Home</span></a>
+        <a href="#search" onClick={toggleSearch}><FaSearch /><span id="dis">Search</span></a>
+        <a href="/explore"><FaCompass /><span id="dis">Explore</span></a>
+        <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
+        
+        {/* ✅ UPDATED MESSAGES LINK */}
+        <a href="/message">
+          <FaFacebookMessenger /><span id="dis">Messages</span>
+        </a>
+        
+        <a href="#" onClick={(e) => { e.preventDefault(); toggleNotifications(); }}>
+          <FaHeart />
+          <span id="dis">Notifications</span>
+        </a>
+        <a href="#create" onClick={(e) => { e.preventDefault(); setShowCreate(true); }}>
+          <FaPlusSquare /><span id="dis">Create</span>
+        </a>
+        <a href="/Profile">
+          <img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} />
+          <span id="dis">Profile</span>
+        </a>
+        <a href="#more"><FaBars /><span id="dis">More</span></a>
+      </nav>
+    </header>
 
       <Search isOpen={showSearch} onClose={toggleSearch} />
 

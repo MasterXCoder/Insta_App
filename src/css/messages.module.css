@@ -1,0 +1,849 @@
+/* ========================
+   MESSAGES MODULE STYLES
+   (Do NOT use global body/html - causes conflicts)
+======================== */
+
+:root {
+  --ig-background: #000000;
+  --ig-primary-text: #f5f5f5;
+  --ig-secondary-text: #a8a8a8;
+  --ig-border: #262626;
+  --ig-highlight: #0095f6;
+  --ig-hover-background: #1a1a1a;
+  --ig-message-bubble-me: #0095f6;
+  --ig-message-bubble-them: #262626;
+}
+
+/* ========================
+   MESSAGES PAGE LAYOUT
+======================== */
+
+.messagesPage {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background: var(--ig-background);
+}
+
+/* ========================
+   LEFT NAVIGATION SIDEBAR (70px fixed for Messages)
+======================== */
+
+.mainNav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 70px;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  color: white;
+  border-right: 1px solid #333;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.logo {
+  font-size: 25px;
+  font-family: 'Dancing Script', cursive;
+  padding: 12px;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav :global(a) {
+  color: white;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.nav :global(a:hover) {
+  background-color: #262626;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+}
+
+/* ========================
+   MAIN MESSAGES LAYOUT
+======================== */
+
+.messagesMain {
+  display: flex;
+  width: 100%;
+  margin-left: 70px;
+  height: 100vh;
+}
+
+/* ========================
+   LEFT SIDEBAR - MESSAGES LIST
+======================== */
+
+.sidebar {
+  width: 397px;
+  border-right: 1px solid var(--ig-border);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.sidebarHeader {
+  padding: 14px 24px;
+}
+
+.searchContainer {
+  background-color: var(--ig-border);
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  color: var(--ig-primary-text);
+  outline: none;
+  padding-left: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.searchContainer :global(svg) {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: var(--ig-primary-text);
+}
+
+.searchIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  width: 100%;
+  background-color: var(--ig-border);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  color: var(--ig-primary-text);
+  outline: none;
+}
+
+.searchInput :global(::placeholder) {
+  color: var(--ig-secondary-text);
+}
+
+/* ========================
+   NOTES SECTION
+======================== */
+
+.notesSection {
+  display: flex;
+  gap: 30px;
+  padding: 12px 24px;
+  height: 130px;
+  padding-top: 20px;
+  align-items: center;
+  padding-bottom: 0px;
+}
+
+.notes {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.noteImg {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--ig-border);
+  margin-top: 5px;
+}
+
+.noteBubble {
+  position: absolute;
+  top: -25px;
+  background-color: var(--ig-border);
+  color: var(--ig-secondary-text);
+  padding: 8px 12px;
+  border-radius: 14px;
+  font-size: 12px;
+  white-space: nowrap;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.noteBubble::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--ig-border);
+}
+
+.noteUsername {
+  font-size: 12px;
+}
+
+/* ========================
+   MESSAGES CONTAINER
+======================== */
+
+.messagesContainer {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.messagesListHeader {
+  flex-shrink: 0;
+  padding: 20px 24px 10px 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.messagesTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.requestsLink {
+  font-size: 14px;
+  color: var(--ig-secondary-text);
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: auto;
+}
+
+.messagesList {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.messagesList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messagesList::-webkit-scrollbar-thumb {
+  background: #4a4a4a;
+  border-radius: 3px;
+}
+
+.messagesList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messagePerson {
+  display: flex;
+  align-items: center;
+  padding: 8px 24px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.messagePerson:hover,
+.messagePerson.activeChat {
+  background-color: var(--ig-hover-background);
+}
+
+.personImage {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  margin-right: 12px;
+  object-fit: cover;
+  background-color: var(--ig-border);
+}
+
+.personDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.personUsername {
+  font-size: 14px;
+  color: var(--ig-primary-text);
+}
+
+.personPreview {
+  font-size: 13px;
+  color: var(--ig-secondary-text);
+}
+
+/* ========================
+   CHAT AREA - MAIN
+======================== */
+
+.chatAreaMain {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  min-height: 0;
+}
+
+/* ========================
+   EMPTY CHAT STATE
+======================== */
+
+.emptyChat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+}
+
+.emptyChatIcon {
+  width: 96px;
+  height: 96px;
+  border: 2px solid var(--ig-primary-text);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.emptyChatIcon :global(i) {
+  font-size: 48px;
+}
+
+.emptyChatTitle {
+  font-size: 22px;
+  font-weight: 300;
+  margin-bottom: 12px;
+  margin: 0 0 12px 0;
+}
+
+.emptyChatSubtitle {
+  font-size: 14px;
+  color: var(--ig-secondary-text);
+  margin-bottom: 24px;
+}
+
+.sendMessageButton {
+  background-color: var(--ig-highlight);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sendMessageButton:hover {
+  background-color: #0085d6;
+}
+
+/* ========================
+   CHAT ACTIVE STATE
+======================== */
+
+.rightMainChat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ========================
+   CHAT HEADING
+======================== */
+
+.chatHeading {
+  height: 94px;
+  border-bottom: 1px solid var(--ig-border);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  padding: 10px 20px;
+  width: 100%;
+  text-align: center;
+  overflow: hidden;
+}
+
+.chatHeadingUserinfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chatHeadingUserinfo :global(img) {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.chatUserName {
+  font-size: 15px;
+  color: var(--ig-primary-text);
+}
+
+.chatHeadingIcons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
+.iconButton {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.iconButton:hover {
+  background-color: #262626;
+  border-radius: 50%;
+}
+
+/* ========================
+   CHAT AREA - MESSAGES
+======================== */
+
+.chatArea {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  padding: 20px;
+  min-height: 0;
+}
+
+.chatArea::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chatArea::-webkit-scrollbar-thumb {
+  background: #4a4a4a;
+  border-radius: 3px;
+}
+
+.chatArea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ========================
+   TEXT MESSAGES CONTAINER
+======================== */
+
+.textMessagesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+.messageLeft,
+.messageRight {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 70%;
+  animation: messageSlideIn 0.3s ease;
+}
+
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.messageLeft {
+  align-self: flex-start;
+}
+
+.messageRight {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.messageSenderAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.messageBubble {
+  padding: 10px 16px;
+  border-radius: 18px;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.messageLeft .messageBubble {
+  background-color: var(--ig-message-bubble-them);
+  color: var(--ig-primary-text);
+  border-bottom-left-radius: 4px;
+}
+
+.messageRight .messageBubble {
+  background-color: var(--ig-message-bubble-me);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.messageText {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: pre-wrap;
+}
+
+/* ========================
+   VIDEO/REEL CONTAINER
+======================== */
+
+.videoContainer {
+  position: relative;
+  width: 250px;
+  height: 380px;
+  border-radius: 30px;
+  overflow: hidden;
+  background: #000;
+}
+
+.videoContainer :global(video) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 30px;
+  display: block;
+}
+
+.videoHeader {
+  position: absolute;
+  top: 16px;
+  left: 6px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profilePic {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  object-fit: cover;
+}
+
+.profileName {
+  color: #fff;
+  font-weight: bold;
+  font-size: 15px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+  letter-spacing: 1px;
+}
+
+.reelsIcon {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 2;
+}
+
+.reelsIcon :global(svg) {
+  padding: 4px;
+  color: #fff;
+  width: 38px;
+  height: 38px;
+}
+
+/* ========================
+   SHORT VIDEO POSITIONING
+======================== */
+
+.shortRight {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #000;
+  margin-left: auto;
+  margin-right: 0px;
+  margin-top: 20px;
+}
+
+.shortLeft {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #000;
+  margin-right: auto;
+  margin-left: 0px;
+  margin-top: 20px;
+}
+
+/* ========================
+   SHORT ICONS TOOLBAR
+======================== */
+
+.shortIcons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  margin-left: 10px;
+}
+
+.shortIcons :global(svg) {
+  color: white;
+  width: 20px;
+  height: 22px;
+  display: inline-block;
+}
+
+.shortIcons :global(i) {
+  color: white;
+  width: 20px;
+  height: 22px;
+  font-size: 20px;
+}
+
+.iconTooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.tooltipText {
+  position: absolute;
+  visibility: hidden;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  text-align: center;
+  padding: 4px 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  opacity: 0;
+  transition: opacity 0.2s, visibility 0.2s;
+  z-index: 1000;
+}
+
+.iconTooltip:hover .tooltipText {
+  visibility: visible;
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+/* ========================
+   CHAT MESSAGE INPUT
+======================== */
+
+.chatAreaMessage {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto;
+  align-items: center;
+  gap: 10px;
+  border: 2px solid var(--ig-border);
+  height: 45px;
+  border-radius: 50px;
+  padding: 5px 15px;
+  background: black;
+  margin: 10px 20px;
+  flex-shrink: 0;
+}
+
+.chatAreaMessage :global(input) {
+  background-color: black;
+  border: none;
+  outline: none;
+  cursor: text;
+  color: white;
+  font-size: 15px;
+  width: 100%;
+}
+
+.chatAreaMessage :global(input::placeholder) {
+  color: var(--ig-secondary-text);
+}
+
+.emojiButton,
+.voiceButton,
+.mediaButton,
+.stickerButton {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.emojiButton:hover,
+.voiceButton:hover,
+.mediaButton:hover,
+.stickerButton:hover {
+  opacity: 0.7;
+}
+
+.emojiButton :global(svg),
+.voiceButton :global(svg),
+.mediaButton :global(svg),
+.stickerButton :global(svg) {
+  width: 20px;
+  height: 20px;
+  color: white;
+}
+
+/* ========================
+   RESPONSIVE DESIGN
+======================== */
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--ig-border);
+    height: auto;
+    max-height: 150px;
+  }
+
+  .messagesMain {
+    flex-direction: column;
+    margin-left: 0;
+  }
+
+  .chatAreaMain {
+    flex-grow: 1;
+  }
+
+  .chatAreaMessage {
+    width: calc(100% - 40px);
+    left: auto;
+    right: auto;
+  }
+
+  .mainNav {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-right: none;
+    border-top: 1px solid #333;
+    padding: 10px 0;
+    justify-content: space-around;
+  }
+
+  .header {
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .nav {
+    flex-direction: row;
+    gap: 5px;
+  }
+
+  .notesSection {
+    height: auto;
+    padding: 8px 24px;
+  }
+
+  .videoContainer {
+    width: 180px;
+    height: 280px;
+  }
+
+  .messageLeft,
+  .messageRight {
+    max-width: 85%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .sidebar {
+    width: 300px;
+  }
+
+  .chatAreaMessage {
+    width: calc(100% - 370px);
+  }
+
+  .videoContainer {
+    width: 200px;
+    height: 320px;
+  }
+}
