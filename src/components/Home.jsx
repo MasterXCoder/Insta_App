@@ -1,4 +1,5 @@
   import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "../css/home.module.css";
 import "../css/notification.css";
   import {
@@ -19,6 +20,7 @@ import "../css/notification.css";
   } from "react-icons/fa";
 
   export default function Home() {
+    const navigate = useNavigate();
     const [showNotifications, setShowNotifications] = useState(false);
     const [showMessages, setShowMessages] = useState(false);
     const [showShare, setShowShare] = useState(false);
@@ -170,10 +172,15 @@ import "../css/notification.css";
             { img: "profile_4.jpg", name: "Lovepreet" },
             { img: "profile_6.jpg", name: "Mohit" },
           ].map((story, i) => (
-            <a href="#" className={styles.story} key={i}>
+            <button
+              className={styles.story}
+              key={i}
+              onClick={() => navigate(`/story/${i}`)}
+              style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}
+            >
               <img src={`/pics/${story.img}`} alt={story.name} />
               <p className={styles.username}>{story.name}</p>
-            </a>
+            </button>
           ))}
         </div>
 

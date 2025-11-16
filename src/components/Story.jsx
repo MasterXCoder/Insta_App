@@ -1,22 +1,25 @@
 // StoryViewer.jsx
 import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
-import "./story.css"; // make sure path is correct for your project
+import { useParams, useNavigate } from "react-router-dom";
+import styles from "../css/story.module.css";
 
 const storiesData = [
-  { name: "Madhav", profile: "../pics/profile_8.jpg", media: ["../pics/pf_3_2.png", "../video/sample_1.mp4", "../pics/post_2.png"] },
-  { name: "Ishpreet Singh", profile: "../pics/profile_2.jpg", media: ["../pics/post_3.png","../video/sample_5.mp4", "../video/sample_3.mp4", "../video/sample_7.mp4"] },
-  { name: "Lucky Arora", profile: "../pics/profile_3.jpg", media: ["../pics/lucky_1.png", "../pics/post_3.png"] },
-  { name: "Lovepreet", profile: "../pics/profile_4.jpg", media: ["../pics/post_1.png", "../video/sample_2.mp4"] },
-  { name: "Nishchal", profile: "../pics/profile_5.jpg", media: ["../video/sample_3.mp4", "../pics/post_4.png", "../video/sample_8.mp4"] },
-  { name: "Mohit", profile: "../pics/profile_6.jpg", media: ["../pics/post_3.png", "../video/sample_10.mp4", "../pics/post_5.png"] },
-  { name: "Mikash", profile: "../pics/profile_9.jpg", media: ["../pics/post_1.png", "../pics/post_6.png"] },
-  { name: "Lavnish", profile: "../pics/profile_10.jpg", media: ["../pics/post_2.png", "../video/sample_4.mp4", "../pics/post_7.png"] }
+  { name: "Nishchal", profile: "/pics/profile_5.jpg", media: ["/pics/pf_3_2.png", "/video/sample_1.mp4", "/pics/post_2.png"] },
+  { name: "Madhav", profile: "/pics/profile_8.jpg", media: ["/pics/pf_3_2.png", "/video/sample_1.mp4", "/pics/post_2.png"] },
+  { name: "Ishpreet Singh", profile: "/pics/profile_2.jpg", media: ["/pics/post_3.png", "/video/sample_5.mp4", "/video/sample_3.mp4", "/video/sample_7.mp4"] },
+  { name: "Lucky Arora", profile: "/pics/profile_3.jpg", media: ["/pics/lucky_1.png", "/pics/post_3.png"] },
+  { name: "Lovepreet", profile: "/pics/profile_4.jpg", media: ["/pics/post_1.png", "/video/sample_2.mp4"] },
+  { name: "Mohit", profile: "/pics/profile_6.jpg", media: ["/pics/post_3.png", "/video/sample_10.mp4", "/pics/post_5.png"] }
 ];
 
 const IMAGE_DURATION = 3000; // ms for images
 
 export default function StoryViewer() {
-  const [profileIndex, setProfileIndex] = useState(0);
+  const { storyId } = useParams();
+  const navigate = useNavigate();
+  const initialProfileIndex = parseInt(storyId) || 0;
+  
+  const [profileIndex, setProfileIndex] = useState(initialProfileIndex);
   const [mediaIndex, setMediaIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [showPlayIcon, setShowPlayIcon] = useState(false);
@@ -224,28 +227,28 @@ export default function StoryViewer() {
 
   // render progress bars for a profile/media
   const renderProgressBars = (profile) => (
-    <div className="progress-container">
+    <div className={styles.progressContainer}>
       {profile.media.map((_, i) => (
-        <div className="progress-bar" key={i}>
-          <div id={`progress-${i}`} className="progress-bar-inner" style={{ width: i < mediaIndex ? "100%" : "0%" }} />
+        <div className={styles.progressBar} key={i}>
+          <div id={`progress-${i}`} className={styles.progressBarInner} style={{ width: i < mediaIndex ? "100%" : "0%" }} />
         </div>
       ))}
     </div>
   );
 
   return (
-    <div id="storyContainer" onClick={handleViewerClick} style={{ width: "100%", height: "100%" }}>
-      <button id="prevBtn" onClick={onPrevClick} aria-label="Previous story">❮</button>
+    <div className={styles.storyContainer} onClick={handleViewerClick}>
+      <button className={styles.prevBtn} onClick={onPrevClick} aria-label="Previous story">❮</button>
 
-      <div id="storyViewer" ref={viewerRef}>
+      <div className={styles.storyViewer} ref={viewerRef}>
         {storiesData.map((profile, idx) => {
           // assign role class
-          let cls = "story";
-          if (idx === profileIndex) cls += " active";
-          else if (idx === (profileIndex - 1 + storiesData.length) % storiesData.length) cls += " left";
-          else if (idx === (profileIndex + 1) % storiesData.length) cls += " right";
-          else if (idx < profileIndex) cls += " far-left";
-          else cls += " far-right";
+          let cls = styles.story;
+          if (idx === profileIndex) cls += ` ${styles.active}`;
+          else if (idx === (profileIndex - 1 + storiesData.length) % storiesData.length) cls += ` ${styles.left}`;
+          else if (idx === (profileIndex + 1) % storiesData.length) cls += ` ${styles.right}`;
+          else if (idx < profileIndex) cls += ` ${styles.farLeft}`;
+          else cls += ` ${styles.farRight}`;
 
           return (
             <div
@@ -254,7 +257,7 @@ export default function StoryViewer() {
               ref={(el) => (storyRefs.current[idx] = el)}
             >
               {idx === profileIndex && renderProgressBars(profile)}
-              <div className="profile" style={{ display: "flex", alignItems: "center" }}>
+              <div className={styles.profile}>
                 <img src={profile.profile} alt={profile.name} />
                 <h4 style={{ marginLeft: 8 }}>{profile.name}</h4>
               </div>
@@ -272,9 +275,9 @@ export default function StoryViewer() {
         })}
       </div>
 
-      <button id="nextBtn" onClick={onNextClick} aria-label="Next story">❯</button>
+      <button className={styles.nextBtn} onClick={onNextClick} aria-label="Next story">❯</button>
 
-      <div id="playPauseIcon" className={showPlayIcon ? "show" : ""}>
+      <div className={`${styles.playPauseIcon} ${showPlayIcon ? styles.show : ""}`}>
         {isPlaying ? "⏸️" : "▶️"}
       </div>
     </div>

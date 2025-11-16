@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Reels from "./components/Reel";
 import Profile from './components/Profile';
 import Messages from './components/Messages';
+import Story from './components/Story';
 
 // Wrapper component to handle navigation from Login
 function LoginWrapper() {
@@ -33,7 +34,8 @@ export default function App() {
         {/* <Route path="/notification" element={<Notification />} /> */}
         <Route path="/reels" element={<Reels />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/Messages" element={<Messages />} /> 
+        <Route path="/Messages" element={<Messages />} />
+        <Route path="/story/:storyId" element={<Story />} />
       </Routes>
     </Router>
   );
