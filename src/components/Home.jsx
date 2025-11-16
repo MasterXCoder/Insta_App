@@ -424,9 +424,9 @@ export default function Home() {
         <div id="home_status">
           {[
             { img: "profile_5.jpg", name: "Nishchal" },
+            { img: "profile_3.jpg", name: "Lucky" },
             { img: "profile_8.jpg", name: "Madhav" },
             { img: "profile_2.jpg", name: "Ishpreet S..." },
-            { img: "profile_3.jpg", name: "Lucky" },
             { img: "profile_4.jpg", name: "Lovepreet" },
             { img: "profile_6.jpg", name: "Mohit" },
           ].map((story, i) => (
