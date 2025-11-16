@@ -30,12 +30,12 @@ export const PostsContext = createContext();
 
 export function PostsProvider({ children }) {
   const [userPosts, setUserPosts] = useState(() => {
-    // Load posts from localStorage on initial render
+    // Load posts from sessionStorage for home feed (cleared on browser close)
     try {
-      const savedPosts = localStorage.getItem('userPosts');
+      const savedPosts = sessionStorage.getItem('userPosts');
       return savedPosts ? JSON.parse(savedPosts) : [];
     } catch (error) {
-      console.error('Error loading posts from localStorage:', error);
+      console.error('Error loading posts from sessionStorage:', error);
       return [];
     }
   });
@@ -43,12 +43,29 @@ export function PostsProvider({ children }) {
   const addPost = (newPost) => {
     setUserPosts(prev => {
       const updatedPosts = [newPost, ...prev];
-      // Save to localStorage whenever posts are added
+      // Save to sessionStorage for home feed (temporary)
       try {
-        localStorage.setItem('userPosts', JSON.stringify(updatedPosts));
+        sessionStorage.setItem('userPosts', JSON.stringify(updatedPosts));
+      } catch (error) {
+        console.error('Error saving posts to sessionStorage:', error);
+      }
+      
+      // Also save to localStorage for profile (permanent)
+      try {
+        const profilePosts = localStorage.getItem('profilePosts');
+        const parsedProfilePosts = profilePosts ? JSON.parse(profilePosts) : [];
+        
+        // Check if post already exists to prevent duplicates
+        const postExists = parsedProfilePosts.some(post => post.id === newPost.id);
+        
+        if (!postExists) {
+          const updatedProfilePosts = [newPost, ...parsedProfilePosts];
+          localStorage.setItem('profilePosts', JSON.stringify(updatedProfilePosts));
+        }
       } catch (error) {
         console.error('Error saving posts to localStorage:', error);
       }
+      
       return updatedPosts;
     });
   };
@@ -225,28 +242,28 @@ function Post({ post }) {
 
       <div className="post-footer">
         <div className="post-footer-rxn">
-          <button onClick={toggleLike} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+          <button onClick={toggleLike} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center" }}>
             <svg className="like-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-              fill={liked ? "red" : "none"} stroke={liked ? "red" : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              fill={liked ? "red" : "none"} stroke={liked ? "red" : "#ffffff"} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
             </svg>
           </button>
 
-          <button style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <button style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
             </svg>
           </button>
 
-          <button style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <button style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", alignItems: "center" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
               <path d="m21.854 2.147-10.94 10.939" />
             </svg>
           </button>
 
-          <button style={{ background: "none", border: "none", cursor: "pointer", marginLeft: "auto", padding: 0 }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <button style={{ background: "none", border: "none", cursor: "pointer", marginLeft: "auto", padding: 0, display: "flex", alignItems: "center" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
             </svg>
           </button>

@@ -819,3 +819,161 @@ footer a:active {
   font-weight: 600;
   margin-right: 8px;
 }
+
+/* ======================
+   CREATE POST MODAL
+====================== */
+.modal-overlay-create {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.modal-content-create {
+  background-color: #262626;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 800px;
+  max-height: 90vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.close-btn-create {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn-create:hover {
+  color: #dbdbdb;
+}
+
+.modal-title {
+  text-align: center;
+  padding: 20px;
+  border-bottom: 1px solid #363636;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.upload-area-create {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  min-height: 400px;
+}
+
+.btn-create {
+  background-color: #0095f6;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-create:hover {
+  background-color: #1877f2;
+}
+
+.btn-create:active {
+  background-color: #0066cc;
+}
+
+.preview-container {
+  display: flex;
+  height: 600px;
+}
+
+.preview-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #000;
+  overflow: hidden;
+}
+
+.preview-left img,
+.preview-left video {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.preview-right {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #363636;
+  background-color: #262626;
+}
+
+.user-info-create {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-bottom: 1px solid #363636;
+}
+
+.user-avatar-create {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.caption-input {
+  flex: 1;
+  padding: 16px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  font-family: inherit;
+}
+
+.caption-input::placeholder {
+  color: #8e8e8e;
+}
+
+.caption-counter {
+  padding: 0 16px 16px;
+  color: #8e8e8e;
+  font-size: 12px;
+  text-align: right;
+}
+
+.btn-share {
+  margin: 16px;
+  margin-top: auto;
+}

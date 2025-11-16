@@ -65,8 +65,25 @@ export default function Profile() {
   };
 
   const handlePostCreated = (newPost) => {
-    if (postsContext?.addPost) {
-      postsContext.addPost(newPost);
+    // Don't use context - directly save to localStorage
+    try {
+      const profilePosts = localStorage.getItem('profilePosts');
+      const parsedProfilePosts = profilePosts ? JSON.parse(profilePosts) : [];
+      const updatedProfilePosts = [newPost, ...parsedProfilePosts];
+      localStorage.setItem('profilePosts', JSON.stringify(updatedProfilePosts));
+      
+      // Reload posts to show the new one
+      const userPostsGrid = updatedProfilePosts.map(post => ({
+        type: post.mediaType === 'video' ? 'video' : 'img',
+        src: post.image,
+        likes: formatNumber(post.likes),
+        comments: post.comments,
+      }));
+      
+      setPosts(userPostsGrid);
+      setProfileData(prev => ({ ...prev, posts: userPostsGrid.length }));
+    } catch (error) {
+      console.error('Error saving post:', error);
     }
   };
 
@@ -115,31 +132,46 @@ export default function Profile() {
       setTagged(pickRandomPosts(4));
       setProfileData(prev => ({ ...prev, posts: 4 }));
     } else {
-      // This is own profile - show only user created posts
-      const userPosts = postsContext?.userPosts || [];
-      
-      // Convert user posts to grid format
-      const userPostsGrid = userPosts.map(post => ({
-        type: post.mediaType === 'video' ? 'video' : 'img',
-        src: post.image,
-        likes: formatNumber(post.likes),
-        comments: post.comments,
-      }));
+      // This is own profile - show posts from localStorage (permanent storage)
+      try {
+        const profilePosts = localStorage.getItem('profilePosts');
+        const savedPosts = profilePosts ? JSON.parse(profilePosts) : [];
+        
+        // Convert user posts to grid format
+        const userPostsGrid = savedPosts.map(post => ({
+          type: post.mediaType === 'video' ? 'video' : 'img',
+          src: post.image,
+          likes: formatNumber(post.likes),
+          comments: post.comments,
+        }));
 
-      setPosts(userPostsGrid);
-      setSaved([]); // Empty for now
-      setTagged([]); // Empty for now
+        setPosts(userPostsGrid);
+        setSaved([]); // Empty for now
+        setTagged([]); // Empty for now
 
-      // Update post count
-      setProfileData(prev => ({
-        ...prev,
-        posts: userPostsGrid.length,
-        name: "Vansh Singh",
-        displayName: "vansh_singh_787",
-        pic: "/pics/profile_1.jpg"
-      }));
+        // Update post count
+        setProfileData(prev => ({
+          ...prev,
+          posts: userPostsGrid.length,
+          name: "Vansh Singh",
+          displayName: "vansh_singh_787",
+          pic: "/pics/profile_1.jpg"
+        }));
+      } catch (error) {
+        console.error('Error loading profile posts:', error);
+        setPosts([]);
+        setSaved([]);
+        setTagged([]);
+        setProfileData(prev => ({
+          ...prev,
+          posts: 0,
+          name: "Vansh Singh",
+          displayName: "vansh_singh_787",
+          pic: "/pics/profile_1.jpg"
+        }));
+      }
     }
-  }, [postsContext?.userPosts]);
+  }, []); // Remove dependency on postsContext to prevent re-running
 
   useEffect(() => {
     const nav = document.getElementById("main_nav");
@@ -197,10 +229,14 @@ export default function Profile() {
             )}
             <div className="overlay-stats">
               <span>
-                <i className="fas fa-heart"></i> {post.likes}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg> {post.likes}
               </span>
               <span>
-                <i className="fas fa-comment"></i> {post.comments}
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg> {post.comments}
               </span>
             </div>
           </div>

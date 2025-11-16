@@ -112,6 +112,34 @@ const Reels = () => {
     setShowCreate(!showCreate);
   };
 
+  const handlePostCreated = (newPost) => {
+    // Save to sessionStorage for home feed
+    try {
+      const sessionPosts = sessionStorage.getItem('userPosts');
+      const parsedSessionPosts = sessionPosts ? JSON.parse(sessionPosts) : [];
+      const updatedSessionPosts = [newPost, ...parsedSessionPosts];
+      sessionStorage.setItem('userPosts', JSON.stringify(updatedSessionPosts));
+    } catch (error) {
+      console.error('Error saving to sessionStorage:', error);
+    }
+
+    // Save to localStorage for profile
+    try {
+      const profilePosts = localStorage.getItem('profilePosts');
+      const parsedProfilePosts = profilePosts ? JSON.parse(profilePosts) : [];
+      
+      // Check if post already exists to prevent duplicates
+      const postExists = parsedProfilePosts.some(post => post.id === newPost.id);
+      
+      if (!postExists) {
+        const updatedProfilePosts = [newPost, ...parsedProfilePosts];
+        localStorage.setItem('profilePosts', JSON.stringify(updatedProfilePosts));
+      }
+    } catch (error) {
+      console.error('Error saving to localStorage:', error);
+    }
+  };
+
   // Handle sidebar styling when search is active
   useEffect(() => {
     const nav = document.getElementById("main_nav");
@@ -151,6 +179,7 @@ const Reels = () => {
       <Create 
         isOpen={showCreate} 
         onClose={() => setShowCreate(false)}
+        onPostCreated={handlePostCreated}
       />
 
       {/* MAIN REELS SECTION */}

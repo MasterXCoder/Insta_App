@@ -168,6 +168,34 @@ const Explore = () => {
     setShowCreate(!showCreate);
   };
 
+  const handlePostCreated = (newPost) => {
+    // Save to sessionStorage for home feed
+    try {
+      const sessionPosts = sessionStorage.getItem('userPosts');
+      const parsedSessionPosts = sessionPosts ? JSON.parse(sessionPosts) : [];
+      const updatedSessionPosts = [newPost, ...parsedSessionPosts];
+      sessionStorage.setItem('userPosts', JSON.stringify(updatedSessionPosts));
+    } catch (error) {
+      console.error('Error saving to sessionStorage:', error);
+    }
+
+    // Save to localStorage for profile
+    try {
+      const profilePosts = localStorage.getItem('profilePosts');
+      const parsedProfilePosts = profilePosts ? JSON.parse(profilePosts) : [];
+      
+      // Check if post already exists to prevent duplicates
+      const postExists = parsedProfilePosts.some(post => post.id === newPost.id);
+      
+      if (!postExists) {
+        const updatedProfilePosts = [newPost, ...parsedProfilePosts];
+        localStorage.setItem('profilePosts', JSON.stringify(updatedProfilePosts));
+      }
+    } catch (error) {
+      console.error('Error saving to localStorage:', error);
+    }
+  };
+
   const handleGridItemClick = (index) => {
     const data = reelData[index % reelData.length];
     setCurrentReel(data);
@@ -253,6 +281,7 @@ const Explore = () => {
         <Create 
           isOpen={showCreate} 
           onClose={() => setShowCreate(false)}
+          onPostCreated={handlePostCreated}
         />
 
         <div className="explore-content">
@@ -345,88 +374,88 @@ const Explore = () => {
             <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(0)}>
               <video src="../video/sample_8.mp4" autoPlay loop muted></video>
               <div className="explore-overlay-stats">
-                <span><i className="fas fa-heart"></i> 4K</span>
-                <span><i className="fas fa-comment"></i> 40</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 4K</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 40</span>
               </div>
             </div>
 
             <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(1)}>
               <video src="../video/sample_10.mp4" autoPlay loop muted></video>
               <div className="explore-overlay-stats">
-                <span><i className="fas fa-heart"></i> 9K</span>
-                <span><i className="fas fa-comment"></i> 40</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 9K</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 40</span>
               </div>
             </div>
 
             <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(2)}>
               <video src="../video/sample_4.mp4" autoPlay loop muted></video>
               <div className="explore-overlay-stats">
-                <span><i className="fas fa-heart"></i> 45K</span>
-                <span><i className="fas fa-comment"></i> 4</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 45K</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 4</span>
               </div>
             </div>
 
             <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(3)}>
               <video src="../video/sample_7.mp4" autoPlay loop muted></video>
               <div className="explore-overlay-stats">
-                <span><i className="fas fa-heart"></i> 459</span>
-                <span><i className="fas fa-comment"></i> 0</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 459</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 0</span>
               </div>
             </div>
 
             <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(4)}>
               <video src="../video/sample_5.mp4" autoPlay loop muted></video>
               <div className="explore-overlay-stats">
-                <span><i className="fas fa-heart"></i> 49K</span>
-                <span><i className="fas fa-comment"></i> 80</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 49K</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 80</span>
               </div>
             </div>
 
             <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(5)}>
               <video src="../video/sample_6.mp4" autoPlay loop muted></video>
               <div className="explore-overlay-stats">
-                <span><i className="fas fa-heart"></i> 4K</span>
-                <span><i className="fas fa-comment"></i> 408</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 4K</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 408</span>
               </div>
             </div>
 
             <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(6)}>
               <video src="../video/sample_9.mp4" autoPlay loop muted></video>
               <div className="explore-overlay-stats">
-                <span><i className="fas fa-heart"></i> 459K</span>
-                <span><i className="fas fa-comment"></i> 4,080</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 459K</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 4,080</span>
               </div>
             </div>
 
             <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(7)}>
               <video src="../video/sample_2.mp4" autoPlay loop muted></video>
               <div className="explore-overlay-stats">
-                <span><i className="fas fa-heart"></i> 9K</span>
-                <span><i className="fas fa-comment"></i> 80</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 9K</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 80</span>
               </div>
             </div>
 
             <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(8)}>
               <video src="../video/sample_3.mp4" autoPlay loop muted></video>
               <div className="explore-overlay-stats">
-                <span><i className="fas fa-heart"></i> 5K</span>
-                <span><i className="fas fa-comment"></i> 48</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 5K</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 48</span>
               </div>
             </div>
 
             <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(9)}>
               <video src="../video/sample_7.mp4" autoPlay loop muted></video>
               <div className="explore-overlay-stats">
-                <span><i className="fas fa-heart"></i> 45</span>
-                <span><i className="fas fa-comment"></i> 4</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 45</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 4</span>
               </div>
             </div>
 
             <div className="explore-grid-item explore-video-item" onClick={() => handleGridItemClick(10)}>
               <video src="../video/sample_1.mp4" autoPlay loop muted></video>
               <div className="explore-overlay-stats">
-                <span><i className="fas fa-heart"></i> 49K</span>
-                <span><i className="fas fa-comment"></i> 400</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 49K</span>
+                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg> 400</span>
               </div>
             </div>
           </div>
