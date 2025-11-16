@@ -650,3 +650,172 @@ nav a svg {
     display: none;
   }
 }
+/* Fix all links to remove blue color and underline */
+
+/* Navigation Links */
+#main_nav a,
+#main_nav a:link,
+#main_nav a:visited,
+#main_nav a:hover,
+#main_nav a:active {
+  color: white !important;
+  text-decoration: none !important;
+}
+
+.logo,
+.logo:link,
+.logo:visited,
+.logo:hover,
+.logo:active {
+  color: white !important;
+  text-decoration: none !important;
+}
+
+/* Sidebar navigation SVG icons */
+#main_nav nav a svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+/* Profile icon */
+#main_nav .icon {
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+}
+
+/* Suggestions section links */
+#suggested a,
+#suggested a:link,
+#suggested a:visited,
+#suggested a:hover,
+#suggested a:active {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+#suggested .see-all,
+#suggested .see-all:link,
+#suggested .see-all:visited,
+#suggested .see-all:hover,
+#suggested .see-all:active {
+  color: #0095f6 !important;
+  text-decoration: none !important;
+}
+
+#suggested .suggestion a:last-child {
+  color: #0095f6 !important;
+  font-weight: 600;
+}
+
+/* Post action buttons */
+.post-action-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-right: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.post-action-btn svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  color: white;
+}
+
+.post-action-btn:hover {
+  opacity: 0.7;
+}
+
+/* Share popup buttons */
+.share-options button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  background: #262626;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+  margin-bottom: 8px;
+  text-decoration: none !important;
+}
+
+.share-options button:hover {
+  background: #363636;
+}
+
+.share-options button svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Story links */
+.story,
+.story:link,
+.story:visited,
+.story:hover,
+.story:active {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+/* User profile links in posts */
+.home_posts a,
+.home_posts a:link,
+.home_posts a:visited,
+.home_posts a:hover,
+.home_posts a:active {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+/* Current user section */
+.current-user a,
+.current-user a:link,
+.current-user a:visited,
+.current-user a:hover,
+.current-user a:active {
+  text-decoration: none !important;
+}
+
+.current-user a:last-child {
+  color: #0095f6 !important;
+  font-weight: 600;
+}
+
+/* Footer links */
+footer a,
+footer a:link,
+footer a:visited,
+footer a:hover,
+footer a:active {
+  color: #737373 !important;
+  text-decoration: none !important;
+}
+
+/* Username in posts */
+.username {
+  font-weight: 600;
+  color: white;
+}
+
+/* Fix caption links */
+.caption {
+  color: white;
+}
+
+.caption .username {
+  font-weight: 600;
+  margin-right: 8px;
+}

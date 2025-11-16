@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import "../css/home.css";
+import Notification from './Notification';
 
 import {
   FaInstagram,
@@ -16,30 +17,275 @@ import {
   FaWhatsapp,
   FaEnvelope,
   FaTwitter,
+  FaImages,
+  FaTimes,
 } from "react-icons/fa";
 
 import Search from './Search';
 import { useNavigate } from 'react-router-dom';
 
+// Create Context for Posts
+export const PostsContext = createContext();
+
+export function PostsProvider({ children }) {
+  const [userPosts, setUserPosts] = useState(() => {
+    // Load posts from localStorage on initial render
+    try {
+      const savedPosts = localStorage.getItem('userPosts');
+      return savedPosts ? JSON.parse(savedPosts) : [];
+    } catch (error) {
+      console.error('Error loading posts from localStorage:', error);
+      return [];
+    }
+  });
+
+  const addPost = (newPost) => {
+    setUserPosts(prev => {
+      const updatedPosts = [newPost, ...prev];
+      // Save to localStorage whenever posts are added
+      try {
+        localStorage.setItem('userPosts', JSON.stringify(updatedPosts));
+      } catch (error) {
+        console.error('Error saving posts to localStorage:', error);
+      }
+      return updatedPosts;
+    });
+  };
+
+  return (
+    <PostsContext.Provider value={{ userPosts, addPost }}>
+      {children}
+    </PostsContext.Provider>
+  );
+}
+
+// Create Component
+function Create({ isOpen, onClose, onPostCreated }) {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [fileType, setFileType] = useState(null);
+  const [caption, setCaption] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setSelectedFile(file);
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      setPreviewUrl(reader.result);
+      if (file.type.startsWith("image/")) {
+        setFileType("image");
+      } else if (file.type.startsWith("video/")) {
+        setFileType("video");
+      } else {
+        alert("Unsupported file type. Please use image or video.");
+        resetModal();
+        return;
+      }
+      setShowPreview(true);
+    };
+
+    reader.onerror = () => {
+      alert("Failed to read file.");
+      resetModal();
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  const handleUpload = () => {
+    if (!previewUrl) {
+      alert("Please select a photo or video.");
+      return;
+    }
+
+    const newPost = {
+      id: "post-" + Date.now(),
+      image: previewUrl,
+      mediaType: fileType,
+      caption: caption.trim(),
+      likes: Math.floor(Math.random() * 900) + 100,
+      comments: Math.floor(Math.random() * 50),
+      username: "vansh_singh_787",
+      userPic: "/pics/profile_1.jpg",
+      timestamp: Date.now(),
+    };
+
+    if (onPostCreated) {
+      onPostCreated(newPost);
+    }
+
+    alert("✅ Post uploaded successfully!");
+    handleClose();
+  };
+
+  const handleClose = () => {
+    resetModal();
+    if (onClose) onClose();
+  };
+
+  const resetModal = () => {
+    setSelectedFile(null);
+    setPreviewUrl(null);
+    setFileType(null);
+    setCaption("");
+    setShowPreview(false);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay-create" onClick={handleClose}>
+      <div className="modal-content-create" onClick={(e) => e.stopPropagation()}>
+        <button className="close-btn-create" onClick={handleClose}>
+          <FaTimes />
+        </button>
+        <h3 className="modal-title">Create new post</h3>
+
+        {!showPreview ? (
+          <div className="upload-area-create">
+            <input
+              type="file"
+              accept="image/*,video/*"
+              onChange={handleFileSelect}
+              style={{ display: "none" }}
+              id="fileInput"
+            />
+            <FaImages style={{ fontSize: "50px", color: "#8e8e8e" }} />
+            <p style={{ margin: "20px 0", color: "#8e8e8e" }}>
+              Drag photos and videos here
+            </p>
+            <button
+              className="btn-create"
+              onClick={() => document.getElementById('fileInput')?.click()}
+            >
+              Select from computer
+            </button>
+          </div>
+        ) : (
+          <div className="preview-container">
+            <div className="preview-left">
+              {fileType === "image" ? (
+                <img src={previewUrl} alt="Preview" />
+              ) : (
+                <video src={previewUrl} controls />
+              )}
+            </div>
+            <div className="preview-right">
+              <div className="user-info-create">
+                <img src="/pics/profile_1.jpg" alt="Profile" className="user-avatar-create" />
+                <strong>vansh_singh_787</strong>
+              </div>
+              <textarea
+                className="caption-input"
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+                maxLength={2200}
+                placeholder="Write a caption..."
+              />
+              <div className="caption-counter">{caption.length}/2200</div>
+              <button className="btn-create btn-share" onClick={handleUpload}>Share</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// Post Component
+function Post({ post }) {
+  const [liked, setLiked] = useState(false);
+  const toggleLike = () => setLiked(!liked);
+
+  return (
+    <div className="post">
+      <div className="home_posts">
+        <div id="home_posts_img">
+          <a href={`/Profile?name=${post.username}&pic=${post.userPic}`}>
+            <img src={post.userPic} alt={post.username} />
+          </a>
+        </div>
+        <a href={`/Profile?name=${post.username}&pic=${post.userPic}`}>
+          <p>{post.username}</p>
+        </a>
+      </div>
+
+      <div id="posts_image">
+        {post.mediaType === "video" ? (
+          <video src={post.image} controls style={{ width: "100%" }} />
+        ) : (
+          <img src={post.image} alt="post" />
+        )}
+      </div>
+
+      <div className="post-footer">
+        <div className="post-footer-rxn">
+          <button onClick={toggleLike} style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+            <svg className="like-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+              fill={liked ? "red" : "none"} stroke={liked ? "red" : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
+            </svg>
+          </button>
+
+          <button style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
+            </svg>
+          </button>
+
+          <button style={{ background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
+              <path d="m21.854 2.147-10.94 10.939" />
+            </svg>
+          </button>
+
+          <button style={{ background: "none", border: "none", cursor: "pointer", marginLeft: "auto", padding: 0 }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div className="likes">
+        {liked ? (post.likes + 1).toLocaleString() : post.likes.toLocaleString()} likes
+      </div>
+
+      <div className="caption">
+        <span className="username">{post.username}</span> {post.caption}
+      </div>
+
+      <div className="add-comment">
+        <input type="text" placeholder="Add a comment..." />
+      </div>
+    </div>
+  );
+}
+
+// Main Home Component
 export default function Home() {
   const navigate = useNavigate();
+  const postsContext = useContext(PostsContext);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showMessages, setShowMessages] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showSearch, setShowSearch] = useState(false);
 
-  // Toggle functions
   const toggleNotifications = () => setShowNotifications(!showNotifications);
   const toggleMessages = () => setShowMessages(!showMessages);
   const toggleShare = () => setShowShare(!showShare);
-
   const toggleSearch = (e) => {
     e.preventDefault();
     setShowSearch(!showSearch);
   };
 
-  // Close share popup if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       const popupContent = document.querySelector(".popup-content");
@@ -51,7 +297,6 @@ export default function Home() {
     return () => window.removeEventListener("click", handleClickOutside);
   }, [showShare]);
 
-  // Handle sidebar styling when search is active
   useEffect(() => {
     const nav = document.getElementById("main_nav");
     const disElements = document.querySelectorAll('#dis');
@@ -61,17 +306,13 @@ export default function Home() {
     const profileElem = document.getElementById("profile");
 
     if (showSearch) {
-      // Activate search mode
       disElements.forEach(el => el.style.display = 'none');
-      if (nav) {
-        nav.style.width = "80px";
-      }
+      if (nav) nav.style.width = "80px";
       if (logo) logo.style.display = "none";
       if (instaIcon) instaIcon.style.display = "inline-block";
       if (homeElem) homeElem.style.marginLeft = "0px";
       if (profileElem) profileElem.style.marginLeft = "120px";
     } else {
-      // Revert to normal sidebar
       disElements.forEach(el => el.style.display = 'inline');
       if (nav) nav.style.width = "";
       if (logo) logo.style.display = "inline-block";
@@ -81,15 +322,14 @@ export default function Home() {
     }
   }, [showSearch]);
 
-  const posts = [
+  const staticPosts = [
     {
       id: 1,
       username: "warnerbrosindia",
       userPic: "/pics/warnerbrosindia.jpg",
       image: "/pics/post_3.png",
       likes: 1317839,
-      caption:
-        "#ContestAlert #TheConjuring: Last Rites Movie Contest goes live soon",
+      caption: "#ContestAlert #TheConjuring: Last Rites Movie Contest goes live soon",
     },
     {
       id: 2,
@@ -108,6 +348,15 @@ export default function Home() {
       caption: "🇮🇳👑",
     },
   ];
+
+  const userPosts = postsContext?.userPosts || [];
+  const allPosts = [...userPosts, ...staticPosts];
+
+  const handlePostCreated = (newPost) => {
+    if (postsContext?.addPost) {
+      postsContext.addPost(newPost);
+    }
+  };
 
   const messages = [
     { name: "Mohit", pic: "/pics/profile_6.jpg", time: "1h" },
@@ -128,84 +377,53 @@ export default function Home() {
   ];
 
   const suggestions = [
-    {
-      name: "ld.gurveeer",
-      pic: "/pics/demo_1.jpg",
-      text: "Followed by priyanshi.dhall_",
-    },
-    {
-      name: "naman1621",
-      pic: "/pics/demo_2.jpg",
-      text: "Followed by _harshitjangta_ + 2",
-    },
-    {
-      name: "itsharman_03",
-      pic: "/pics/demo_3.jpg",
-      text: "Followed by _harshitjangta_ + 2",
-    },
-    {
-      name: "tanush_520",
-      pic: "/pics/demo_4.jpg",
-      text: "Followed by ananyaguptaa16 + ...",
-    },
-    {
-      name: "anand_akash07",
-      pic: "/pics/demo_5.jpg",
-      text: "Followed by chitkarafresherss_2",
-    },
+    { name: "ld.gurveeer", pic: "/pics/demo_1.jpg", text: "Followed by priyanshi.dhall_" },
+    { name: "naman1621", pic: "/pics/demo_2.jpg", text: "Followed by _harshitjangta_ + 2" },
+    { name: "itsharman_03", pic: "/pics/demo_3.jpg", text: "Followed by _harshitjangta_ + 2" },
+    { name: "tanush_520", pic: "/pics/demo_4.jpg", text: "Followed by ananyaguptaa16 + ..." },
+    { name: "anand_akash07", pic: "/pics/demo_5.jpg", text: "Followed by chitkarafresherss_2" },
   ];
 
   return (
     <div id="main_page">
-      {/* SIDEBAR NAVIGATION */}
       <header id="main_nav">
-        <a href="#" className="logo" style={{ fontFamily: "Dancing Script" }}>
-          Instagram
-        </a>
-        <a href="#" id="insta-icon" style={{ display: "none" }}>
-          <FaInstagram />
-        </a>
+        <a href="#" className="logo" style={{ fontFamily: "Dancing Script" }}>Instagram</a>
+        <a href="#" id="insta-icon" style={{ display: "none" }}><FaInstagram /></a>
         <nav>
           <a href="/Home"><FaHome /><span id="dis">Home</span></a>
           <a href="#search" onClick={toggleSearch}><FaSearch /><span id="dis">Search</span></a>
           <a href="/explore"><FaCompass /><span id="dis">Explore</span></a>
           <a href="/reels"><FaVideo /><span id="dis">Reels</span></a>
-          <a href="Messages" onClick={toggleMessages}><FaFacebookMessenger /><span id="dis">Messages</span></a>
-          <a href="/notification" onClick={toggleNotifications}><FaHeart /><span id="dis">Notifications</span></a>
-          <a href="Create" onClick={toggleShare}><FaPlusSquare /><span id="dis">Create</span></a>
-          <a href="/Profile"><img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} /><span id="dis">Profile</span></a>
-          <a href="#"><FaBars /><span id="dis">More</span></a>
+          <a href="#messages" onClick={(e) => { e.preventDefault(); toggleMessages(); }}>
+            <FaFacebookMessenger /><span id="dis">Messages</span>
+          </a>
+          <a href="#" onClick={(e) => { e.preventDefault(); toggleNotifications(); }}>
+            <FaHeart />
+            <span id="dis">Notifications</span>
+          </a>
+          <a href="#create" onClick={(e) => { e.preventDefault(); setShowCreate(true); }}>
+            <FaPlusSquare /><span id="dis">Create</span>
+          </a>
+          <a href="/Profile">
+            <img src="/pics/profile_1.jpg" alt="Profile" className="icon" style={{ borderRadius: "50%" }} />
+            <span id="dis">Profile</span>
+          </a>
+          <a href="#more"><FaBars /><span id="dis">More</span></a>
         </nav>
       </header>
 
-      {/* SEARCH COMPONENT */}
       <Search isOpen={showSearch} onClose={toggleSearch} />
 
-      {/* NOTIFICATIONS */}
-      {showNotifications && (
-        <div className="notifications">
-          <div className="main">
-            <h1>Notifications</h1>
-            <div className="request-section">
-              <img src="/pics/profile_1.jpg" alt="profile" />
-              <div className="request-section-follow">
-                <p><b>Follow requests</b></p>
-                <p className="follow-requests">hiten_256 + 5 others</p>
-              </div>
-              <div className="blue-dot"></div>
-            </div>
-            <h2>This week</h2>
-            <div className="latest-news">
-              <img src="/pics/profile_1.jpg" alt="profile" />
-              <p>Learn how Meta will use your info to personalize your experiences.</p>
-            </div>
-          </div>
-        </div>
-      )}
+      <Create 
+        isOpen={showCreate} 
+        onClose={() => setShowCreate(false)}
+        onPostCreated={handlePostCreated}
+      />
 
-      {/* HOME FEED */}
+      {/* ✅ NOTIFICATION COMPONENT - THIS WAS MISSING! */}
+      <Notification isOpen={showNotifications} onClose={toggleNotifications} />
+
       <div id="home">
-        {/* STORIES */}
         <div id="home_status">
           {[
             { img: "profile_5.jpg", name: "Nishchal" },
@@ -222,15 +440,13 @@ export default function Home() {
           ))}
         </div>
 
-        {/* POSTS */}
         <div id="post-no">
-          {posts.map((post) => (
+          {allPosts.map((post) => (
             <Post key={post.id} post={post} />
           ))}
         </div>
       </div>
 
-      {/* SUGGESTIONS SECTION */}
       <div id="suggested">
         <div className="current-user">
           <a href="/Profile">
@@ -266,7 +482,6 @@ export default function Home() {
         </footer>
       </div>
 
-      {/* FLOATING MESSAGE BAR */}
       <div className="popup-bar" onClick={toggleMessages}>
         <div className="icon">
           <FaFacebookMessenger />
@@ -280,7 +495,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* MESSAGES POPUP */}
       {showMessages && (
         <div className="popup-window">
           <div className="popup-header">
@@ -300,30 +514,20 @@ export default function Home() {
         </div>
       )}
 
-      {/* SHARE POPUP */}
       {showShare && (
         <div className="popup">
           <div className="popup-content">
             <span className="close" onClick={toggleShare}>&times;</span>
             <h2>Share Reel</h2>
-            <input
-              type="text"
-              placeholder="Search user..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+            <input type="text" placeholder="Search user..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
 
             <div className="share-list">
-              {shareUsers
-                .filter((u) =>
-                  u.name.toLowerCase().includes(searchTerm.toLowerCase())
-                )
-                .map((user, i) => (
-                  <div className="user" key={i}>
-                    <img src={user.pic} alt={user.name} />
-                    <p>{user.name}</p>
-                  </div>
-                ))}
+              {shareUsers.filter((u) => u.name.toLowerCase().includes(searchTerm.toLowerCase())).map((user, i) => (
+                <div className="user" key={i}>
+                  <img src={user.pic} alt={user.name} />
+                  <p>{user.name}</p>
+                </div>
+              ))}
             </div>
 
             <div className="share-options">
@@ -336,158 +540,6 @@ export default function Home() {
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-// POST COMPONENT
-function Post({ post }) {
-  const [liked, setLiked] = useState(false);
-  const toggleLike = () => setLiked(!liked);
-
-  return (
-    <div className="post">
-      {/* Header (User Info) */}
-      <div className="home_posts">
-        <div id="home_posts_img">
-          <a href={`/Profile?name=${post.username}&pic=${post.userPic}`}>
-            <img src={post.userPic} alt={post.username} />
-          </a>
-        </div>
-        <a href={`/Profile?name=${post.username}&pic=${post.userPic}`}>
-          <p>{post.username}</p>
-        </a>
-      </div>
-
-      {/* Post Image */}
-      <div id="posts_image">
-        <img src={post.image} alt="post" />
-      </div>
-
-      {/* Footer (Reaction Icons) */}
-      <div className="post-footer">
-        <div className="post-footer-rxn">
-          {/* ❤️ Like Button */}
-          <button
-            onClick={toggleLike}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-            }}
-          >
-            <svg
-              className="like-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill={liked ? "red" : "none"}
-              stroke={liked ? "red" : "currentColor"}
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" />
-            </svg>
-          </button>
-
-          {/* 💬 Comment Icon */}
-          <button
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-            }}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" />
-            </svg>
-          </button>
-
-          {/* 📤 Share Icon */}
-          <button
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              padding: 0,
-            }}
-          >
-            <svg
-              className="fa-solid fa-share"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" />
-              <path d="m21.854 2.147-10.94 10.939" />
-            </svg>
-          </button>
-
-          {/* 🔖 Save Icon */}
-          <button
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              marginLeft: "auto",
-              padding: 0,
-            }}
-          >
-            <svg
-              className="rxn-save"
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {/* Likes */}
-      <div className="likes">
-        {liked
-          ? (post.likes + 1).toLocaleString()
-          : post.likes.toLocaleString()}{" "}
-        likes
-      </div>
-
-      {/* Caption */}
-      <div className="caption">
-        <span className="username">{post.username}</span> {post.caption}
-      </div>
-
-      {/* Comment Input */}
-      <div className="add-comment">
-        <input type="text" placeholder="Add a comment..." />
-      </div>
     </div>
   );
 }

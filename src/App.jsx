@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
-import Home from "./components/Home";
+import Home, { PostsProvider } from "./components/Home";
 import Notification from "./components/Notification";
 import Login from "./components/Login";
 import Reels from "./components/Reel";
@@ -28,15 +28,17 @@ function LoginWrapper() {
 export default function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<LoginWrapper />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/notification" element={<Notification />} />
-        <Route path="/reels" element={<Reels />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/story" element={<Story />} />
-        <Route path="/explore" element={<Explore />} />
-      </Routes>
+      <PostsProvider>
+        <Routes>
+          <Route path="/" element={<LoginWrapper />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/notification" element={<Notification />} />
+          <Route path="/reels" element={<Reels />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/story" element={<Story />} />
+          <Route path="/explore" element={<Explore />} />
+        </Routes>
+      </PostsProvider>
     </Router>
   );
 }

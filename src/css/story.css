@@ -1,6 +1,5 @@
 /* ========================================
-   STORY VIEWER - Isolated CSS
-   All classes/IDs prefixed with 'story-'
+   STORY VIEWER - Fixed CSS
    ======================================== */
 
 /* ---------- Story Container ---------- */
@@ -46,16 +45,20 @@
   filter: blur(3px);
   transition: all 0.7s ease;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  will-change: transform, opacity, filter;
+  backface-visibility: hidden;
 }
 
 .st1 video,
-.st1 img {
+.st1 > img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   background-color: #000;
+  will-change: transform;
 }
 
 /* ---------- Active Story ---------- */
@@ -111,6 +114,7 @@
   align-items: center;
   gap: 8px;
   z-index: 4;
+  pointer-events: none;
 }
 
 .st1 .profile img {
@@ -130,6 +134,7 @@
       #cd662f 300deg,
       #d62976 360deg
     ) border-box;
+  object-fit: cover;
 }
 
 .st1 .profile h4 {
@@ -137,6 +142,7 @@
   font-size: 14px;
   font-weight: 600;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  margin: 0;
 }
 
 /* ---------- Story Progress Bars ---------- */
@@ -149,6 +155,7 @@
   display: flex;
   gap: 3px;
   z-index: 5;
+  pointer-events: none;
 }
 
 .st1 .progress-bar {
@@ -162,7 +169,7 @@
   width: 0%;
   height: 100%;
   background: #fff;
-  transition: width 0.1s linear;
+  transition: width 0.05s linear;
 }
 
 /* ---------- Navigation Buttons ---------- */
@@ -182,13 +189,17 @@
   justify-content: center;
   align-items: center;
   transition: all 0.3s ease;
-  z-index: 5;
+  z-index: 10;
   user-select: none;
 }
 
 .nav-btn:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: translateY(-50%) scale(1.1);
+}
+
+.nav-btn:active {
+  background: rgba(255, 255, 255, 0.35);
 }
 
 .nav-btn.left {
@@ -201,7 +212,7 @@
 
 /* ---------- Active Story Hover Effect ---------- */
 .st1.active:hover video,
-.st1.active:hover img {
+.st1.active:hover > img {
   transform: scale(1.03);
   transition: transform 0.3s ease;
 }
@@ -216,7 +227,7 @@
   color: rgba(255, 255, 255, 0.85);
   pointer-events: none;
   opacity: 0;
-  z-index: 10;
+  z-index: 10000;
   transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
@@ -307,21 +318,14 @@
   }
 }
 
-/* ---------- Performance Optimizations ---------- */
-.st1 {
-  will-change: transform, opacity, filter;
-  backface-visibility: hidden;
-}
-
-.st1 video,
-.st1 img {
-  will-change: transform;
-}
-
 /* ---------- Accessibility ---------- */
 .nav-btn:focus {
   outline: 2px solid rgba(255, 255, 255, 0.5);
   outline-offset: 2px;
+}
+
+.nav-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
 }
 
 /* ---------- Loading State ---------- */
@@ -343,4 +347,12 @@
   100% {
     background-position: -200% 0;
   }
+}
+
+/* ---------- Prevent text selection during interaction ---------- */
+#storyContainer * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }

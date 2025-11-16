@@ -17,23 +17,36 @@ export default function Story() {
   const [mediaIndex, setMediaIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [showPlayPause, setShowPlayPause] = useState(false);
+  const [progressWidths, setProgressWidths] = useState({});
 
   const viewerRef = useRef(null);
   const videoRef = useRef(null);
   const progressIntervalRef = useRef(null);
   const progressStartTimeRef = useRef(null);
 
-  // Update story display positioning
+  // Center active story
   useEffect(() => {
-    updateStoryDisplay();
+    if (viewerRef.current) {
+      const activeDiv = viewerRef.current.querySelector(".st1.active");
+      if (activeDiv) {
+        const offset = viewerRef.current.clientWidth / 2 - (activeDiv.offsetLeft + activeDiv.clientWidth / 2);
+        viewerRef.current.style.transition = "transform 0.7s ease-in-out";
+        viewerRef.current.style.transform = `translateX(${offset}px)`;
+      }
+    }
   }, [profileIndex, mediaIndex]);
 
   // Handle progress animation and auto-play
   useEffect(() => {
-    clearInterval(progressIntervalRef.current);
+    // Clear previous interval
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+    }
 
     if (!isPlaying) {
-      if (videoRef.current) videoRef.current.pause();
+      if (videoRef.current) {
+        videoRef.current.pause();
+      }
       return;
     }
 
@@ -44,57 +57,49 @@ export default function Story() {
     let duration = 3000; // default for images
 
     if (isVideo && videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
+      const video = videoRef.current;
+      video.currentTime = 0;
+      video.play().catch(() => {});
       
-      // Wait for video metadata to load
       const handleLoadedMetadata = () => {
-        duration = videoRef.current.duration * 1000 || 3000;
+        duration = (video.duration * 1000) || 3000;
         startProgress(duration);
       };
 
-      if (videoRef.current.readyState >= 1) {
-        duration = videoRef.current.duration * 1000 || 3000;
+      if (video.readyState >= 1) {
+        duration = (video.duration * 1000) || 3000;
         startProgress(duration);
       } else {
-        videoRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
-        return () => videoRef.current?.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        video.addEventListener('loadedmetadata', handleLoadedMetadata, { once: true });
       }
     } else {
       startProgress(duration);
     }
 
-    return () => clearInterval(progressIntervalRef.current);
+    return () => {
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    };
   }, [isPlaying, profileIndex, mediaIndex]);
 
   const startProgress = (duration) => {
     progressStartTimeRef.current = Date.now();
-    const progressBar = document.getElementById(`progress-${mediaIndex}`);
-
+    
     progressIntervalRef.current = setInterval(() => {
       const elapsed = Date.now() - progressStartTimeRef.current;
       const percent = Math.min((elapsed / duration) * 100, 100);
       
-      if (progressBar) {
-        progressBar.style.width = percent + "%";
-      }
+      setProgressWidths(prev => ({
+        ...prev,
+        [mediaIndex]: percent
+      }));
 
       if (percent >= 100) {
         clearInterval(progressIntervalRef.current);
         nextStory();
       }
     }, 50);
-  };
-
-  const updateStoryDisplay = () => {
-    if (viewerRef.current) {
-      const activeDiv = viewerRef.current.querySelector(".st1.active");
-      if (activeDiv) {
-        const offset = viewerRef.current.clientWidth / 2 - (activeDiv.offsetLeft + activeDiv.clientWidth / 2);
-        viewerRef.current.style.transition = "transform 0.7s ease-in-out";
-        viewerRef.current.style.transform = `translateX(${offset}px)`;
-      }
-    }
   };
 
   const nextStory = () => {
@@ -104,6 +109,7 @@ export default function Story() {
     if (nextMediaIndex >= profile.media.length) {
       setMediaIndex(0);
       setProfileIndex((profileIndex + 1) % stories.length);
+      setProgressWidths({});
     } else {
       setMediaIndex(nextMediaIndex);
     }
@@ -116,6 +122,7 @@ export default function Story() {
       const prevProfileIndex = (profileIndex - 1 + stories.length) % stories.length;
       setProfileIndex(prevProfileIndex);
       setMediaIndex(stories[prevProfileIndex].media.length - 1);
+      setProgressWidths({});
     } else {
       setMediaIndex(prevMediaIndex);
     }
@@ -137,7 +144,7 @@ export default function Story() {
 
   return (
     <div id="storyContainer">
-      <div className="nav-btn left" id="prevBtn" onClick={(e) => { e.stopPropagation(); prevStory(); }}>
+      <div className="nav-btn left" onClick={(e) => { e.stopPropagation(); prevStory(); }}>
         ❮
       </div>
 
@@ -149,26 +156,30 @@ export default function Story() {
           const isVideo = currentMedia.endsWith('.mp4');
 
           return (
-            <div key={index} className={`st1 ${storyClass}`} style={{ display: 'flex' }}>
+            <div key={index} className={`st1 ${storyClass}`}>
               {isActive && (
                 <>
+                  {/* Progress bars */}
                   <div className="progress-container">
                     {profile.media.map((_, i) => (
                       <div key={i} className="progress-bar">
                         <div
                           className="progress-bar-inner"
-                          id={`progress-${i}`}
                           style={{
-                            width: i < mediaIndex ? '100%' : i === mediaIndex ? '0%' : '0%'
+                            width: i < mediaIndex ? '100%' : i === mediaIndex ? `${progressWidths[i] || 0}%` : '0%'
                           }}
                         ></div>
                       </div>
                     ))}
                   </div>
+
+                  {/* Profile info */}
                   <div className="profile">
                     <img src={profile.profile} alt={profile.name} />
                     <h4>{profile.name}</h4>
                   </div>
+
+                  {/* Media */}
                   {isVideo ? (
                     <video
                       ref={videoRef}
@@ -181,6 +192,7 @@ export default function Story() {
                   )}
                 </>
               )}
+              
               {!isActive && (
                 <>
                   <img src={currentMedia} alt={profile.name} />
@@ -194,7 +206,7 @@ export default function Story() {
         })}
       </div>
 
-      <div className="nav-btn right" id="nextBtn" onClick={(e) => { e.stopPropagation(); nextStory(); }}>
+      <div className="nav-btn right" onClick={(e) => { e.stopPropagation(); nextStory(); }}>
         ❯
       </div>
 

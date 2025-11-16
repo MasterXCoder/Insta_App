@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   FaInstagram,
   FaHome,
@@ -13,28 +13,32 @@ import {
   FaBookmark,
   FaUser,
   FaCog,
+  FaPlusCircle,
+  FaCamera,
 } from "react-icons/fa";
 
 import '../css/profile.css';
 import Search from './Search';
+import { PostsContext } from './Home';
 
 export default function Profile() {
-
+  const postsContext = useContext(PostsContext);
   const [activeTab, setActiveTab] = useState("posts");
   const [showSearch, setShowSearch] = useState(false);
   const [profileData, setProfileData] = useState({
     name: "Vansh Singh",
     displayName: "vansh_singh_787",
     pic: "/pics/profile_1.jpg",
-    posts: 5,
+    posts: 0,
     followers: "91",
     following: 131,
-    bio: "Warner Bros. India",
+    bio: "...",
   });
 
   const [postsData, setPosts] = useState([]);
   const [savedData, setSaved] = useState([]);
   const [taggedData, setTagged] = useState([]);
+  const [isOwnProfile, setIsOwnProfile] = useState(true);
 
   const getRandomInt = (min, max) =>
     Math.floor(Math.random() * (max - min + 1)) + min;
@@ -54,43 +58,72 @@ export default function Profile() {
     const name = params.get('name');
     const pic = params.get('pic');
 
-    if (name && pic) {
-        setProfileData(prev => ({
+    // Check if this is the user's own profile
+    const ownProfile = !name || name === "vansh_singh_787" || pic === "/pics/profile_1.jpg";
+    setIsOwnProfile(ownProfile);
+
+    if (name && pic && !ownProfile) {
+      // This is someone else's profile - show random posts
+      setProfileData(prev => ({
         ...prev,
         name: name,
         displayName: name,
         pic: pic
-        }));
-    }
-
-    const postPool = [
-      { type: "img", src: "/pics/pf_3_1.png" },
-      { type: "img", src: "/pics/pf_3_2.png" },
-      { type: "img", src: "/pics/post_1.png" },
-      { type: "img", src: "/pics/post_2.png" },
-      { type: "img", src: "/pics/post_3.png" },
-      { type: "img", src: "/pics/post_4.png" },
-      { type: "video", src: "/video/sample_2.mp4" },
-      { type: "video", src: "/video/sample_4.mp4" },
-      { type: "video", src: "/video/sample_7.mp4" },
-      { type: "video", src: "/video/horror.mp4" },
-    ];
-
-    const pickRandomPosts = (n) => {
-      const shuffled = [...postPool].sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, n).map((post) => ({
-        ...post,
-        likes: formatNumber(getRandomInt(100, 2500)),
-        comments: getRandomInt(10, 1200),
       }));
-    };
 
-    setPosts(pickRandomPosts(4));
-    setSaved(pickRandomPosts(4));
-    setTagged(pickRandomPosts(4));
-  }, []);
+      const postPool = [
+        { type: "img", src: "/pics/pf_3_1.png" },
+        { type: "img", src: "/pics/pf_3_2.png" },
+        { type: "img", src: "/pics/post_1.png" },
+        { type: "img", src: "/pics/post_2.png" },
+        { type: "img", src: "/pics/post_3.png" },
+        { type: "img", src: "/pics/post_4.png" },
+        { type: "video", src: "/video/sample_2.mp4" },
+        { type: "video", src: "/video/sample_4.mp4" },
+        { type: "video", src: "/video/sample_7.mp4" },
+        { type: "video", src: "/video/horror.mp4" },
+      ];
 
-  // Handle sidebar styling when search is active
+      const pickRandomPosts = (n) => {
+        const shuffled = [...postPool].sort(() => 0.5 - Math.random());
+        return shuffled.slice(0, n).map((post) => ({
+          ...post,
+          likes: formatNumber(getRandomInt(100, 2500)),
+          comments: getRandomInt(10, 1200),
+        }));
+      };
+
+      setPosts(pickRandomPosts(4));
+      setSaved(pickRandomPosts(4));
+      setTagged(pickRandomPosts(4));
+      setProfileData(prev => ({ ...prev, posts: 4 }));
+    } else {
+      // This is own profile - show only user created posts
+      const userPosts = postsContext?.userPosts || [];
+      
+      // Convert user posts to grid format
+      const userPostsGrid = userPosts.map(post => ({
+        type: post.mediaType === 'video' ? 'video' : 'img',
+        src: post.image,
+        likes: formatNumber(post.likes),
+        comments: post.comments,
+      }));
+
+      setPosts(userPostsGrid);
+      setSaved([]); // Empty for now
+      setTagged([]); // Empty for now
+
+      // Update post count
+      setProfileData(prev => ({
+        ...prev,
+        posts: userPostsGrid.length,
+        name: "Vansh Singh",
+        displayName: "vansh_singh_787",
+        pic: "/pics/profile_1.jpg"
+      }));
+    }
+  }, [postsContext?.userPosts]);
+
   useEffect(() => {
     const nav = document.getElementById("main_nav");
     const disElements = document.querySelectorAll('#dis');
@@ -99,14 +132,12 @@ export default function Profile() {
     const profileElem = document.getElementById("profile");
 
     if (showSearch) {
-      // Activate search mode
       disElements.forEach(el => el.style.display = 'none');
       if (nav) nav.style.width = "80px";
       if (logo) logo.style.display = "none";
       if (instaIcon) instaIcon.style.display = "inline-block";
       if (profileElem) profileElem.style.marginLeft = "120px";
     } else {
-      // Revert to normal sidebar
       disElements.forEach(el => el.style.display = 'inline');
       if (nav) nav.style.width = "";
       if (logo) logo.style.display = "inline-block";
@@ -117,6 +148,21 @@ export default function Profile() {
 
   const renderGrid = (data) => {
     if (data.length === 0) {
+      // Show empty state only for own profile
+      if (isOwnProfile && activeTab === "posts") {
+        return (
+          <div className="share-photos" style={{ textAlign: "center", padding: "60px 20px" }}>
+            <FaCamera style={{ fontSize: "60px", color: "#8e8e8e", marginBottom: "20px" }} />
+            <h3 style={{ color: "#fff", marginBottom: "10px" }}>Share Photos</h3>
+            <p style={{ color: "#8e8e8e", marginBottom: "20px" }}>
+              When you share photos, they will appear on your profile.
+            </p>
+            <a href="#" style={{ color: "#0095f6", textDecoration: "none", fontWeight: "600" }}>
+              Share your first photo
+            </a>
+          </div>
+        );
+      }
       return <p style={{ textAlign: "center", color: "#888" }}>No {activeTab} yet</p>;
     }
 
@@ -148,7 +194,6 @@ export default function Profile() {
 
   return (
     <div id="main_page">
-      {/* SIDEBAR NAVIGATION */}
       <div id="main_nav">
         <header>
           <a href="#" className="logo" style={{ fontFamily: "Dancing Script" }}>
@@ -174,7 +219,7 @@ export default function Profile() {
               <FaVideo />
               <span id="dis">Reels</span>
             </a>
-            <a href="Messages">
+            <a href="/Messages">
               <FaFacebookMessenger />
               <span id="dis">Messages</span>
             </a>
@@ -182,7 +227,7 @@ export default function Profile() {
               <FaHeart />
               <span id="dis">Notifications</span>
             </a>
-            <a href="Create">
+            <a href="/Create">
               <FaPlusSquare />
               <span id="dis">Create</span>
             </a>
@@ -208,10 +253,8 @@ export default function Profile() {
         </header>
       </div>
 
-      {/* SEARCH COMPONENT */}
       <Search isOpen={showSearch} onClose={toggleSearch} />
 
-      {/* PROFILE */}
       <div id="profile">
         <div className="profile-header">
           <div className="profile-pic">
@@ -219,14 +262,24 @@ export default function Profile() {
           </div>
           <div className="profile-info">
             <div className="profile-top">
-              <h2>{profileData.name}</h2>
-              <button className="btn">Edit profile</button>
-              <button className="btn">View archive</button>
-              <FaCog className="settings" title="options" />
+              <h2>{profileData.displayName}</h2>
+              {isOwnProfile && (
+                <>
+                  <button className="btn">Edit profile</button>
+                  <button className="btn">View archive</button>
+                  <FaCog className="settings" title="options" />
+                </>
+              )}
+              {!isOwnProfile && (
+                <>
+                  <button className="btn" style={{ background: "#0095f6" }}>Follow</button>
+                  <button className="btn">Message</button>
+                </>
+              )}
             </div>
             <div className="profile-stats">
               <span>
-                <strong>{profileData.posts.toLocaleString()}</strong> posts
+                <strong>{profileData.posts}</strong> posts
               </span>
               <span style={{ cursor: "pointer" }}>
                 <strong>{profileData.followers}</strong> followers
@@ -237,9 +290,9 @@ export default function Profile() {
             </div>
             <div className="profile-bio">
               <p>
-                <strong style={{ cursor: "pointer" }}>{profileData.displayName}</strong>
+                <strong style={{ cursor: "pointer" }}>{profileData.name}</strong>
                 <br />
-                ...
+                {profileData.bio}
               </p>
             </div>
           </div>
@@ -247,7 +300,13 @@ export default function Profile() {
         <br />
         <br />
 
-        {/* Tabs Section */}
+        {isOwnProfile && postsData.length === 0 && (
+          <div className="new-post" style={{ textAlign: "center", marginBottom: "40px" }}>
+            <FaPlusCircle style={{ fontSize: "40px", color: "#8e8e8e", cursor: "pointer" }} title="add new" />
+            <p style={{ color: "#8e8e8e", marginTop: "10px" }}>New</p>
+          </div>
+        )}
+
         <div className="profile-tabs">
           <button
             className={`tab-btn ${activeTab === "posts" ? "active" : ""}`}
@@ -272,7 +331,6 @@ export default function Profile() {
           </button>
         </div>
 
-        {/* Tab Contents */}
         <div
           className="tab-content"
           id="posts"
@@ -305,7 +363,6 @@ export default function Profile() {
         <br />
         <br />
 
-        {/* Footer */}
         <footer className="footer">
           <div className="links">
             <a href="#">Meta</a>
