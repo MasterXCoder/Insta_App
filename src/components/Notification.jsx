@@ -14,12 +14,12 @@ const Notification = ({ isOpen, onClose }) => {
     {
       id: 2,
       type: 'like',
-      username: 'navreetk_06',
-      username2: 'iishu._16',
+      username: 'ishpreet_06',
+      username2: 'vansh._16',
       avatar: '/pics/profile_4.jpg',
       date: 'Oct 09',
       action: 'and 1 other liked your story',
-      thumbnail: '/pics/thumb_2.jpg'
+      thumbnail: '/pics/Microsoft.png'
     },
     {
       id: 3,
@@ -28,7 +28,7 @@ const Notification = ({ isOpen, onClose }) => {
       avatar: '/pics/profile_5.jpg',
       date: 'Sep 29',
       action: 'requested to follow you',
-      thumbnail: '/pics/thumb_3.jpg'
+      thumbnail: '/pics/lucky_3.png'
     },
     {
       id: 4,
@@ -46,7 +46,7 @@ const Notification = ({ isOpen, onClose }) => {
       avatar: '/pics/profile_2.jpg',
       date: 'Oct 08',
       action: 'and 2 others liked your post',
-      thumbnail: '/pics/thumb_1.jpg'
+      thumbnail: '/pics/ishpreet.jpg'
     },
     {
       id: 6,
@@ -55,7 +55,7 @@ const Notification = ({ isOpen, onClose }) => {
       avatar: '/pics/profile_7.jpg',
       date: 'Sep 25',
       action: 'requested to follow you',
-      thumbnail: '/pics/thumb_4.jpg'
+      thumbnail: '/pics/profile_7.jpg'
     }
   ]);
 

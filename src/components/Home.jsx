@@ -364,6 +364,16 @@ export default function Home() {
       likes: 1317839,
       caption: "🇮🇳👑",
     },
+    {
+      id: 4,
+      username: "nishcal_23",
+      userPic: "/pics/nishchal_1.jpg",
+      image: "/pics/nishchal_3.jpg",
+      likes: 139,
+      caption: "🇮🇳👑",
+    }, 
+      
+    
   ];
 
   const userPosts = postsContext?.userPosts || [];

@@ -36,11 +36,18 @@ export default function Messages() {
   ];
 
   const reels = [
-    "/video/sample_6.mp4",
-    "/video/sample_7.mp4",
-    "/video/sample_8.mp4",
-    "/video/sample_9.mp4",
+    "/video/gpuvscpu.mp4",
     "/video/sample_10.mp4",
+    "/video/sample_11.mp4",
+    "/video/sample_12.mp4",
+    "/video/sample_13.mp4",
+    "/video/sample_14.mp4",
+    "/video/sample_15.mp4",
+    "/video/car.mp4",
+    "./video/horror.mp4",
+    "./video/sample_17.mp4",
+    "./video/sample_18.mp4",
+    "./video/sample_19.mp4",
   ];
 
   const reelsNames = [
