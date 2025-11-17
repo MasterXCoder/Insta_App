@@ -43,6 +43,8 @@ export default function Profile() {
   const [savedData, setSaved] = useState([]);
   const [taggedData, setTagged] = useState([]);
   const [isOwnProfile, setIsOwnProfile] = useState(true);
+  const [selectedPostIndex, setSelectedPostIndex] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const getRandomInt = (min, max) =>
     Math.floor(Math.random() * (max - min + 1)) + min;
@@ -64,15 +66,78 @@ export default function Profile() {
     setShowCreate(!showCreate);
   };
 
-  const handlePostCreated = (newPost) => {
-    // Don't use context - directly save to localStorage
+  const handlePostClick = (index) => {
+    if (isOwnProfile && activeTab === "posts") {
+      setSelectedPostIndex(index);
+      setShowDeleteModal(true);
+    }
+  };
+
+  const handleDeletePost = () => {
     try {
       const profilePosts = localStorage.getItem('profilePosts');
       const parsedProfilePosts = profilePosts ? JSON.parse(profilePosts) : [];
-      const updatedProfilePosts = [newPost, ...parsedProfilePosts];
-      localStorage.setItem('profilePosts', JSON.stringify(updatedProfilePosts));
       
-      // Reload posts to show the new one
+      // Remove the post at the selected index
+      parsedProfilePosts.splice(selectedPostIndex, 1);
+      
+      // Save back to localStorage
+      localStorage.setItem('profilePosts', JSON.stringify(parsedProfilePosts));
+      
+      // Update the UI
+      const userPostsGrid = parsedProfilePosts.map(post => ({
+        type: post.mediaType === 'video' ? 'video' : 'img',
+        src: post.image,
+        likes: formatNumber(post.likes),
+        comments: post.comments,
+      }));
+      
+      setPosts(userPostsGrid);
+      setProfileData(prev => ({ ...prev, posts: userPostsGrid.length }));
+      
+      // Close modal
+      setShowDeleteModal(false);
+      setSelectedPostIndex(null);
+      
+      console.log('Post deleted successfully! Remaining posts:', parsedProfilePosts.length);
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      alert('❌ Failed to delete post. Please try again.');
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setSelectedPostIndex(null);
+  };
+
+  const handlePostCreated = (newPost) => {
+    // Save directly to localStorage
+    try {
+      const profilePosts = localStorage.getItem('profilePosts');
+      const parsedProfilePosts = profilePosts ? JSON.parse(profilePosts) : [];
+      
+      // Check for duplicates
+      const postExists = parsedProfilePosts.some(post => post.id === newPost.id);
+      if (postExists) {
+        console.warn('Post already exists, skipping');
+        return;
+      }
+      
+      const updatedProfilePosts = [newPost, ...parsedProfilePosts];
+      
+      // Try to save and catch quota exceeded errors
+      try {
+        localStorage.setItem('profilePosts', JSON.stringify(updatedProfilePosts));
+      } catch (quotaError) {
+        if (quotaError.name === 'QuotaExceededError') {
+          alert('❌ Storage full! Cannot save more posts. Please delete some old posts.');
+          return;
+        }
+        throw quotaError;
+      }
+      
+      // Immediately update the UI
       const userPostsGrid = updatedProfilePosts.map(post => ({
         type: post.mediaType === 'video' ? 'video' : 'img',
         src: post.image,
@@ -82,8 +147,11 @@ export default function Profile() {
       
       setPosts(userPostsGrid);
       setProfileData(prev => ({ ...prev, posts: userPostsGrid.length }));
+      
+      console.log('Post saved successfully! Total posts:', updatedProfilePosts.length);
     } catch (error) {
       console.error('Error saving post:', error);
+      alert('❌ Failed to save post. Please try again.');
     }
   };
 
@@ -133,9 +201,13 @@ export default function Profile() {
       setProfileData(prev => ({ ...prev, posts: 4 }));
     } else {
       // This is own profile - show posts from localStorage (permanent storage)
+      console.log('Loading own profile posts...');
       try {
         const profilePosts = localStorage.getItem('profilePosts');
+        console.log('Raw profilePosts from localStorage:', profilePosts ? 'exists' : 'null');
+        
         const savedPosts = profilePosts ? JSON.parse(profilePosts) : [];
+        console.log('Number of posts loaded:', savedPosts.length);
         
         // Convert user posts to grid format
         const userPostsGrid = savedPosts.map(post => ({
@@ -157,6 +229,8 @@ export default function Profile() {
           displayName: "vansh_singh_787",
           pic: "/pics/profile_1.jpg"
         }));
+        
+        console.log('Profile posts loaded successfully, count:', userPostsGrid.length);
       } catch (error) {
         console.error('Error loading profile posts:', error);
         setPosts([]);
@@ -221,6 +295,8 @@ export default function Profile() {
           <div
             key={index}
             className={post.type === "video" ? "grid-item video-item" : "grid-item"}
+            onClick={() => handlePostClick(index)}
+            style={{ cursor: isOwnProfile && activeTab === "posts" ? 'pointer' : 'default' }}
           >
             {post.type === "img" ? (
               <img src={post.src} alt={`post_${index + 1}`} />
@@ -260,6 +336,20 @@ export default function Profile() {
         onClose={() => setShowCreate(false)}
         onPostCreated={handlePostCreated}
       />
+
+      {/* Delete Post Modal */}
+      {showDeleteModal && (
+        <div className="delete-modal-overlay" onClick={handleCancelDelete}>
+          <div className="delete-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Delete Post?</h3>
+            <p>Are you sure you want to delete this post? This action cannot be undone.</p>
+            <div className="delete-modal-buttons">
+              <button className="delete-btn-confirm" onClick={handleDeletePost}>Delete</button>
+              <button className="delete-btn-cancel" onClick={handleCancelDelete}>Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div id="profile">
         <div className="profile-header">
